@@ -10,7 +10,7 @@ module.exports = defineConfig({
         "appId": "com.caesiumstudio.apporb",
         "linux": {
           "category": "App Development",
-          "synopsis": "App marketing made simple",
+          "synopsis": "Grow your app",
 
           "target": [
             "AppImage",
