@@ -2,7 +2,7 @@
   "name": "apporb",
   "version": "1.0.0",
   "private": false,
-  "description": "App marketing made simple",
+  "description": "Grow your app",
   "author": {
     "name": "Caesium Studio",
     "email": "caesiumstudio@outlook.com"
@@ -20,13 +20,13 @@
     "app developer account"
   ],
   "license": "MIT",
-  "productDescription": "App marketing made simple",
+  "productDescription": "Grow your app",
   "productName": "apporb",
   "repository": {
     "type": "git",
     "url": "https://github.com/caesiumstudio/apporb"
   },
-  "synopsis": "App marketing made simple",
+  "synopsis": "Grow your app",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
