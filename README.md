@@ -1,6 +1,17 @@
-# Apporb - Grow your app
+<div align="center" style="width: 100%;">
+<img align="center" style="width:200px" src="https://raw.githubusercontent.com/caesiumstudio/apporb/main/public/icon.png"/>
+</div>
 
-Apporb is designed to provide marketing support for app developers. Currently this software only provides automatic translations for app store app versions and updating them.
+<div align="center" style="width:100%">
+  <h1 align="center">Apporb - Grow your app</h1>
+</div>
+
+<p align="center">
+    <a href="https://github.com/sindresorhus/awesome-electron"><img alt="Awesome" src="https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg"></a>
+</p>
+
+
+**Apporb** is designed to provide marketing support for app developers. Currently this software only provides automatic translations for app store app versions and updating them.
 
 ##### The following features are planned -
 1. Translation management for description, what'sNew, promotional text and keywords app store.
@@ -26,4 +37,9 @@ npm run electron:build
 ```
 
 ### License type
-#### MIT License
+**MIT License**
+
+
+### Feature Suggestions
+
+To request any features, please create issue report here - [Apporb issues page](https://github.com/caesiumstudio/apporb/issues).
