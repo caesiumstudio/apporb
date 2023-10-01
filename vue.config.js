@@ -11,18 +11,18 @@ module.exports = defineConfig({
         "linux": {
           "category": "App Development",
           "synopsis": "Grow your app",
-
+          "icon": "public/icon.png",
           "target": [
-            "AppImage",
+            // "AppImage",
             "deb",
-            "snap",
-            "pacman", // for building pacman package execute first "sudo apt install libarchive-tools"
-            "rpm" // for building rpm package execute first "sudo apt-get install rpm"
+            // "snap",
+            // "pacman", // for building pacman package execute first "sudo apt install libarchive-tools"
+            // "rpm" // for building rpm package execute first "sudo apt-get install rpm"
           ]
         },
-        "snap": {
-          "plugs": ["default", "removable-media"]
-        },
+        // "snap": {
+        //   "plugs": ["default", "removable-media"]
+        // },
         "win": {
           "target": "appx",
           "target": "nsis"

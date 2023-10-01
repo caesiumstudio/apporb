@@ -17,11 +17,11 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
-  console.log(Utils.joinPath(__static, 'logo.png'));
+  console.log(Utils.joinPath(__static, 'icon.png'));
   browserWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    icon: Utils.joinPath(__static, 'logo.png'),
+    icon: Utils.joinPath(__static, 'icon.png'),
 
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
