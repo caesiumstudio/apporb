@@ -319,6 +319,7 @@ export class Translation {
         nb: "Norwegian Bokmål",
         nn_NO: "Norwegian Nynorsk (Norway)",
         nn: "Norwegian Nynorsk",
+        no: "Norwegian",
         nyn_UG: "Nyankole (Uganda)",
         nyn: "Nyankole",
         or_IN: "Oriya (India)",

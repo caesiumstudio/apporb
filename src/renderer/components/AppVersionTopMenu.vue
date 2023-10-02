@@ -1,15 +1,12 @@
 <template>
   <div>
     <div class="app-menu">
-      <div class="ui basic buttons">
-        <div class="ui button" @click="addAllLanguages()">
-          Add All Languages
-        </div>
-        <div class="ui button" @click="generateTranslations">
-          Generate Translations
-        </div>
+      <div class="ui button primary" @click="addAllLanguages()">Add All Languages</div>
+      <div class="ui button primary" @click="generateTranslations">
+        Generate Translations
       </div>
 
+      <div class="ui divider hidden"></div>
       <div class="ui form">
         <div class="field">
           <label>Select attributes to translate</label>

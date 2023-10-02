@@ -24,7 +24,7 @@ import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
 import IPCClient from "../ipc/IPCClient";
 import AppVersionLocalization from "@/renderer/components/AppVersionLocalization";
-import { ViewController } from '../ViewController';
+import { ViewController } from "../ViewController";
 export default {
   components: { AppVersionLocalization },
 
@@ -63,8 +63,8 @@ export default {
         },
         (response) => {
           ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", false);
+            .getVuexStore()
+            .dispatch("setProgressState", false);
           this.appVersions = JSON.parse(response).data;
         }
       );

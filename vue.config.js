@@ -11,7 +11,6 @@ module.exports = defineConfig({
         "linux": {
           "category": "App Development",
           "synopsis": "Grow your app",
-          "icon": "public/icon.png",
           "target": [
             // "AppImage",
             "deb",
