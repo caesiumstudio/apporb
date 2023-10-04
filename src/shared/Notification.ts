@@ -1,17 +1,17 @@
 export interface NotifHistory {
-    id: string, 
-    timestamp: string, 
+    id: string,
+    timestamp: string,
     status: string
     title: string,
     messageId: string
 }
 
 export interface Notification {
-    id: string, 
-    title: string, 
+    id: string,
+    title: string,
     topic: string,
-    authKey: string, 
-    notifJson: string, 
-    dataJsno: string, 
+    authKey: string,
+    notifJson: string,
+    dataJson: string,
     history: NotifHistory[]
 }

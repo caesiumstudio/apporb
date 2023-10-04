@@ -6,7 +6,7 @@
       <div class="ui segment blue">
         <h4>{{ entry.title }}</h4>
         <div>Id: {{ entry.id }}</div>
-        <div>Timestamp: {{ entry.time }}</div>
+        <div>Timestamp: {{ entry.timestamp }}</div>
       </div>
     </template>
   </div>

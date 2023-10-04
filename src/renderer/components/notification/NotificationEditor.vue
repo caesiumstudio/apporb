@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="notif" class="ui grid">
+    <div v-show="notif" class="ui grid">
       <div class="ten wide column">
         <!-- <div class="ui header">Notification Editor</div>
         <div class="ui divider"></div> -->
@@ -13,8 +13,20 @@
                 <input v-model="notif.title" type="text" placeholder="name" />
               </div>
               <div class="field">
-                <button type="button" class="ui button primary" @click="onNotificationSave">
+                <button
+                  type="button"
+                  class="ui button primary"
+                  @click="onNotificationSave"
+                >
                   Save
+                </button>
+                &nbsp;
+                <button
+                  type="button"
+                  class="ui button primary"
+                  @click="onNotifSaveAsNew"
+                >
+                  Save As New
                 </button>
               </div>
             </div>
@@ -23,14 +35,18 @@
             <label>Authorization Key</label>
             <div class="fields">
               <div class="sixteen wide field">
-                <input v-model="authKey" type="text" />
+                <input v-model="notif.authKey" type="text" />
               </div>
             </div>
             <div class="field">
               <label>Topic</label>
               <div class="two fields">
                 <div class="field">
-                  <input v-model="topic" type="text" placeholder="topic" />
+                  <input
+                    v-model="notif.topic"
+                    type="text"
+                    placeholder="topic"
+                  />
                 </div>
                 <div class="field">
                   <input type="text" />
@@ -40,16 +56,26 @@
 
             <div class="ui segment field">
               <label>Notification JSON</label>
-              <CodeMirrorVue :jsonText="jsonNotif" @onChange="onNotifChange" />
+              <CodeMirrorVue
+                :jsonText="notif.notifJson || '{}'"
+                @onChange="onNotifChange"
+              />
             </div>
 
             <div class="ui segment field">
               <label>Notification Data JSON</label>
-              <CodeMirrorVue :jsonText="jsonNotifData" @onChange="onNotifDataChange" />
+              <CodeMirrorVue
+                :jsonText="notif.dataJson || '{}'"
+                @onChange="onNotifDataChange"
+              />
             </div>
 
             <div class="field">
-              <button type="button" class="ui button primary" @click="onSendNotification">
+              <button
+                type="button"
+                class="ui button primary"
+                @click="onSendNotification"
+              >
                 Send
               </button>
             </div>
@@ -57,7 +83,7 @@
         </form>
       </div>
       <div class="six wide column">
-        <NotificationHistory :history="history" />
+        <NotificationHistory :history="notif.history" />
       </div>
     </div>
   </div>
@@ -68,7 +94,7 @@ import IPCClient from "@/renderer/ipc/IPCClient";
 import { Commands } from "@/shared/constants/Commands";
 import { Toaster } from "@/renderer/services/Toaster";
 import { ViewController } from "@/renderer/ViewController";
-import { Utils } from '@/shared/Utils';
+import { Utils } from "@/shared/Utils";
 import CodeMirrorVue from "./CodeMirror.vue";
 import NotificationHistory from "./NotificationHistory.vue";
 export default {
@@ -79,57 +105,78 @@ export default {
 
   data() {
     return {
-      notif: null,
-      notifId: Utils.getUID(),
-      history: [],
-      topic: "testdebug",
-      title: "Test name",
-      authKey: "",
-      jsonNotif: '{ "title": "title", "body": "body"}',
-      jsonNotifData:
-        '{"title": "title", "message": "message", "url": "https://www.youtube.com/watch?v=ia64t7GYsIs"}',
+      notif: {},
     };
   },
 
   props: {
     notifProp: Object,
   },
+
   watch: {
     notifProp: {
-      handler(newNotif) {
-        this.notif = this.clone(newNotif);
+      handler(newNotifProp) {
+        this.notif = newNotifProp;
+        console.log(JSON.stringify(newNotifProp));
       },
     },
   },
+
   methods: {
-    onNotificationSave() {
-      const notif = {
-        id: this.notifId,
-        topic: this.topic,
-        title: this.title,
-        authKey: this.authKey,
-        notifJson: this.jsonNotif,
-        dataJsno: this.jsonNotifData,
-        history: JSON.parse(JSON.stringify(this.history))
+    onNotifSaveAsNew() {
+      const notif = this.notif;
+      const notifObject = {
+        id: Utils.getUID(),
+        title: notif.title,
+        topic: notif.topic,
+        authKey: notif.authKey,
+        notifJson: notif.notifJson,
+        dataJson: notif.dataJson,
+        history: notif.history,
       };
 
       IPCClient.instance().request(
         {
           command: Commands.CMD_SAVE_NOTIFICATION,
-          value: notif,
+          value: JSON.parse(JSON.stringify(notifObject)),
         },
         (response) => {
           console.log(JSON.stringify(response));
         }
       );
     },
+
+    onNotificationSave() {
+      const notif = this.notif;
+      const notifObject = {
+        id: notif.id,
+        title: notif.title,
+        topic: notif.topic,
+        authKey: notif.authKey,
+        notifJson: notif.notifJson,
+        dataJson: notif.dataJson,
+        history: notif.history,
+      };
+
+      IPCClient.instance().request(
+        {
+          command: Commands.CMD_SAVE_NOTIFICATION,
+          value: JSON.parse(JSON.stringify(notifObject)),
+        },
+        (response) => {
+          console.log(JSON.stringify(response));
+        }
+      );
+    },
+
     onNotifChange(text) {
       console.log("notif", text);
-      this.jsonNotif = text;
+      this.notif.notifJson = text;
     },
+
     onNotifDataChange(text) {
       console.log("data", text);
-      this.jsonNotifData = text;
+      this.notif.dataJson = text;
     },
 
     updateJsonData(value) {
@@ -137,34 +184,38 @@ export default {
     },
 
     onSendNotification() {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
-
       const postData = this.getPostData();
       if (!postData) return;
 
+      ViewController.instance()
+        .getVuexStore()
+        .dispatch("setProgressState", true);
       IPCClient.instance().request(
         {
           command: Commands.CMD_HTTP_POST_NOTIFICATION,
           value: {
             url: "https://fcm.googleapis.com/fcm/send",
             postData: postData,
-            authKey: this.authKey,
+            authKey: this.notif.authKey,
           },
         },
-        (response) => {
+        (respJson) => {
           ViewController.instance()
             .getVuexStore()
             .dispatch("setProgressState", false);
-          console.log(JSON.stringify(response));
-          this.history.push({
-            id: Utils.getUID(),
-            title: postData.notification.title,
-            timestamp: this.getTimestamp(),
-            status: "SENT",
-            messageId: JSON.parse(response).message_id
-          });
+
+          console.log(JSON.stringify(respJson));
+          if (respJson.error) {
+            Toaster.showToast(respJson.error, Toaster.ERROR, 1000);
+          } else {
+            this.notif.history.push({
+              id: Utils.getUID(),
+              title: postData.notification.title,
+              timestamp: this.getTimestamp(),
+              status: "SENT",
+              messageId: respJson.message_id,
+            });
+          }
         }
       );
     },
@@ -189,8 +240,8 @@ export default {
     getPostData() {
       try {
         const postData = {
-          to: "/topics/" + this.topic,
-          notification: this.clone(JSON.parse(this.jsonNotif)),
+          to: "/topics/" + this.notif.topic,
+          notification: this.clone(JSON.parse(this.notif.notifJson)),
           //   android: {
           //     notification: {
           //       color: "#bcbf01",
@@ -207,7 +258,7 @@ export default {
             },
           },
 
-          data: this.clone(JSON.parse(this.jsonNotifData)),
+          data: this.clone(JSON.parse(this.notif.dataJson)),
           //   webpush: {
           //     headers: {
           //       TTL: "5",
@@ -232,9 +283,6 @@ export default {
 
   mounted() {
     window.$(".ui.accordion").accordion();
-    // for (let i = 0; i < 100; i++) {
-    //   this.history.push({ title: "sfsfd", id: "sfsdf", time: "sdfsdfsdf" });
-    // }
   },
 
   computed: {

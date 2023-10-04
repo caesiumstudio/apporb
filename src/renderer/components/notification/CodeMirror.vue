@@ -1,7 +1,7 @@
 <template>
   <codemirror
     v-model="code"
-    placeholder="Code goes here..."
+    placeholder=""
     :style="{ height: '140px' }"
     :autofocus="true"
     :indent-with-tab="true"
@@ -38,41 +38,60 @@ export default {
     jsonText: String,
   },
 
+  watch: {
+    jsonText: {
+      handler(newJsonText) {
+        this.refresh(newJsonText);
+      },
+    },
+  },
+
   methods: {
+
     onChange(event) {
       this.$emit("onChange", event);
     },
+
     onFocus(event) {
       console.log(event);
     },
+
     onBlur(event) {
       console.log(event);
     },
+
+    refresh(code) {
+      try {
+        console.log(JSON.stringify(JSON.parse(code), null, 4));
+        this.code = ref(JSON.stringify(JSON.parse(code), null, 4));
+        // this.extensions = [json(), oneDark];
+        this.extensions = [json()];
+
+        // Codemirror EditorView instance ref
+        const view = shallowRef();
+        this.handleReady = (payload) => {
+          view.value = payload.view;
+        };
+      } catch (e) {
+        console.log(e);
+      }
+
+      // // Status is available at all times via Codemirror EditorView
+      // const getCodemirrorStates = () => {
+      //   const state = view.value.state;
+      //   const ranges = state.selection.ranges;
+      //   const selected = ranges.reduce(
+      //     (r, range) => r + range.to - range.from,
+      //     0
+      //   );
+      //   const cursor = ranges[0].anchor;
+      //   const length = state.doc.length;
+      //   const lines = state.doc.lines;
+      // };
+    },
   },
   mounted() {
-    console.log(JSON.stringify(JSON.parse(this.jsonText), null, 4));
-    this.code = ref(JSON.stringify(JSON.parse(this.jsonText), null, 4));
-    // this.extensions = [json(), oneDark];
-    this.extensions = [json()];
-
-    // Codemirror EditorView instance ref
-    const view = shallowRef();
-    this.handleReady = (payload) => {
-      view.value = payload.view;
-    };
-
-    // // Status is available at all times via Codemirror EditorView
-    const getCodemirrorStates = () => {
-      const state = view.value.state;
-      const ranges = state.selection.ranges;
-      const selected = ranges.reduce(
-        (r, range) => r + range.to - range.from,
-        0
-      );
-      const cursor = ranges[0].anchor;
-      const length = state.doc.length;
-      const lines = state.doc.lines;
-    };
+    this.refresh("{}");
   },
 };
 </script>

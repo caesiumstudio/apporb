@@ -33,7 +33,7 @@ export class NotifDB {
     notifUpsert(notif: Notification) {
         Log.debug(TAG, 'notif saved: ' + JSON.stringify(notif));
         this.dataStore.update({
-            fingerprint: notif.id
+            id: notif.id
         }, notif, { upsert: true },
             (err: any, numReplaced: number, upsert: any) => {
                 Log.debug(TAG, 'Upserted book: ' + numReplaced);
@@ -53,67 +53,4 @@ export class NotifDB {
             });
         });
     }
-
-    // bookGetByFingerprint(fingerprint: string) {
-    //     return new Promise((resolve, reject) => {
-    //         this.bookDB.find({ fingerprint: fingerprint }, (err: any, docs: any) => {
-    //             if (docs.length) {
-    //                 Log.debug(TAG, "Found " + docs.length + " docs");
-    //                 resolve(docs);
-    //             } else {
-    //                 Log.debug(TAG, "No book found by fingerprint: " + fingerprint);
-    //                 reject(null);
-    //             }
-    //         });
-    //     });
-    // }
-
-    // bookRemoveAll(): Promise<number> {
-    //     return new Promise<number>((resolve, reject) => {
-    //         this.bookDB.remove({}, {
-    //             multi: true
-    //         }, (err, numRemoved) => {
-    //             resolve(numRemoved);
-    //         });
-    //     });
-    // }
-
-    // removeBook(book: Book): Promise<number> {
-    //     Log.debug(TAG, "Removing: " + book.title + ": " + book.fingerprint);
-    //     return new Promise<number>((resolve, reject) => {
-    //         this.bookDB.remove({
-    //             fingerprint: book.fingerprint
-    //         }, {
-    //             multi: true
-    //         }, (err, numRemoved) => {
-    //             Log.debug(TAG, 'Removed ' + numRemoved + ' books');
-    //             resolve(numRemoved);
-    //         });
-    //     });
-    // }
-
-    // bookUpdateCurPage(book: Book) {
-    //     this.bookDB.findOne({ fingerprint: book.fingerprint }, (err: any, doc: any) => {
-    //         doc.curPage = book.curPage;
-    //         this.bookUpsert(doc);
-    //     });
-    // }
-
-    // bookUpdateCollection(book: Book) {
-    //     this.bookDB.findOne({ fingerprint: book.fingerprint }, (err: any, doc: any) => {
-    //         doc.collection = book.collection;
-    //         this.bookUpsert(doc);
-    //     });
-    // }
-
-    // saveAudioBook(audioBook: AudioBook): void {
-    //     Log.debug(TAG, 'bookUpsert: ' + JSON.stringify(audioBook));
-    //     this.bookDB.update({
-    //         fingerprint: audioBook.fingerprint
-    //     }, audioBook, { upsert: true },
-    //         (err, numReplaced, upsert) => {
-    //             Log.debug(TAG, 'upserted: ' + numReplaced);
-    //         });
-    // }
-
 }

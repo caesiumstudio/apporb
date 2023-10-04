@@ -4,7 +4,7 @@
       <NotificationSidebar @onNotifSelected="onNotifSelected" />
     </div>
     <div id="center" class="flex-child">
-      <NotificationEditor :notif="notif" />
+      <NotificationEditor :notifProp="notif" />
     </div>
   </div>
 </template>
@@ -34,7 +34,6 @@ export default {
   methods: {
     onNotifSelected(notif) {
       this.notif = notif;
-      console.log('selected: ' + notif.title);
     },
 
     showAboutApp() {
