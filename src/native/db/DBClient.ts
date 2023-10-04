@@ -9,7 +9,6 @@ export class DBClient {
         const db: Database = new Database();
         try {
             db.read();
-            console.log(db.jsonDBContent["settings"]);
             return db.jsonDBContent["settings"]["credentials"];
         } catch (e) {
             Log.error(TAG, e as string);

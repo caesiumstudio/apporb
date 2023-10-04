@@ -2,7 +2,7 @@ import { CommandValue, IPCListener } from "@/shared/IPCListener";
 import { Log } from "@/shared/Logger";
 import { IPCNative } from "../ipc/IpcNative";
 import { ClientCredentials } from "./ClientCredentials";
-import { HttpHandler } from "@/native/AppleAppStore/HttpHandler";
+import { HttpHandler } from "@/native/appstore/HttpHandler";
 import { APPLE_DEV_HOST } from "@/shared/App";
 const jwt = require("jsonwebtoken");
 

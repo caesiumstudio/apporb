@@ -1,13 +1,14 @@
 <template>
   <div class="flex-container">
     <div class="flex-child">
-      <NotificationSidebar />
+      <NotificationSidebar @onNotifSelected="onNotifSelected" />
     </div>
     <div id="center" class="flex-child">
-      <NotificationEditor @onNotificationSent="onNotificationSent" />
+      <NotificationEditor :notif="notif" />
     </div>
   </div>
 </template>
+
 <script>
 import NotificationSidebar from "@/renderer/components/notification/NotificationSidebar";
 import NotificationEditor from "@/renderer/components/notification/NotificationEditor";
@@ -19,7 +20,9 @@ export default {
   },
 
   data() {
-    return {};
+    return {
+      notif: {}
+    };
   },
 
   computed: {
@@ -29,8 +32,9 @@ export default {
   },
 
   methods: {
-    onAppSelected(app) {
-      this.app = app;
+    onNotifSelected(notif) {
+      this.notif = notif;
+      console.log('selected: ' + notif.title);
     },
 
     showAboutApp() {
@@ -44,9 +48,11 @@ export default {
 .ui[class*="top attached"].menu {
   border-radius: 0;
 }
+
 .flex-container {
   display: flex;
 }
+
 #center {
   width: 100%;
 }

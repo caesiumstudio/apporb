@@ -1,9 +1,9 @@
 import { BrowserWindow, ipcMain } from "electron"
 import { CommandValue, IPCListener } from "../../shared/IPCListener"
 import { Log } from "../../shared/Logger"
-import { APIClient } from "../AppleAppStore/APIClient"
-import { ClientCredentials } from "../AppleAppStore/ClientCredentials"
-import { FirebaseApiClient } from "../notification/FirebaseApiClient"
+import { APIClient } from "../appstore/APIClient"
+import { ClientCredentials } from "../appstore/ClientCredentials"
+import { NotifHandler } from "../notification/NotifHandler"
 
 const TAG = "IPCNative";
 export class IPCNative {
@@ -21,7 +21,7 @@ export class IPCNative {
     }
 
     constructor() {
-        this.ipcListeners = [new APIClient(), new ClientCredentials(), new FirebaseApiClient()];
+        this.ipcListeners = [new APIClient(), new ClientCredentials(), new NotifHandler()];
         this.init();
     }
 

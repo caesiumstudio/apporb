@@ -1,25 +1,43 @@
 import { CommandValue, IPCListener } from "@/shared/IPCListener";
 import { Log } from "@/shared/Logger";
 import { IPCNative } from "../ipc/IpcNative";
-import { HttpHandler } from "@/native/AppleAppStore/HttpHandler";
-import { APPLE_DEV_HOST } from "@/shared/App";
-const jwt = require("jsonwebtoken");
+import { HttpHandler } from "@/native/appstore/HttpHandler";
+import { NotifDB } from "../db/NotifDB";
+import { Notification } from "@/shared/Notification";
 
-const TAG = "FirebaseApiClient";
+const TAG = "NotifHandler";
 
-export class FirebaseApiClient implements IPCListener {
+export class NotifHandler implements IPCListener {
 
     notify(args: CommandValue): boolean {
         if (args.command.startsWith("CMD_HTTP_POST_NOTIFICATION")) {
             this.post(args);
+        } else if (args.command === "CMD_SAVE_NOTIFICATION") {
+            this.saveNotification(args);
+        } else if (args.command == "CMD_GET_ALL_NOTIFICATIONS") {
+            this.getAllNotifications(args)
         }
 
         return false;
     }
 
-    private post(args: CommandValue) {
-        // Log.debug(TAG, "Posting: " + JSON.stringify(args));
+    private getAllNotifications(args: CommandValue) {
+        const notifDB = NotifDB.instance();
+        notifDB.getAllNotifications().then((notifs: Notification[]) => {
+            args.value = notifs;
+            IPCNative.instance().onNativeEvent(args);
+        });
+    }
 
+    private saveNotification(args: CommandValue) {
+        const notifDB = NotifDB.instance();
+        notifDB.notifUpsert(args.value);
+        args.value = { message: "Saved" };
+        IPCNative.instance().onNativeEvent(args);
+
+    }
+
+    private post(args: CommandValue) {
         const httpHandler = new HttpHandler();
         const options = this.getPostOptions(args.value);
         Log.debug(TAG, JSON.stringify(options));

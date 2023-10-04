@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="ui grid">
+    <div v-if="notif" class="ui grid">
       <div class="ten wide column">
         <!-- <div class="ui header">Notification Editor</div>
         <div class="ui divider"></div> -->
@@ -10,14 +10,10 @@
             <label>Name</label>
             <div class="two fields">
               <div class="field">
-                <input v-model="notifId" type="text" placeholder="name" />
+                <input v-model="notif.title" type="text" placeholder="name" />
               </div>
               <div class="field">
-                <button
-                  type="button"
-                  class="ui button primary"
-                  @click="onNotificationSave"
-                >
+                <button type="button" class="ui button primary" @click="onNotificationSave">
                   Save
                 </button>
               </div>
@@ -27,12 +23,7 @@
             <label>Authorization Key</label>
             <div class="fields">
               <div class="sixteen wide field">
-                <input
-                  v-model="authKey"
-                  type="text"
-                  name="shipping[address]"
-                  placeholder="Street Address"
-                />
+                <input v-model="authKey" type="text" />
               </div>
             </div>
             <div class="field">
@@ -54,18 +45,11 @@
 
             <div class="ui segment field">
               <label>Notification Data JSON</label>
-              <CodeMirrorVue
-                :jsonText="jsonNotifData"
-                @onChange="onNotifDataChange"
-              />
+              <CodeMirrorVue :jsonText="jsonNotifData" @onChange="onNotifDataChange" />
             </div>
 
             <div class="field">
-              <button
-                type="button"
-                class="ui button primary"
-                @click="onSendNotification"
-              >
+              <button type="button" class="ui button primary" @click="onSendNotification">
                 Send
               </button>
             </div>
@@ -84,6 +68,7 @@ import IPCClient from "@/renderer/ipc/IPCClient";
 import { Commands } from "@/shared/constants/Commands";
 import { Toaster } from "@/renderer/services/Toaster";
 import { ViewController } from "@/renderer/ViewController";
+import { Utils } from '@/shared/Utils';
 import CodeMirrorVue from "./CodeMirror.vue";
 import NotificationHistory from "./NotificationHistory.vue";
 export default {
@@ -94,11 +79,12 @@ export default {
 
   data() {
     return {
-      notifId: "sdasdf-adf-sda-fsdaf-sdafa-sf",
+      notif: null,
+      notifId: Utils.getUID(),
       history: [],
       topic: "testdebug",
-      authKey:
-        "",
+      title: "Test name",
+      authKey: "",
       jsonNotif: '{ "title": "title", "body": "body"}',
       jsonNotifData:
         '{"title": "title", "message": "message", "url": "https://www.youtube.com/watch?v=ia64t7GYsIs"}',
@@ -106,12 +92,36 @@ export default {
   },
 
   props: {
-    appVersion: Object,
+    notifProp: Object,
   },
-
+  watch: {
+    notifProp: {
+      handler(newNotif) {
+        this.notif = this.clone(newNotif);
+      },
+    },
+  },
   methods: {
     onNotificationSave() {
-      console.log("saving");
+      const notif = {
+        id: this.notifId,
+        topic: this.topic,
+        title: this.title,
+        authKey: this.authKey,
+        notifJson: this.jsonNotif,
+        dataJsno: this.jsonNotifData,
+        history: JSON.parse(JSON.stringify(this.history))
+      };
+
+      IPCClient.instance().request(
+        {
+          command: Commands.CMD_SAVE_NOTIFICATION,
+          value: notif,
+        },
+        (response) => {
+          console.log(JSON.stringify(response));
+        }
+      );
     },
     onNotifChange(text) {
       console.log("notif", text);
@@ -149,9 +159,11 @@ export default {
             .dispatch("setProgressState", false);
           console.log(JSON.stringify(response));
           this.history.push({
-            id: JSON.parse(response).message_id,
+            id: Utils.getUID(),
             title: postData.notification.title,
-            time: this.getTimestamp(),
+            timestamp: this.getTimestamp(),
+            status: "SENT",
+            messageId: JSON.parse(response).message_id
           });
         }
       );
@@ -173,6 +185,7 @@ export default {
         currentdate.getSeconds();
       return datetime;
     },
+
     getPostData() {
       try {
         const postData = {
@@ -219,9 +232,9 @@ export default {
 
   mounted() {
     window.$(".ui.accordion").accordion();
-    for (let i = 0; i < 100; i++) {
-      this.history.push({ title: "sfsfd", id: "sfsdf", time: "sdfsdfsdf" });
-    }
+    // for (let i = 0; i < 100; i++) {
+    //   this.history.push({ title: "sfsfd", id: "sfsdf", time: "sdfsdfsdf" });
+    // }
   },
 
   computed: {
@@ -240,6 +253,7 @@ export default {
   overflow: hidden;
   padding: 8px 8px 128px 8px;
 }
+
 #content {
   border: none;
 }
