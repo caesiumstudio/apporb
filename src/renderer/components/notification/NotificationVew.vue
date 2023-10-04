@@ -1,33 +1,25 @@
 <template>
   <div class="flex-container">
     <div class="flex-child">
-      <Sidebar @onAppSelected="onAppSelected" />
+      <NotificationSidebar />
     </div>
     <div id="center" class="flex-child">
-      <AppInfo :app="app" />
+      <NotificationEditor @onNotificationSent="onNotificationSent" />
     </div>
   </div>
 </template>
 <script>
-import Sidebar from "@/renderer/components/AppSidebar";
-import AppInfo from "@/renderer/components/AppInfo";
+import NotificationSidebar from "@/renderer/components/notification/NotificationSidebar";
+import NotificationEditor from "@/renderer/components/notification/NotificationEditor";
 import { Log } from "@/shared/Logger";
 export default {
   components: {
-    Sidebar,
-    AppInfo,
-  },
-
-  props: {
-    searchTerm: String,
-    sortBy: String,
-    fileTypeFilter: Object,
+    NotificationSidebar,
+    NotificationEditor,
   },
 
   data() {
-    return {
-      app: {},
-    };
+    return {};
   },
 
   computed: {

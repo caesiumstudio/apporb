@@ -11,12 +11,18 @@ const TAG = "AppsLoader";
 export class APIClient implements IPCListener {
 
     notify(args: CommandValue): boolean {
-        if (args.command.startsWith("CMD_HTTP_GET")) {
-            this.get(args);
-        } else if (args.command.startsWith("CMD_HTTP_PATCH")) {
-            this.patch(args);
-        } else if (args.command.startsWith("CMD_HTTP_POST")) {
-            this.post(args);
+        const map: any = {
+            "CMD_HTTP_GET_LOAD_APPS": this.get,
+            "CMD_HTTP_GET_APP_STORE_VERSIONS": this.get,
+            "CMD_HTTP_GET_APP_STORE_VERSION_LOCALIZATIONS": this.get,
+
+            "CMD_HTTP_PATCH_APP_STORE_VERSION_UPDATE": this.patch,
+            "CMD_HTTP_POST_APP_STORE_VERSION_CREATE": this.post,
+
+        };
+        const method = map[args.command];
+        if (method) {
+            method.call(this, args);
         }
 
         return false;

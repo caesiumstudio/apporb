@@ -1,70 +1,81 @@
 <template>
   <div>
+    <div class="ui segment">
     <AppVersionTopMenuVue
       :appVersionLocalizations="appVersionLocalizations"
     ></AppVersionTopMenuVue>
-    <div
-      v-for="(appVersionLocalization, index) in appVersionLocalizations"
-      :key="appVersionLocalization.id"
-    >
-      <div class="ui blue segment">
-        <div class="ui form">
-          <div class="field">
-            <label>Language</label>
-            <div>
-              {{ getLanguage(getAttributes(appVersionLocalization).locale) }}
+    </div>
+
+    <div class="ui segmenft">
+      <div
+        v-for="(appVersionLocalization, index) in appVersionLocalizations"
+        :key="appVersionLocalization.id"
+      >
+        <div class="ui accordion">
+          <div class="title">
+            <i class="dropdown icon"></i>
+            {{ getLanguage(getAttributes(appVersionLocalization).locale) + ' (' + getAttributes(appVersionLocalization).locale + ')'}}
+          </div>
+          <div class="content">
+            <div class="ui blue segment">
+              <div class="ui form">
+                <div class="field">
+                  <label>Description</label>
+                  <textarea
+                    v-model="getAttributes(appVersionLocalization).description"
+                    spellcheck="false"
+                  ></textarea>
+                </div>
+
+                <div class="field">
+                  <label>Keywords</label>
+                  <input
+                    type="text"
+                    v-model="getAttributes(appVersionLocalization).keywords"
+                  />
+                </div>
+
+                <div class="field">
+                  <label>Marketing URL</label>
+                  <input
+                    type="text"
+                    v-model="getAttributes(appVersionLocalization).marketingUrl"
+                  />
+                </div>
+
+                <div class="field">
+                  <label>Promotional Text</label>
+                  <textarea
+                    v-model="
+                      getAttributes(appVersionLocalization).promotionalText
+                    "
+                    rows="2"
+                    spellcheck="false"
+                  >
+                  </textarea>
+                </div>
+                <div class="field">
+                  <label>What's New</label>
+                  <textarea
+                    v-model="getAttributes(appVersionLocalization).whatsNew"
+                    rows="2"
+                    spellcheck="false"
+                  >
+                  </textarea>
+                  <div class="field"></div>
+                  <button
+                    class="ui mini primary button"
+                    @click="saveTranslation(index)"
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
             </div>
-            <label>Description</label>
-            <textarea
-              v-model="getAttributes(appVersionLocalization).description"
-              spellcheck="false"
-            ></textarea>
-          </div>
-
-          <div class="field">
-            <label>Keywords</label>
-            <input
-              type="text"
-              v-model="getAttributes(appVersionLocalization).keywords"
-            />
-          </div>
-
-          <div class="field">
-            <label>Marketing URL</label>
-            <input
-              type="text"
-              v-model="getAttributes(appVersionLocalization).marketingUrl"
-            />
-          </div>
-
-          <div class="field">
-            <label>Promotional Text</label>
-            <textarea
-              v-model="getAttributes(appVersionLocalization).promotionalText"
-              rows="2"
-              spellcheck="false"
-            >
-            </textarea>
-          </div>
-          <div class="field">
-            <label>What's New</label>
-            <textarea
-              v-model="getAttributes(appVersionLocalization).whatsNew"
-              rows="2"
-              spellcheck="false"
-            >
-            </textarea>
-            <div class="field"></div>
-            <button
-              class="ui mini black button"
-              @click="saveTranslation(index)"
-            >
-              Save
-            </button>
+            <div class="ui divider"></div>
           </div>
         </div>
       </div>
-      <div class="ui divider"></div>
     </div>
   </div>
 </template>
@@ -73,11 +84,10 @@
 import { Translation } from "@/shared/constants/Translation";
 import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
-import IPCClient from "../ipc/IPCClient";
-import { Toaster } from "../services/Toaster";
-import AppVersionTopMenuVue from "./AppVersionTopMenu.vue";
-import { ViewController } from "../ViewController";
-
+import IPCClient from "@/renderer/ipc/IPCClient";
+import { Toaster } from "@/renderer/services/Toaster";
+import AppVersionTopMenuVue from "@/renderer/components/apple/AppVersionTopMenu.vue";
+import { ViewController } from "@/renderer/ViewController";
 export default {
   components: {
     AppVersionTopMenuVue,
@@ -147,6 +157,7 @@ export default {
       ViewController.instance()
         .getVuexStore()
         .dispatch("setProgressState", true);
+
       IPCClient.instance(this.appVersion).request(
         {
           command: Commands.CMD_HTTP_GET_APP_STORE_VERSION_LOCALIZATIONS,

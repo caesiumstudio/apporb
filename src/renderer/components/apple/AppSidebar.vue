@@ -31,10 +31,9 @@
 import { Log } from "@/shared/Logger";
 import { App } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
-import { Toaster } from "../services/Toaster";
+import { Toaster } from "@/renderer/services/Toaster";
 import IPCClient from "@/renderer/ipc/IPCClient";
-import { ViewController } from "../ViewController";
-
+import { ViewController } from "@/renderer/ViewController";
 const TAG = "AppSidebar";
 export default {
   components: {},

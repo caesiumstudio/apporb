@@ -3,6 +3,7 @@ import { CommandValue, IPCListener } from "../../shared/IPCListener"
 import { Log } from "../../shared/Logger"
 import { APIClient } from "../AppleAppStore/APIClient"
 import { ClientCredentials } from "../AppleAppStore/ClientCredentials"
+import { FirebaseApiClient } from "../notification/FirebaseApiClient"
 
 const TAG = "IPCNative";
 export class IPCNative {
@@ -20,7 +21,7 @@ export class IPCNative {
     }
 
     constructor() {
-        this.ipcListeners = [new APIClient(), new ClientCredentials()];
+        this.ipcListeners = [new APIClient(), new ClientCredentials(), new FirebaseApiClient()];
         this.init();
     }
 

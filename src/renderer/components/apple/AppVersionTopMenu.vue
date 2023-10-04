@@ -1,15 +1,12 @@
 <template>
   <div>
     <div class="app-menu">
-      <div class="ui basic buttons">
-        <div class="ui button" @click="addAllLanguages()">
-          Add All Languages
-        </div>
-        <div class="ui button" @click="generateTranslations">
-          Generate Translations
-        </div>
+      <div class="ui button primary" @click="addAllLanguages()">Add All Languages</div>
+      <div class="ui button primary" @click="generateTranslations">
+        Generate Translations
       </div>
 
+      <div class="ui divider hidden"></div>
       <div class="ui form">
         <div class="field">
           <label>Select attributes to translate</label>
@@ -40,10 +37,9 @@
 import { Translation } from "@/shared/constants/Translation";
 import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
-import IPCClient from "../ipc/IPCClient";
-import { Toaster } from "../services/Toaster";
-import { ViewController } from "../ViewController";
-
+import IPCClient from "@/renderer/ipc/IPCClient";
+import { Toaster } from "@/renderer/services/Toaster";
+import { ViewController } from "@/renderer/ViewController";
 export default {
   data() {
     return {
