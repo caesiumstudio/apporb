@@ -64,7 +64,7 @@ import ProgressBar from "@/renderer/components/ProgressBar.vue";
 export default {
   data() {
     return {
-      contentView: "NOTIFICATION",
+      contentView: "APPLE",
     };
   },
   components: {
