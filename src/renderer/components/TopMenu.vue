@@ -6,7 +6,7 @@
       </div>
 
       <div
-        id="text-bookshelf"
+        id="apple-bookshelf"
         title="Apple platform"
         @click="setPlatform('APPLE')"
         :class="['ui icon item dropdown', { active: contentView === 'APPLE' }]"
@@ -15,7 +15,8 @@
       </div>
 
       <div
-        id="text-bookshelf"
+        id="android-bookshelf"
+        v-if="false"
         title="Android platform"
         :class="[
           'ui icon item dropdown',
@@ -27,7 +28,7 @@
       </div>
 
       <div
-        id="text-bookshelf"
+        id="notification-bookshelf"
         title="Android platform"
         @click="setPlatform('NOTIFICATION')"
         :class="[
