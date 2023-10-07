@@ -22,9 +22,11 @@
 <script>
 import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
-import IPCClient from "../ipc/IPCClient";
-import AppVersionLocalization from "@/renderer/components/AppVersionLocalization";
-import { ViewController } from "../ViewController";
+import IPCClient from "@/renderer/ipc/IPCClient";
+import AppVersionLocalization from "@/renderer/components/apple/AppVersionLocalization";
+import { ViewController } from "@/renderer/ViewController";
+import { Toaster } from "@/renderer/services/Toaster";
+
 export default {
   components: { AppVersionLocalization },
 
@@ -56,6 +58,7 @@ export default {
       ViewController.instance()
         .getVuexStore()
         .dispatch("setProgressState", true);
+
       IPCClient.instance().request(
         {
           command: Commands.CMD_HTTP_GET_APP_STORE_VERSIONS,
@@ -65,7 +68,12 @@ export default {
           ViewController.instance()
             .getVuexStore()
             .dispatch("setProgressState", false);
-          this.appVersions = JSON.parse(response).data;
+          response = JSON.parse(response);
+          if (response.code < 0) {
+            Toaster.showToast(response.error, Toaster.ERROR, 3000);
+          } else {
+            this.appVersions = response.data;
+          }
         }
       );
     },
@@ -78,9 +86,11 @@ export default {
       return App.getAttributes(app) || {};
     },
   },
+
   mounted() {
     window.$(".ui.accordion").accordion();
   },
+
   computed: {
     darkMode() {
       return this.$store.state.appConfig.darkMode;

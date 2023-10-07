@@ -1,24 +1,22 @@
-import { DBClient } from "../db/DBClient";
 import fs from 'fs';
 
 export class Credentials {
+    private credentials: any;
+
+    constructor(credentials: object) {
+        this.credentials = credentials;
+    }
 
     public get privateKey() {
-        const dbClient = new DBClient();
-        const credentials: any = dbClient.getCredentials();
-        return fs.readFileSync(credentials["authTokenFilePath"]);
+        return fs.readFileSync(this.credentials["authTokenFilePath"]);
     }
 
     public get apiKeyId(): string {
-        const dbClient = new DBClient();
-        const credentials: any = dbClient.getCredentials();
-        return credentials["keyID"];
+        return this.credentials["keyID"];
     }
 
     public get issuerId() {
-        const dbClient = new DBClient();
-        const credentials: any = dbClient.getCredentials();
-        return credentials["issuerID"];
+        return this.credentials["issuerID"];
     }
 
     public get payload() {

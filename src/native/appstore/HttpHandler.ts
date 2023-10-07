@@ -46,7 +46,7 @@ export class HttpHandler {
             });
 
             req.on("error", (e: any) => {
-                console.log("Error: " + e.message);
+                Log.error(TAG, "Error: " + e.message);
                 reject(e);
             });
 

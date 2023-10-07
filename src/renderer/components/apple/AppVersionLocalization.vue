@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="ui segment">
-    <AppVersionTopMenuVue
-      :appVersionLocalizations="appVersionLocalizations"
-    ></AppVersionTopMenuVue>
+      <AppVersionTopMenuVue
+        :appVersionLocalizations="appVersionLocalizations"
+      ></AppVersionTopMenuVue>
     </div>
 
     <div class="ui segmenft">
@@ -14,7 +14,12 @@
         <div class="ui accordion">
           <div class="title">
             <i class="dropdown icon"></i>
-            {{ getLanguage(getAttributes(appVersionLocalization).locale) + ' (' + getAttributes(appVersionLocalization).locale + ')'}}
+            {{
+              getLanguage(getAttributes(appVersionLocalization).locale) +
+              " (" +
+              getAttributes(appVersionLocalization).locale +
+              ")"
+            }}
           </div>
           <div class="content">
             <div class="ui blue segment">
@@ -84,11 +89,10 @@
 import { Translation } from "@/shared/constants/Translation";
 import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
-import IPCClient from "../ipc/IPCClient";
-import { Toaster } from "../services/Toaster";
-import AppVersionTopMenuVue from "./AppVersionTopMenu.vue";
-import { ViewController } from "../ViewController";
-
+import IPCClient from "@/renderer/ipc/IPCClient";
+import { Toaster } from "@/renderer/services/Toaster";
+import AppVersionTopMenuVue from "@/renderer/components/apple/AppVersionTopMenu.vue";
+import { ViewController } from "@/renderer/ViewController";
 export default {
   components: {
     AppVersionTopMenuVue,
@@ -113,6 +117,7 @@ export default {
       ViewController.instance()
         .getVuexStore()
         .dispatch("setProgressState", true);
+
       const appVersionLocalization = this.appVersionLocalizations[index];
       let attributes = this.getAttributes(appVersionLocalization);
       attributes = JSON.parse(JSON.stringify(attributes));
