@@ -13,6 +13,8 @@
 
 **Apporb** is designed to provide marketing support for app developers. Currently this software only provides automatic translations for app store app versions and updating them.
 
+### Apporb works on <img src="https://www.nicepng.com/png/full/201-2015528_linux-logo-png.png" width="80">
+
 ##### The following features are planned -
 1. Translation management for description, whatsNew, promotional text and keywords app store. :white_check_mark:
 2. Screenshot generation for the App Store and Play Store in the suitable resolutions.
