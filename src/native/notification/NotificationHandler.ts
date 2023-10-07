@@ -1,14 +1,14 @@
 import { CommandValue, IPCListener } from "@/shared/IPCListener";
 import { Log } from "@/shared/Logger";
-import { IPCNative } from "../ipc/IpcNative";
 import { HttpHandler } from "@/native/appstore/HttpHandler";
-import { NotifDB } from "../db/NotifDB";
-import { Notification } from "@/shared/Notification";
-import { Utils } from "@/shared/Utils";
+import { Notification, emptyNotification } from "@/shared/Notification";
+import { NotificationDB } from "./NotificationDB";
+import { IPCNative } from "../ipc/IpcNative";
+import { StatusResponse } from "@/shared/StatusResponse";
 
-const TAG = "NotifHandler";
+const TAG = "NotificationHandler";
 
-export class NotifHandler implements IPCListener {
+export class NotificationHandler implements IPCListener {
 
     notify(args: CommandValue): boolean {
         if (args.command === "CMD_HTTP_POST_NOTIFICATION") {
@@ -23,28 +23,23 @@ export class NotifHandler implements IPCListener {
     }
 
     private getAllNotifications(args: CommandValue) {
-        const notifDB = NotifDB.instance();
-        notifDB.getAllNotifications().then((notifs: Notification[]) => {
-            args.value = notifs;
+        const notifDB = NotificationDB.instance();
+        notifDB.getAllNotifications().then((notification: Notification[]) => {
+            args.value = notification;
             IPCNative.instance().onNativeEvent(args);
         }).catch(error => {
-            args.value = [{
-                id: Utils.getUID(),
-                title: "Notification Test",
-                topic: "test_topic",
-                authKey: "test_authkey",
-                notifJson: '{ "title": "title", "body": "body"}',
-                dataJson: '{"title": "title", "message": "message", "url": "https://www.youtube.com/watch?v=ia64t7GYsIs"}',
-                history: []
-            }];
+            args.value = [emptyNotification];
             IPCNative.instance().onNativeEvent(args);
         });
     }
 
     private saveNotification(args: CommandValue) {
-        const notifDB = NotifDB.instance();
+        const notifDB = NotificationDB.instance();
         notifDB.notifUpsert(args.value);
-        args.value = { message: "Saved" };
+
+
+        const status: StatusResponse = { code: 0, message: "Notification test saved" };
+        args.value = status;
         IPCNative.instance().onNativeEvent(args);
 
     }
@@ -53,23 +48,25 @@ export class NotifHandler implements IPCListener {
         const httpHandler = new HttpHandler();
         const options = this.getPostOptions(args.value);
         if (options.headers.Authorization.length < 30) {
-            args.value = {error: 'Invalid Auth Key'};
+            const status: StatusResponse = { code: 0, message: "Invalid auth key" };
+            args.value = status;
             IPCNative.instance().onNativeEvent(args);
-            return;
         } else if (args.value.postData.to.length < 3) {
-            args.value = {error: 'Invalid topic'};
+            const status: StatusResponse = { code: 0, message: "Invalid topic" };
+            args.value = status;
             IPCNative.instance().onNativeEvent(args);
-            return;
         }
 
         httpHandler.makePostRequest(options, JSON.stringify(args.value.postData)).then((jsonResponse: string) => {
             Log.debug(TAG, jsonResponse);
-            args.value = jsonResponse;
+
+            const status: StatusResponse = { code: 0, message: "Sent successfully", data: JSON.parse(jsonResponse) };
+            args.value = status;
             IPCNative.instance().onNativeEvent(args);
         }).catch(error => {
             Log.error(TAG, error);
-            args.value = error;
-            Log.error(TAG, JSON.stringify(args));
+            const status: StatusResponse = { code: -1, message: "Error sending notification", data: error };
+            args.value = status;
             IPCNative.instance().onNativeEvent(args);
         });
     }

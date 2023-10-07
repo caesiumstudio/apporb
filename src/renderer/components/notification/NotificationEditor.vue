@@ -124,47 +124,37 @@ export default {
 
   methods: {
     onNotifSaveAsNew() {
-      const notif = this.notif;
-      const notifObject = {
-        id: Utils.getUID(),
-        title: notif.title,
-        topic: notif.topic,
-        authKey: notif.authKey,
-        notifJson: notif.notifJson,
-        dataJson: notif.dataJson,
-        history: notif.history,
-      };
+      const notif = Utils.cloneObject(this.notif);
+      delete notif._id;
+      notif.id = Utils.getUID();
 
       IPCClient.instance().request(
         {
           command: Commands.CMD_SAVE_NOTIFICATION,
-          value: JSON.parse(JSON.stringify(notifObject)),
+          value: notif,
         },
         (response) => {
-          console.log(JSON.stringify(response));
+          if (response.code < 0) {
+            Toaster.showToast(response.message, Toaster.ERROR, 2000);
+          } else {
+            Toaster.showToast(response.message, Toaster.INFO, 2000);
+          }
         }
       );
     },
 
     onNotificationSave() {
-      const notif = this.notif;
-      const notifObject = {
-        id: notif.id,
-        title: notif.title,
-        topic: notif.topic,
-        authKey: notif.authKey,
-        notifJson: notif.notifJson,
-        dataJson: notif.dataJson,
-        history: notif.history,
-      };
-
       IPCClient.instance().request(
         {
           command: Commands.CMD_SAVE_NOTIFICATION,
-          value: JSON.parse(JSON.stringify(notifObject)),
+          value: Utils.cloneObject(this.notif),
         },
         (response) => {
-          console.log(JSON.stringify(response));
+          if (response.code < 0) {
+            Toaster.showToast(response.message, Toaster.ERROR, 2000);
+          } else {
+            Toaster.showToast(response.message, Toaster.INFO, 2000);
+          }
         }
       );
     },
@@ -205,65 +195,27 @@ export default {
             .dispatch("setProgressState", false);
 
           console.log(JSON.stringify(respJson));
-          if (respJson.error) {
+          if (respJson.code < 0) {
             Toaster.showToast(respJson.error, Toaster.ERROR, 1000);
           } else {
             this.notif.history.push({
               id: Utils.getUID(),
               title: postData.notification.title,
-              timestamp: this.getTimestamp(),
+              timestamp: Utils.getTimestamp(),
               status: "SENT",
-              messageId: respJson.message_id,
+              messageId: respJson.data.message_id,
             });
           }
         }
       );
     },
 
-    getTimestamp() {
-      var currentdate = new Date();
-      var datetime =
-        currentdate.getDate() +
-        "/" +
-        (currentdate.getMonth() + 1) +
-        "/" +
-        currentdate.getFullYear() +
-        " @ " +
-        currentdate.getHours() +
-        ":" +
-        currentdate.getMinutes() +
-        ":" +
-        currentdate.getSeconds();
-      return datetime;
-    },
-
     getPostData() {
       try {
         const postData = {
           to: "/topics/" + this.notif.topic,
-          notification: this.clone(JSON.parse(this.notif.notifJson)),
-          //   android: {
-          //     notification: {
-          //       color: "#bcbf01",
-          //       icon: "stock_ticker_update",
-          //       imageUrl:
-          //         "https://raw.githubusercontent.com/caesiumstudio/apporb/main/public/icon.png",
-          //       time_to_live: 5,
-          //     },
-          //   },
-          android: {
-            notification: {
-              imageUrl:
-                "https://raw.githubusercontent.com/caesiumstudio/apporb/main/public/icon.png",
-            },
-          },
-
-          data: this.clone(JSON.parse(this.notif.dataJson)),
-          //   webpush: {
-          //     headers: {
-          //       TTL: "5",
-          //     },
-          //   },
+          notification: Utils.cloneObject(JSON.parse(this.notif.notifJson)),
+          data: Utils.cloneObject(JSON.parse(this.notif.dataJson)),
         };
         return postData;
       } catch (e) {
@@ -274,10 +226,6 @@ export default {
         );
       }
       return null;
-    },
-
-    clone(json) {
-      return JSON.parse(JSON.stringify(json));
     },
   },
 

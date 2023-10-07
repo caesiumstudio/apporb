@@ -11,7 +11,6 @@
 <script>
 import Sidebar from "@/renderer/components/apple/AppSidebar";
 import AppInfo from "@/renderer/components/apple/AppInfo";
-import { Log } from "@/shared/Logger";
 export default {
   components: {
     Sidebar,

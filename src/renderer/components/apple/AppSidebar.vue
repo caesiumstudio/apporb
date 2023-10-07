@@ -50,16 +50,14 @@ export default {
     },
 
     onLoadApps() {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      const viewController = ViewController.instance();
+      viewController.getVuexStore().dispatch("setProgressState", true);
+
       IPCClient.instance().request(
         { command: Commands.CMD_HTTP_GET_LOAD_APPS, value: "/v1/apps" },
         (data) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
-          if (data.error) {
+          viewController.getVuexStore().dispatch("setProgressState", false);
+          if (data.error < 0) {
             Toaster.showToast(data.error, Toaster.ERROR, 3000);
           } else {
             this.apps = this.getAppList(data);

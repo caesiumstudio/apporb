@@ -6,13 +6,13 @@ import { Utils } from '@/shared/Utils';
 
 const TAG = "NotificationDB";
 
-export class NotifDB {
-    public static notifDB: NotifDB;
+export class NotificationDB {
+    public static notifDB: NotificationDB;
     private dataStore: Datastore;
 
-    static instance(): NotifDB {
+    static instance(): NotificationDB {
         if (!this.notifDB) {
-            this.notifDB = new NotifDB();
+            this.notifDB = new NotificationDB();
             Log.debug(TAG, "NotifDB Initialized");
         }
 
@@ -26,17 +26,18 @@ export class NotifDB {
         this.dataStore = new Datastore({
             filename: dbPath,
             autoload: true,
-            onload: function (error: any) { Log.debug(TAG, error) }
+            onload: (error: any) => { Log.debug(TAG, error) }
         });
     }
 
     notifUpsert(notif: Notification) {
         Log.debug(TAG, 'notif saved: ' + JSON.stringify(notif));
+
         this.dataStore.update({
             id: notif.id
         }, notif, { upsert: true },
             (err: any, numReplaced: number, upsert: any) => {
-                Log.debug(TAG, 'Upserted book: ' + numReplaced);
+                Log.debug(TAG, 'error: ' + err + ' Upserted book: ' + numReplaced + " upsert: " + upsert);
             });
     }
 

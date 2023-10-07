@@ -47,7 +47,6 @@ export default {
   },
 
   methods: {
-
     onChange(event) {
       this.$emit("onChange", event);
     },
