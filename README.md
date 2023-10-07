@@ -14,11 +14,13 @@
 **Apporb** is designed to provide marketing support for app developers. Currently this software only provides automatic translations for app store app versions and updating them.
 
 ##### The following features are planned -
-1. Translation management for description, whatsNew, promotional text and keywords app store.
+1. Translation management for description, whatsNew, promotional text and keywords app store. :white_check_mark:
 2. Screenshot generation for the App Store and Play Store in the suitable resolutions.
 3. Simple but elegant screenshot templates.
 4. Marketing image generation for various social media platforms like Instagram and Twitter.
-5. Push notification testing for android and iOS apps.
+5. Firebase Push notification testing for android and iOS apps. :white_check_mark:
+
+
 
 #### Feel free to suggest any feature you would like to have. :D
 
@@ -36,11 +38,13 @@ npm run electron:serve
 ```
 npm run electron:build
 ```
+#### This is app will help you if you have questions like -
+- How can I get my iOS app connected with api?
+- How to manage translations for app store apps?
+- How to add localized language app descriptions on app store?
+- How to translate App Store Keywords Into 20+ Languages With One Click
+
 
 ### License type
 **MIT License**
 
-
-### Feature Suggestions
-
-To request any features, please create issue report here - [Apporb issues page](https://github.com/caesiumstudio/apporb/issues).
