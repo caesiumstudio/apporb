@@ -20,8 +20,6 @@
 4. Marketing image generation for various social media platforms like Instagram and Twitter.
 5. Firebase Push notification testing for android and iOS apps. :white_check_mark:
 
-
-
 #### Feel free to suggest any feature you would like to have. :D
 
 ## Project setup
