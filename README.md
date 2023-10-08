@@ -16,11 +16,11 @@
 ### Apporb works on <img src="https://www.nicepng.com/png/full/201-2015528_linux-logo-png.png" width="80">
 
 ##### The following features are planned -
-1. Translation management for description, whatsNew, promotional text and keywords app store. :white_check_mark:
-2. Screenshot generation for the App Store and Play Store in the suitable resolutions.
+1. Translation management for description, whatsNew, promotional text and keywords in app store. :white_check_mark:
+2. Screenshot generation for App Store and Play Store in the suitable resolutions.
 3. Simple but elegant screenshot templates.
 4. Marketing image generation for various social media platforms like Instagram and Twitter.
-5. Firebase Push notification testing for android and iOS apps. :white_check_mark:
+5. Firebase push notification testing for android and iOS apps. :white_check_mark:
 6. Read all the reviews and respond to them individually. :white_check_mark:
 
 #### Feel free to suggest any feature you would like to have. :D
@@ -39,11 +39,12 @@ npm run electron:serve
 ```
 npm run electron:build
 ```
-#### This is app will help you if you have questions like -
-- How can I get my iOS app connected with api?
-- How to manage translations for app store apps?
+#### This app will help you if you have questions like -
+- How can I access my iOS apps connected with app connect api?
+- How can I manage translations for my app versions?
 - How to add localized language app descriptions on app store?
-- How to translate App Store Keywords Into 20+ Languages With One Click
+- How to translate App Store Keywords Into 20+ Languages with one click
+- How to respond to customer reviews through app connect api.
 
 
 ### License type
