@@ -1,15 +1,14 @@
 <template>
   <div>
     <div class="app-menu">
-      <div class="ui basic buttons">
-        <div class="ui button" @click="addAllLanguages()">
-          Add All Languages
-        </div>
-        <div class="ui button" @click="generateTranslations">
-          Generate Translations
-        </div>
+      <div class="ui button primary" @click="addAllLanguages()">
+        Add All Languages
+      </div>
+      <div class="ui button primary" @click="generateTranslations">
+        Generate Translations
       </div>
 
+      <div class="ui divider hidden"></div>
       <div class="ui form">
         <div class="field">
           <label>Select attributes to translate</label>
@@ -40,10 +39,9 @@
 import { Translation } from "@/shared/constants/Translation";
 import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
-import IPCClient from "../ipc/IPCClient";
-import { Toaster } from "../services/Toaster";
-import { ViewController } from "../ViewController";
-
+import IPCClient from "@/renderer/ipc/IPCClient";
+import { Toaster } from "@/renderer/services/Toaster";
+import { ViewController } from "@/renderer/ViewController";
 export default {
   data() {
     return {
@@ -80,6 +78,7 @@ export default {
         );
         return;
       }
+
       for (let i = 0; i < this.appVersionLocalizations.length; i++) {
         const loc = this.appVersionLocalizations[i];
         const attr = this.getAttributes(loc);
@@ -156,6 +155,7 @@ export default {
       ViewController.instance()
         .getVuexStore()
         .dispatch("setProgressState", true);
+
       const appVersionLocalization = this.appVersionLocalizations;
       const existingLocale = [];
       for (let i = 0; i < this.appVersionLocalizations.length; i++) {
@@ -219,8 +219,7 @@ export default {
           ViewController.instance()
             .getVuexStore()
             .dispatch("setProgressState", false);
-          response = JSON.parse(response);
-          if (response.errors) {
+          if (response.code < 0) {
             console.log(JSON.stringify(response));
           } else {
             console.log("success");

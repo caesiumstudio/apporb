@@ -7,7 +7,7 @@
 
 import { Commands } from "@/shared/constants/Commands";
 import { defineComponent } from "vue";
-import { ViewController } from "../ViewController";
+import { ViewController } from "@/renderer/ViewController";
 import TopMenu from "@/renderer/components/TopMenu.vue";
 import SettingsDialogs from "@/renderer/components/dialogs/SettingsDialogs.vue";
 

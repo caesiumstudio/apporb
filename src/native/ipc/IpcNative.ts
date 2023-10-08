@@ -1,8 +1,9 @@
 import { BrowserWindow, ipcMain } from "electron"
 import { CommandValue, IPCListener } from "../../shared/IPCListener"
 import { Log } from "../../shared/Logger"
-import { APIClient } from "../AppleAppStore/APIClient"
-import { ClientCredentials } from "../AppleAppStore/ClientCredentials"
+import { AppStoreHandler as AppStoreHandler } from "../appstore/AppStoreHandler"
+import { ClientCredentials } from "../appstore/ClientCredentials"
+import { NotificationHandler as NotificationHandler } from "../notification/NotificationHandler"
 
 const TAG = "IPCNative";
 export class IPCNative {
@@ -20,7 +21,8 @@ export class IPCNative {
     }
 
     constructor() {
-        this.ipcListeners = [new APIClient(), new ClientCredentials()];
+        // register modules
+        this.ipcListeners = [new AppStoreHandler(), new ClientCredentials(), new NotificationHandler()];
         this.init();
     }
 

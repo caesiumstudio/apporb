@@ -9,6 +9,8 @@ import path from "path";
 
 declare const __static: string;
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const preload = isDevelopment ? "../public/preload.js" : "./preload.js";
+
 let browserWindow: BrowserWindow;
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -17,7 +19,6 @@ protocol.registerSchemesAsPrivileged([
 
 async function createWindow() {
   // Create the browser window.
-  console.log(Utils.joinPath(__static, 'icon.png'));
   browserWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -29,7 +30,7 @@ async function createWindow() {
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
-      preload: path.join(__dirname, "./preload.js"), // path to your preload.js file
+      preload: path.join(__dirname, preload), // path to your preload.js file
     }
   });
 

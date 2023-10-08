@@ -9,9 +9,8 @@
   </div>
 </template>
 <script>
-import Sidebar from "@/renderer/components/AppSidebar";
-import AppInfo from "@/renderer/components/AppInfo";
-import { Log } from "@/shared/Logger";
+import Sidebar from "@/renderer/components/apple/AppSidebar";
+import AppInfo from "@/renderer/components/apple/AppInfo";
 export default {
   components: {
     Sidebar,

@@ -102,6 +102,7 @@ export default {
         },
         (response) => {
           if (response) {
+            response = response.data;
             this.authTokenFilePath = response.authTokenFilePath;
             this.keyID = response.keyID;
             this.issuerID = response.issuerID;

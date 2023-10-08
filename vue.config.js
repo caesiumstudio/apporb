@@ -11,27 +11,17 @@ module.exports = defineConfig({
         "linux": {
           "category": "App Development",
           "synopsis": "Grow your app",
-          "icon": "public/icon.png",
           "target": [
-            // "AppImage",
+            "AppImage",
             "deb",
-            // "snap",
-            // "pacman", // for building pacman package execute first "sudo apt install libarchive-tools"
-            // "rpm" // for building rpm package execute first "sudo apt-get install rpm"
+            "snap",
+            "pacman", // for building pacman package execute first "sudo apt install libarchive-tools"
+            "rpm" // for building rpm package execute first "sudo apt-get install rpm"
           ]
         },
-        // "snap": {
-        //   "plugs": ["default", "removable-media"]
-        // },
         "win": {
           "target": "appx",
           "target": "nsis"
-        },
-        "appx": {
-          "identityName": "46191CaesiumStudio.csBooks",
-          "publisher": "CN=A963860E-2E38-4B48-8DBB-6D90B3BAE06D",
-          "publisherDisplayName": "Caesium Studio",
-          "applicationId": "com.caesiumstudio.csbooks"
         }
       }
     }

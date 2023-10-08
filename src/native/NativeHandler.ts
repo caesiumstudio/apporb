@@ -1,7 +1,7 @@
 import { BrowserWindow } from "electron"
 import { IPCNative } from "./ipc/IpcNative"
 import { Commands } from "@/shared/constants/Commands";
-import { ClientCredentials } from "./AppleAppStore/ClientCredentials";
+import { ClientCredentials } from "./appstore/ClientCredentials";
 
 export class NativeHandler {
   private win: BrowserWindow

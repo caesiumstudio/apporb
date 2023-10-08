@@ -1,0 +1,72 @@
+<template>
+  <div class="container">
+    <div v-show="Object.keys(app).length">
+      <div class="ui top attached tabular menu">
+        <a class="item active" data-tab="one">App Meta</a>
+        <a class="item" data-tab="two">Reviews</a>
+      </div>
+      <div class="ui bottom attached tab segment active" data-tab="one">
+        <app-versions :app="app"/>
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="two">
+        <app-reviews :app="app"/>
+      </div>
+    </div>
+    <div v-show="Object.keys(app).length == 0">
+      <loader-view :config="loaderConfig" />
+    </div>
+  </div>
+</template>
+
+<script>
+import LoaderView from "../LoaderView.vue";
+import AppReviews from './AppReviews.vue';
+import AppVersions from './AppVersions.vue';
+
+export default {
+  components: { AppVersions, AppReviews, LoaderView },
+
+  data() {
+    return {
+      appVersions: [],
+      selectedBookTitle: "",
+      loaderConfig: {
+        isIconVisible: false,
+        text: "Load and select an app",
+      },
+    };
+  },
+
+  props: {
+    app: Object,
+  },
+
+  methods: {
+  },
+
+  mounted() {
+    window.$(".ui.accordion").accordion();
+    window.$(".menu .item").tab();
+  },
+
+  computed: {
+    darkMode() {
+      return this.$store.state.appConfig.darkMode;
+    },
+  },
+};
+</script>
+
+<style scoped>
+.container {
+  height: 100vh;
+  width: 100%;
+  min-height: 100%;
+  overflow: scroll;
+  padding: 8px 8px 128px 8px;
+}
+
+#content {
+  border: none;
+}
+</style>
