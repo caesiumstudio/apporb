@@ -15,7 +15,8 @@ export class GetAPIHandler {
             "CMD_HTTP_GET_LOAD_APPS",
             "CMD_HTTP_GET_APP_STORE_VERSIONS",
             "CMD_HTTP_GET_APP_STORE_VERSION_LOCALIZATIONS",
-            "CMD_HTTP_GET_ALL_APP_STORE_REVIEWS"
+            "CMD_HTTP_GET_ALL_APP_STORE_REVIEWS",
+            "CMD_HTTP_GET_APP_REVIEW_RESPONSE"
         ];
         return commandList.indexOf(args.command) >= 0;
     }
@@ -40,7 +41,7 @@ export class GetAPIHandler {
             });
         } catch (e: any) {
             Log.error(TAG, "Missing credentials");
-            const status: StatusResponse = { code: -1, message: "Operation failed" };
+            const status: StatusResponse = { code: -1, message: "Missing credentials" };
             args.value = status;
             IPCNative.instance().onNativeEvent(args);
         }

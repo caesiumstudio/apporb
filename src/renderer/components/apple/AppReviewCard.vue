@@ -128,7 +128,7 @@ export default {
 
       IPCClient.instance().request(
         {
-          command: Commands.CMD_HTTP_GET_APP_STORE_VERSIONS,
+          command: Commands.CMD_HTTP_GET_APP_REVIEW_RESPONSE,
           value: this.getPath(review.relationships.response.links.related),
         },
         (response) => {
@@ -139,7 +139,6 @@ export default {
           if (response.code < 0) {
             Toaster.showToast(response.error, Toaster.ERROR, 3000);
           } else if (response.data.data != null) {
-            console.log(JSON.stringify(response));
             this.response = this.getAttributes(response.data.data).responseBody;
           }
         }

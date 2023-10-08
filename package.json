@@ -56,7 +56,6 @@
     "electron-icon-builder": "^2.0.1",
     "fs": "^0.0.1-security",
     "jquery": "^3.7.1",
-    "json-beautify": "^1.1.1",
     "jsonwebtoken": "^9.0.2",
     "less": "^4.2.0",
     "less-loader": "^11.1.3",

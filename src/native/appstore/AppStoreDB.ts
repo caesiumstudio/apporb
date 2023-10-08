@@ -1,7 +1,6 @@
 import { app } from 'electron';
 import Datastore from 'nedb';
 import { Log } from '@/shared/Logger';
-import { Notification } from '@/shared/Notification';
 import { Utils } from '@/shared/Utils';
 
 const TAG = "AppStoreDB";

@@ -43,7 +43,6 @@ export class ClientCredentials implements IPCListener {
     public async getCredentials() {
         const appStoreDB = AppStoreDB.instance();
         const credentials = await appStoreDB.getCredentials(CREDENTIALS_NAME);
-        console.log("CRED: " + JSON.stringify(credentials.data));
         return new Credentials(credentials.data);
     }
 
