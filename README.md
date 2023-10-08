@@ -21,6 +21,7 @@
 3. Simple but elegant screenshot templates.
 4. Marketing image generation for various social media platforms like Instagram and Twitter.
 5. Firebase Push notification testing for android and iOS apps. :white_check_mark:
+6. Read all the reviews and respond to them individually. :white_check_mark:
 
 #### Feel free to suggest any feature you would like to have. :D
 
