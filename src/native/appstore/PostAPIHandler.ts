@@ -11,7 +11,9 @@ const TAG = "AppsLoader";
 
 export class PostAPIHandler {
     isValid(args: CommandValue): boolean {
-        const commandList: string[] = ["CMD_HTTP_POST_APP_STORE_VERSION_CREATE"]
+        const commandList: string[] = [
+            "CMD_HTTP_POST_APP_STORE_VERSION_CREATE",
+            "CMD_HTTP_POST_APP_STORE_REVIEW_RESPONSE"]
         return commandList.indexOf(args.command) >= 0;
     }
 
@@ -26,7 +28,15 @@ export class PostAPIHandler {
         const options = await this.getPostOptions(args.value.url);
 
         httpHandler.makePostRequest(options, JSON.stringify(args.value.postData)).then((jsonResponse: string) => {
-            args.value = jsonResponse;
+            console.log(jsonResponse);
+            const jsonObject = JSON.parse(jsonResponse);
+            const status: StatusResponse = { code: 0, message: "Operation successful.", data: JSON.parse(jsonResponse) };
+            if (jsonObject.errors) {
+                status.code = -1;
+                status.message = "Operation failed.";
+                status.data = jsonObject.errors;
+            }
+            args.value = status;
             IPCNative.instance().onNativeEvent(args);
         }).catch(error => {
             const status: StatusResponse = { code: -1, message: "Operation failed." };

@@ -28,7 +28,7 @@
                   <label>Description</label>
                   <textarea
                     v-model="getAttributes(appVersionLocalization).description"
-                    spellcheck="false"
+                    spellcheck="true"
                   ></textarea>
                 </div>
 
@@ -55,7 +55,7 @@
                       getAttributes(appVersionLocalization).promotionalText
                     "
                     rows="2"
-                    spellcheck="false"
+                    spellcheck="true"
                   >
                   </textarea>
                 </div>
@@ -64,7 +64,7 @@
                   <textarea
                     v-model="getAttributes(appVersionLocalization).whatsNew"
                     rows="2"
-                    spellcheck="false"
+                    spellcheck="true"
                   >
                   </textarea>
                   <div class="field"></div>
@@ -140,15 +140,13 @@ export default {
           },
         },
         (response) => {
-          response = JSON.parse(response);
-          if (response.errors) {
-            console.log(response.errors[0].detail);
+          if (response.code < 0) {
+            Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
           } else {
-            console.log("success");
-            Toaster.showToast("Updated successfully.", Toaster.INFO, 2000);
             ViewController.instance()
               .getVuexStore()
               .dispatch("setProgressState", false);
+            Toaster.showToast("Operation success.", Toaster.INFO, 2000);
           }
         }
       );
@@ -176,11 +174,18 @@ export default {
           ViewController.instance()
             .getVuexStore()
             .dispatch("setProgressState", false);
-          this.appVersionLocalizations = JSON.parse(response).data;
-          if (this.appVersionLocalizations.length) {
-            console.log(
-              this.getAttributes(this.appVersionLocalizations[0]).locale
-            );
+
+          if (response.code < 0) {
+            Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
+          } else {
+            Toaster.showToast("Operation success.", Toaster.INFO, 2000);
+
+            this.appVersionLocalizations = response.data.data;
+            if (this.appVersionLocalizations.length) {
+              console.log(
+                this.getAttributes(this.appVersionLocalizations[0]).locale
+              );
+            }
           }
         }
       );

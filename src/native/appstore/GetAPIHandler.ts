@@ -14,7 +14,8 @@ export class GetAPIHandler {
         const commandList: string[] = [
             "CMD_HTTP_GET_LOAD_APPS",
             "CMD_HTTP_GET_APP_STORE_VERSIONS",
-            "CMD_HTTP_GET_APP_STORE_VERSION_LOCALIZATIONS"
+            "CMD_HTTP_GET_APP_STORE_VERSION_LOCALIZATIONS",
+            "CMD_HTTP_GET_ALL_APP_STORE_REVIEWS"
         ];
         return commandList.indexOf(args.command) >= 0;
     }
@@ -29,11 +30,13 @@ export class GetAPIHandler {
             const options = await this.getGetOptions(args.value);
 
             httpHandler.makeGetRequest(options).then((jsonResponse: string) => {
-                args.value = jsonResponse;
-
+                const status: StatusResponse = { code: 0, message: "Operation successful.", data: JSON.parse(jsonResponse) };
+                args.value = status;
                 IPCNative.instance().onNativeEvent(args);
             }).catch(error => {
-                Log.error(TAG, error);
+                const status: StatusResponse = { code: -1, message: "Operation failed." };
+                args.value = status;
+                IPCNative.instance().onNativeEvent(args);
             });
         } catch (e: any) {
             Log.error(TAG, "Missing credentials");

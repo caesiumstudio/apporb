@@ -15,7 +15,7 @@
               <div class="field">
                 <button
                   type="button"
-                  class="ui button primary"
+                  class="ui button primary mini"
                   @click="onNotificationSave"
                 >
                   Save
@@ -23,7 +23,7 @@
                 &nbsp;
                 <button
                   type="button"
-                  class="ui button primary"
+                  class="ui button primary mini"
                   @click="onNotifSaveAsNew"
                 >
                   Save As New
@@ -73,7 +73,7 @@
             <div class="field">
               <button
                 type="button"
-                class="ui button primary"
+                class="ui button primary mini"
                 @click="onSendNotification"
               >
                 Send

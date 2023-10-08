@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="app-menu">
-      <div class="ui button primary" @click="addAllLanguages()">Add All Languages</div>
+      <div class="ui button primary" @click="addAllLanguages()">
+        Add All Languages
+      </div>
       <div class="ui button primary" @click="generateTranslations">
         Generate Translations
       </div>
@@ -76,6 +78,7 @@ export default {
         );
         return;
       }
+
       for (let i = 0; i < this.appVersionLocalizations.length; i++) {
         const loc = this.appVersionLocalizations[i];
         const attr = this.getAttributes(loc);
@@ -152,6 +155,7 @@ export default {
       ViewController.instance()
         .getVuexStore()
         .dispatch("setProgressState", true);
+
       const appVersionLocalization = this.appVersionLocalizations;
       const existingLocale = [];
       for (let i = 0; i < this.appVersionLocalizations.length; i++) {
@@ -215,8 +219,7 @@ export default {
           ViewController.instance()
             .getVuexStore()
             .dispatch("setProgressState", false);
-          response = JSON.parse(response);
-          if (response.errors) {
+          if (response.code < 0) {
             console.log(JSON.stringify(response));
           } else {
             console.log("success");

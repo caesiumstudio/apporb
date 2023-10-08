@@ -1,42 +1,38 @@
 <template>
   <div class="container">
-    <h3 v-if="!!app" class="ui header">{{ getAttributes(app).name }}</h3>
-
-    <div v-show="appVersions.length > 0" class="ui styled fluid accordion">
-      <template v-for="appVersion in appVersions" :key="appVersion.id">
-        <div class="title">
-          <i class="dropdown icon"></i>
-          {{ getAttributes(appVersion).versionString }}
-          {{ getAttributes(appVersion).appStoreState }}
-        </div>
-        <div class="content">
-          <AppVersionLocalization
-            :appVersion="appVersion"
-          ></AppVersionLocalization>
-        </div>
-      </template>
+    <div v-show="Object.keys(app).length">
+      <div class="ui top attached tabular menu">
+        <a class="item active" data-tab="one">App Meta</a>
+        <a class="item" data-tab="two">Reviews</a>
+      </div>
+      <div class="ui bottom attached tab segment active" data-tab="one">
+        <app-versions :app="app"/>
+      </div>
+      <div class="ui bottom attached tab segment" data-tab="two">
+        <app-reviews :app="app"/>
+      </div>
+    </div>
+    <div v-show="Object.keys(app).length == 0">
+      <loader-view :config="loaderConfig" />
     </div>
   </div>
 </template>
 
 <script>
-import { App, APPLE_DEV_HOST } from "@/shared/App";
-import { Commands } from "@/shared/constants/Commands";
-import IPCClient from "@/renderer/ipc/IPCClient";
-import AppVersionLocalization from "@/renderer/components/apple/AppVersionLocalization";
-import { ViewController } from "@/renderer/ViewController";
-import { Toaster } from "@/renderer/services/Toaster";
+import LoaderView from "../LoaderView.vue";
+import AppReviews from './AppReviews.vue';
+import AppVersions from './AppVersions.vue';
 
 export default {
-  components: { AppVersionLocalization },
+  components: { AppVersions, AppReviews, LoaderView },
 
   data() {
     return {
       appVersions: [],
       selectedBookTitle: "",
       loaderConfig: {
-        isIconVisible: true,
-        text: "Loading apps data",
+        isIconVisible: false,
+        text: "Load and select an app",
       },
     };
   },
@@ -45,50 +41,12 @@ export default {
     app: Object,
   },
 
-  watch: {
-    app: {
-      handler(newApp) {
-        this.loadAppVersions(newApp);
-      },
-    },
-  },
-
   methods: {
-    loadAppVersions(app) {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
-
-      IPCClient.instance().request(
-        {
-          command: Commands.CMD_HTTP_GET_APP_STORE_VERSIONS,
-          value: this.getPath(app.relationships.appStoreVersions.links.related),
-        },
-        (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
-          response = JSON.parse(response);
-          if (response.code < 0) {
-            Toaster.showToast(response.error, Toaster.ERROR, 3000);
-          } else {
-            this.appVersions = response.data;
-          }
-        }
-      );
-    },
-
-    getPath(url) {
-      return url.replaceAll("https://", "").replaceAll(APPLE_DEV_HOST, "");
-    },
-
-    getAttributes(app) {
-      return App.getAttributes(app) || {};
-    },
   },
 
   mounted() {
     window.$(".ui.accordion").accordion();
+    window.$(".menu .item").tab();
   },
 
   computed: {

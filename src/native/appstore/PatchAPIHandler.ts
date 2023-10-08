@@ -26,7 +26,8 @@ export class PatchAPIHandler implements APIHandler {
         const options = await this.getPatchOptions(args.value.url);
 
         httpHandler.makePostRequest(options, JSON.stringify(args.value.patchData)).then((jsonResponse: string) => {
-            args.value = jsonResponse;
+            const status: StatusResponse = { code: 0, message: "Operation successful.", data: JSON.parse(jsonResponse) };
+            args.value = status;
             IPCNative.instance().onNativeEvent(args);
         }).catch(error => {
             Log.error(TAG, error);
