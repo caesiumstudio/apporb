@@ -5,46 +5,32 @@
         <i id="sidebar-button" class="globe icon"></i> AppOrb
       </div>
 
-      <div
-        id="apple-bookshelf"
-        title="Apple platform"
-        @click="setPlatform('APPLE')"
-        :class="['ui icon item dropdown', { active: contentView === 'APPLE' }]"
-      >
+      <div id="apple-bookshelf" title="Apple platform" @click="setPlatform('APPLE')"
+        :class="['ui icon item dropdown', { active: contentView === 'APPLE' }]">
         <i class="apple icon"></i>
       </div>
 
-      <div
-        id="android-bookshelf"
-        v-if="false"
-        title="Android platform"
-        :class="[
-          'ui icon item dropdown',
-          { active: contentView === 'ANDROID' },
-        ]"
-        @click="setPlatform('ANDROID')"
-      >
+      <div id="android-bookshelf" v-if="false" title="Android platform" :class="[
+        'ui icon item dropdown',
+        { active: contentView === 'ANDROID' },
+      ]" @click="setPlatform('ANDROID')">
         <i class="android icon"></i>
       </div>
 
-      <div
-        id="notification-bookshelf"
-        title="Android platform"
-        @click="setPlatform('NOTIFICATION')"
-        :class="[
-          'ui icon item dropdown',
-          { active: contentView === 'NOTIFICATION' },
-        ]"
-      >
+      <div id="notification-bookshelf" title="Android platform" @click="setPlatform('NOTIFICATION')" :class="[
+        'ui icon item dropdown',
+        { active: contentView === 'NOTIFICATION' },
+      ]">
         <i class="bell outline icon"></i>
       </div>
-
+      <div id="notification-bookshelf" title="Screenshot editor" @click="setPlatform('SCREENSHOT')" :class="[
+        'ui icon item dropdown',
+        { active: contentView === 'SCREENSHOT' },
+      ]">
+        <i class="image outline icon"></i>
+      </div>
       <div class="right menu">
-        <div
-          id="sort-button"
-          class="ui icon item"
-          @click="toggleSettingsDialog"
-        >
+        <div id="sort-button" class="ui icon item" @click="toggleSettingsDialog">
           <i class="settings icon"></i>
         </div>
       </div>
@@ -53,13 +39,16 @@
     <ProgressBar />
     <AppleStoreView v-show="contentView == 'APPLE'" />
     <NotificationView v-show="contentView == 'NOTIFICATION'" />
+    <ScreenshotView v-show="contentView == 'SCREENSHOT'" />
+    
   </div>
 </template>
 
 <script>
 import { ViewController } from "@/renderer/ViewController";
 import AppleStoreView from "@/renderer/components/apple/AppleStoreView";
-import NotificationView from "@/renderer/components/notification/NotificationVew.vue";
+import NotificationView from "@/renderer/components/notification/NotificationView.vue";
+import ScreenshotView  from "@/renderer/components/screenshot/ScreenshotView.vue";
 
 import ProgressBar from "@/renderer/components/ProgressBar.vue";
 export default {
@@ -72,6 +61,7 @@ export default {
     AppleStoreView,
     NotificationView,
     ProgressBar,
+    ScreenshotView
   },
 
   mounted() {
@@ -102,13 +92,16 @@ export default {
 .ui[class*="top attached"].menu {
   border-radius: 0;
 }
+
 .flex-container {
   display: flex;
   margin-top: 40px;
 }
+
 #center {
   width: 100%;
 }
+
 #book-store-caption {
   margin-left: 8px;
 }
