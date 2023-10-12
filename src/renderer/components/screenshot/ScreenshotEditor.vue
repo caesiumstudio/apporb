@@ -2,12 +2,13 @@
   <div class="container">
     <div class="ui grid">
       <div class="ten wide column">
-        <button class="ui button basic" @click="onConvertToPng">To PNG</button>
-        <!-- <div class="ui header">Screenshot Editor</div>
-        <div class="ui divider"></div> -->
+        <button class="ui button primary" @click="onConvertToPng">To PNG</button>
+        <button class="ui button primary" @click="onSave">Save</button>
+        <!-- <div class="ui header">Screenshot Editor</div> -->
+        <div class="ui divider"></div>
 
-        <div id="screen-1" class="screen">
-          <div class="headerText">Learn anything anywhere</div>
+        <div id="screen-1" class="screen-slider">
+          <ScreenshotCard/>
         </div>
       </div>
       <div class="six wide column">
@@ -19,11 +20,13 @@
 
 <script>
 import ScreenshotPreview from "@/renderer/components/screenshot/ScreenshotPreview.vue";
+import ScreenshotCard from "@/renderer/components/screenshot/ScreenshotCard.vue";
 import domtoimage from "dom-to-image";
 
 export default {
   components: {
     ScreenshotPreview,
+    ScreenshotCard
   },
 
   data() {
@@ -55,7 +58,17 @@ export default {
           var img = new Image();
           img.src = dataUrl;
           this.previewImage.img = dataUrl;
+        })
+        .catch((error) => {
+          console.error("oops, something went wrong!", error);
+        });
+    },
+    onSave() {
+      var node = document.getElementById("screen-1");
 
+      domtoimage
+        .toPng(node)
+        .then((dataUrl) => {
           let link = document.createElement("A");
           link.download = "screen-1.png";
           link.href = dataUrl;
@@ -64,7 +77,7 @@ export default {
         .catch((error) => {
           console.error("oops, something went wrong!", error);
         });
-    },
+    }
   },
 
   mounted() {
@@ -80,19 +93,9 @@ export default {
 </script>
 
 <style scoped>
-.headerText {
-  color: white;
-  /* font-weight: 900; */
-  font-size: 30px;
-  padding: 20px;
-  line-height: 1;
-}
-.screen {
-  margin-top: 8px;
-  height: 736px;
-  width: 414px;
-  background-color: blue;
-}
+
+
+
 .container {
   height: 100vh;
   width: 100%;

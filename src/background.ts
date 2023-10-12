@@ -30,6 +30,7 @@ async function createWindow() {
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      webSecurity: false,
       preload: path.join(__dirname, preload), // path to your preload.js file
     }
   });
@@ -45,6 +46,15 @@ async function createWindow() {
     browserWindow.loadURL('app://./index.html');
   }
 }
+
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('file', (request, callback) => {
+    console.log('decodingUIR');
+    const pathname = decodeURI(request.url.replace('file:///', ''));
+    console.log("pathName", pathname);
+    callback(pathname);
+  });
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
