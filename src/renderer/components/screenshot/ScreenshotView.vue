@@ -5,7 +5,7 @@
     </div>
     <div id="center" class="flex-child">
       <ScreenshotEditor/>
-    </div>
+    </div>   
   </div>
 </template>
 

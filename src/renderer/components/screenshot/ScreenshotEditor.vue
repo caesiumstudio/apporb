@@ -1,31 +1,50 @@
 <template>
   <div class="container">
-    <!-- <div class="ui grid">
-      <div class="sixteen wide column"> -->
-    <button class="ui button primary" @click="onConvertToPng">To PNG</button>
-    <button class="ui button primary" @click="onSave">Save</button>
-    <!-- <div class="ui header">Screenshot Editor</div> -->
-    <div class="ui divider"></div>
+    <div class="ui grid">
+      <div class="twelve wide column">
+        <button class="ui button primary" @click="onConvertToPng">To PNG</button>
+        <button class="ui button primary" @click="onSave">Save</button>
+        <!-- <div class="ui header">Screenshot Editor</div> -->
+        <div class="ui divider"></div>
 
-    <div id="screen-1" class="screen-slider">
-      <ScreenshotCard />
+        <div class="editor-view">
+          <div class="screens-container">
+            <div class="screenshot-card">
+              <ScreenshotCard ref="card" />
+            </div>
+            <div class="screenshot-card">
+              <ScreenshotCard />
+            </div>
+            <div class="screenshot-card">
+              <ScreenshotCard />
+            </div>
+            <div class="screenshot-card">
+              <ScreenshotCard />
+            </div>
+            <div class="screenshot-card">
+              <ScreenshotCard />
+            </div>
+            <div class="screenshot-card">
+              <ScreenshotCard />
+            </div>
+          </div>          
+        </div>
+      </div>
+      <div class="four wide column">
+        <ScreenshotPreview :previewImage="previewImage" />
+      </div>
     </div>
   </div>
-  <!-- <div class="six wide column">
-        <ScreenshotPreview :previewImage="previewImage" />
-      </div> -->
-  <!-- </div> -->
-  <!-- </div> -->
 </template>
 
 <script>
-// import ScreenshotPreview from "@/renderer/components/screenshot/ScreenshotPreview.vue";
+import ScreenshotPreview from "@/renderer/components/screenshot/ScreenshotPreview.vue";
 import ScreenshotCard from "@/renderer/components/screenshot/ScreenshotCard.vue";
 import domtoimage from "dom-to-image";
 
 export default {
   components: {
-    // ScreenshotPreview,
+    ScreenshotPreview,
     ScreenshotCard,
   },
 
@@ -50,7 +69,7 @@ export default {
 
   methods: {
     onConvertToPng() {
-      var node = document.getElementById("screen-1");
+      var node = document.getElementById("card");
 
       domtoimage
         .toPng(node.firstChild, { width: 1242, height: 2208 })
@@ -64,10 +83,10 @@ export default {
         });
     },
     onSave() {
-      var node = document.getElementById("screen-1");
+      var node = document.getElementsByClassName("screenshot")[0];
       // node.firstChild.style.width = '1242px';
       // node.firstChild.style.height = '2208px';
-      const dup = node.firstChild.cloneNode(true);
+      const dup = node.cloneNode(true);
 
       node.appendChild(dup);
       dup.style.transform = "scale(1)";
@@ -100,6 +119,18 @@ export default {
 </script>
 
 <style scoped>
+.screenshot-card {
+  width: 260px;
+  height: 460px;
+}
+
+.screens-container {
+  display: flex;
+  flex-direction: row;
+  background: #ffffff;
+  overflow-x: scroll;
+}
+
 .container {
   height: 100vh;
   width: 100%;
@@ -110,5 +141,10 @@ export default {
 
 #content {
   border: none;
+}
+
+.editor-view {
+  overflow-y: scroll;
+  /* height: 85vh; */
 }
 </style>
