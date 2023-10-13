@@ -1,10 +1,10 @@
 <template>
   <div class="flex-container">
     <div class="flex-child">
-      <ScreenshotSidebar @onNotifSelected="onNotifSelected" />
+      <ScreenshotSidebar/>
     </div>
     <div id="center" class="flex-child">
-      <ScreenshotEditor :notifProp="notif" />
+      <ScreenshotEditor/>
     </div>
   </div>
 </template>
