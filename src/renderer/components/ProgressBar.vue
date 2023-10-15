@@ -22,16 +22,15 @@ export default {
 
 .top-progressbar.bg {
   background-size: 300% 300%;
-  height: 2px;
+  height: 4px;
   background-image: linear-gradient(
-    -45deg,
-    rgb(0, 132, 255) 0%,
-    rgb(0, 204, 255) 25%,
-    rgb(195, 0, 255) 51%,
-    rgb(0, 255, 213) 100%
+    -90deg,
+    rgb(0, 255, 106) 0%,
+    rgb(225, 0, 255) 50%,
+    rgb(0, 204, 255) 100%
   );
-  -webkit-animation: AnimateBG 2s ease infinite;
-  animation: AnimateBG 2s ease infinite;
+  /* -webkit-animation: AnimateBG 10s ease infinite; */
+  animation: AnimateBG 0.5s ease infinite;
 }
 
 @-webkit-keyframes AnimateBG {

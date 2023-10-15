@@ -56,6 +56,8 @@
     "dom-to-image": "^2.6.0",
     "electron-icon-builder": "^2.0.1",
     "fs": "^0.0.1-security",
+    "image-data-uri": "^2.0.1",
+    "jimp": "^0.22.10",
     "jquery": "^3.7.1",
     "jsonwebtoken": "^9.0.2",
     "less": "^4.2.0",

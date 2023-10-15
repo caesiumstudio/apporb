@@ -2,43 +2,70 @@
   <div class="container">
     <div class="ui grid">
       <div class="twelve wide column">
-        <button class="ui button primary" @click="onConvertToPng">To PNG</button>
-        <button class="ui button primary" @click="onSave">Save</button>
-        <!-- <div class="ui header">Screenshot Editor</div> -->
+        <div class="ui header">Screenshot Editor</div>
+        <form class="ui form">
+          <div class="inline field">
+            <button class="ui button blue" @click="exportSelected">
+              Export Selected
+            </button>
+            <input type="text" v-model="exportPath" placeholder="Export path" />
+            <button class="ui button green right floated" @click="onSave">
+              Save Config
+            </button>
+          </div>
+          <div class="inline field"></div>
+        </form>
         <div class="ui divider"></div>
-
         <div class="editor-view">
-          <div class="screens-container">
-            <div class="screenshot-card">
-              <ScreenshotCard ref="card" />
+          <template
+            v-for="(designTemplate, index) in designTemplates"
+            :key="index"
+          >
+            <div class="screens-container">
+              <template
+                v-for="(card, cardIndex) in designTemplate.cards"
+                :key="cardIndex"
+              >
+                <div class="screenshot-card selected">
+                  <div class="ui selected">
+                    <div class="ui checkbox center aligned">
+                      <input
+                        type="checkbox"
+                        :checked="selectedCardData.id == card.id"
+                        name="example"
+                      />
+                      <label></label>
+                    </div>
+                  </div>
+                  <ScreenshotCard
+                    :config="card"
+                    @onCardClicked="onCardClicked"
+                  />
+                </div>
+              </template>
             </div>
-            <div class="screenshot-card">
-              <ScreenshotCard />
-            </div>
-            <div class="screenshot-card">
-              <ScreenshotCard />
-            </div>
-            <div class="screenshot-card">
-              <ScreenshotCard />
-            </div>
-            <div class="screenshot-card">
-              <ScreenshotCard />
-            </div>
-            <div class="screenshot-card">
-              <ScreenshotCard />
-            </div>
-          </div>          
+          </template>
         </div>
       </div>
       <div class="four wide column">
-        <ScreenshotPreview :previewImage="previewImage" />
+        <ScreenshotPreview
+          :data="selectedCardData"
+          @onDataChanged="onDataChanged"
+        />
       </div>
+    </div>
+    <div class="ui segment">
+      <div class="ui divider"></div>
     </div>
   </div>
 </template>
 
 <script>
-import ScreenshotPreview from "@/renderer/components/screenshot/ScreenshotPreview.vue";
+import { Commands } from "@/shared/constants/Commands";
+import { Toaster } from "@/renderer/services/Toaster";
+import { ViewController } from "@/renderer/ViewController";
+import IPCClient from "@/renderer/ipc/IPCClient";
+import ScreenshotPreview from "@/renderer/components/screenshot/ScreenshotData.vue";
 import ScreenshotCard from "@/renderer/components/screenshot/ScreenshotCard.vue";
 import domtoimage from "dom-to-image";
 
@@ -48,57 +75,86 @@ export default {
     ScreenshotCard,
   },
 
+  props: {
+    propDesignTemplates: Array,
+  },
+  watch: {
+    propDesignTemplates: {
+      handler(newPropDesignTemplates) {
+        this.designTemplates = newPropDesignTemplates;
+      },
+    },
+  },
   data() {
     return {
+      exportPath: "/home/ravi/Downloads/harmoniumscreenshots",
       previewImage: { img: null },
+      selectedCardData: { id: "sunset-1" },
+      designTemplates: [],
     };
   },
 
-  // props: {
-  //   notifProp: Object,
-  // },
-
-  // watch: {
-  //   notifProp: {
-  //     handler(newNotifProp) {
-  //       this.notif = newNotifProp;
-  //       console.log(JSON.stringify(newNotifProp));
-  //     },
-  //   },
-  // },
-
   methods: {
-    onConvertToPng() {
-      var node = document.getElementById("card");
-
-      domtoimage
-        .toPng(node.firstChild, { width: 1242, height: 2208 })
-        .then((dataUrl) => {
-          var img = new Image();
-          img.src = dataUrl;
-          this.previewImage.img = dataUrl;
-        })
-        .catch((error) => {
-          console.error("oops, something went wrong!", error);
-        });
+    onDataChanged(data) {
+      this.selectedCardData = data;
+      for (let i = 0; i < this.designTemplates.length; i++) {
+        const designTemplate = this.designTemplates[i];
+        for (let j = 0; j < designTemplate.cards.length; j++) {
+          if (designTemplate.cards[j].id == data.id) {
+            designTemplate.cards[j] = data;
+          }
+        }
+      }
     },
-    onSave() {
-      var node = document.getElementsByClassName("screenshot")[0];
-      // node.firstChild.style.width = '1242px';
-      // node.firstChild.style.height = '2208px';
-      const dup = node.cloneNode(true);
 
-      node.appendChild(dup);
+    onCardClicked(cardData) {
+      console.log("selected", JSON.stringify(cardData));
+      this.selectedCardData = cardData;
+    },
+
+    exportSelected() {
+      if (this.exportPath.length < 5) {
+        Toaster.showToast("Prove export path", Toaster.ERROR, 2000);
+        return;
+      }
+      ViewController.instance()
+        .getVuexStore()
+        .dispatch("setProgressState", true);
+
+      const cardNode = document.querySelector("#" + this.selectedCardData.id);
+      const dup = cardNode.cloneNode(true);
+      document.body.appendChild(dup);
       dup.style.transform = "scale(1)";
-      // node.firstChild.style.transform = 'scale(1)';
+      setTimeout(() => {
+        this.onSave(dup);
+      }, 300);
+    },
 
+    onSave(node) {
       domtoimage
-        .toPng(dup)
+        .toPng(node)
         .then((dataUrl) => {
-          let link = document.createElement("A");
-          link.download = "screen-1.png";
-          link.href = dataUrl;
-          link.click();
+          IPCClient.instance().request(
+            {
+              command: Commands.CMD_SAVE_SCREENSHOT,
+              value: {
+                imageData: dataUrl,
+                fullPath: this.exportPath + "/screenshot-1.png",
+                size: { height: 2208, width: 1242 },
+              },
+            },
+            (response) => {
+              ViewController.instance()
+                .getVuexStore()
+                .dispatch("setProgressState", false);
+              if (response.code < 0) {
+                Toaster.showToast(response.message, Toaster.ERROR, 2000);
+              } else {
+                Toaster.showToast(response.message, Toaster.INFO, 2000);
+              }
+              document.body.removeChild(node);
+            }
+          );
         })
         .catch((error) => {
           console.error("oops, something went wrong!", error);
@@ -108,6 +164,7 @@ export default {
 
   mounted() {
     window.$(".ui.accordion").accordion();
+    this.designTemplates = this.propDesignTemplates;
   },
 
   computed: {
@@ -120,23 +177,16 @@ export default {
 
 <style scoped>
 .screenshot-card {
+  padding: 6px;
   width: 260px;
-  height: 460px;
+  height: 480px;
 }
 
 .screens-container {
   display: flex;
   flex-direction: row;
-  background: #ffffff;
+  background: #f5f5f5;
   overflow-x: scroll;
-}
-
-.container {
-  height: 100vh;
-  width: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  padding: 8px 8px 128px 8px;
 }
 
 #content {
@@ -145,6 +195,14 @@ export default {
 
 .editor-view {
   overflow-y: scroll;
-  /* height: 85vh; */
+  height: 75vh;
+}
+
+.container {
+  height: 100vh;
+  width: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  padding: 8px 8px 128px 8px;
 }
 </style>

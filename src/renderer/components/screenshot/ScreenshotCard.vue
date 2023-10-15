@@ -1,77 +1,83 @@
 <template>
-    <div class="screenshot">
-        <div class="headerTextContainer">
-            <div class="headerText">Learn anything anywhere</div>
-        </div>
-        <div class="imgContainer">
-            <img class="bezel" src="file:///C:\Users\D059976\Downloads\Bezel-iPhone-12\PNG\iPhone12-White-Portrait.png" />
-            <div class="appWrapper">
-                <div class="appImageFrame">
-                    <img class="appImage" src="file:///C:\Users\D059976\Downloads\harm\1.PNG" />
-                </div>
-            </div>
-        </div>
+  <div
+    class="screenshot"
+    @click="onCardClicked"
+    :id="config.id"
+    :style="config.style"
+  >
+    <div class="headerTextContainer">
+      <div class="headerText" :style="config.textStyles">{{ config.text }}</div>
     </div>
+    <div class="imgContainer">
+      <img class="bezel" :src="config.bezel" />
+      <div class="appWrapper">
+        <div class="appImageFrame">
+          <img class="appImage" :src="config.appImage" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
+
+<script>
+export default {
+  props: {
+    config: Object,
+  },
+  methods: {
+    onCardClicked() {
+      this.$emit("onCardClicked", this.config);
+    },
+  },
+};
+</script>
 
 <style scoped>
 .screenshot {
-    box-shadow: 0 0 red;
-    overflow: hidden;
-    margin-top: 8px;
-    height: 2208px;
-    width: 1242px;
-    transform: scale(0.2);
-    transform-origin: 0 0;
-    background-image: linear-gradient(180deg,
-            #248d88 0%,
-            #7811a1 35%,
-            #00d4ff 100%);
-    background-color: pink;
+  overflow: hidden;
+  height: 2208px;
+  width: 1242px;
+  transform: scale(0.2);
+  transform-origin: 0 0;
 }
 
 .headerTextContainer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    flex-direction: row;
+  width: 100%;
 }
 
 .headerText {
-    color: white;
-    font-size: 90px;
-    padding: 80px 0px;
-    line-height: 1;
+  font-size: 90px;
+  padding: 60px 0px;
+  line-height: 1.2;
+  text-align: center;
 }
 
 .imgContainer {
-    position: relative;
-    display: flex;
-    width: 90%;
-    /* height: 90%; */
-    margin-left: calc(100% - 95%);
-    flex-direction: column;
-    justify-content: center;
-    top: 20px;
+  position: relative;
+  display: flex;
+  width: 90%;
+  margin-left: calc(100% - 95%);
+  flex-direction: column;
+  justify-content: center;
 }
 
 .imgContainer .bezel {
-    position: absolute;
-    width: 100%;
-    z-index: 100;
+  position: absolute;
+  width: 100%;
+  z-index: 100;
 }
 
 .appWrapper {
-    padding: 82px;
+  padding: 82px;
 }
 
 .imgContainer .appImageFrame {
-    border-radius: 100px;
-    overflow: hidden;
-    z-index: 50;
+  border-radius: 100px;
+  overflow: hidden;
+  z-index: 50;
 }
 
-.imgContainer .appImageFrame img {    
-    width: 100%;
+.imgContainer .appImageFrame img {
+  width: 100%;
 }
 </style>

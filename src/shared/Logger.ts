@@ -1,4 +1,5 @@
-import { Utils } from "../native/utils/Utils"
+import { Utils } from "./Utils"
+
 
 export class Log {
     public static debug(tag: string, msg: string): void {

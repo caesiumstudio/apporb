@@ -6,16 +6,16 @@
       </div>
 
       <div class="menu">
-        <div v-for="notif in notifArray" :key="notif.id">
+        <div v-for="screenshot in screenshotArray" :key="screenshot.id">
           <div class="ui divider"></div>
           <a
             :class="[
               'item',
-              selectedNotifId == notif.id ? 'active app-selected' : '',
+              selectedId == screenshot.id ? 'active app-selected' : '',
             ]"
-            @click="onNotifSelected(notif)"
+            @click="onScreenshotSelected(screenshot)"
           >
-            {{ notif.title }}
+            {{ screenshot.title }}
           </a>
         </div>
         <div class="ui divider"></div>
@@ -28,14 +28,17 @@
 import { Commands } from "@/shared/constants/Commands";
 import IPCClient from "@/renderer/ipc/IPCClient";
 
-const TAG = "AppSidebar";
+const TAG = "ScreenshotSidebar";
 
 export default {
   components: {},
   data() {
     return {
-      notifArray: [],
-      selectedNotifId: "",
+      screenshotArray: [
+        { title: "Gradient", id: "gradient" },
+        { title: "Artistic", id: "artistic" },
+      ],
+      selectedId: "",
     };
   },
 
@@ -52,14 +55,14 @@ export default {
         }
       );
 
-      this.selectedNotifId = "";
-      this.$emit("onNotifSelected", {});
+      this.selectedId = "";
+      this.$emit("onScreenshotSelected", {});
     },
 
-    onNotifSelected(notif) {
-      this.notif = notif;
-      this.selectedNotifId = notif.id;
-      this.$emit("onNotifSelected", notif);
+    onScreenshotSelected(screenshot) {
+      this.screenshot = screenshot;
+      this.selectedId = screenshot.id;
+      this.$emit("onScreenshotSelected", screenshot);
     },
   },
 };
