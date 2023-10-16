@@ -2,7 +2,7 @@
   <div class="container">
     <div class="ui grid">
       <div class="twelve wide column">
-        <div class="ui header">Screenshot Editor</div>
+        <!-- <div class="ui header">Screenshot Editor</div> -->
         <form class="ui form">
           <div class="inline field">
             <button class="ui button blue" @click="exportSelected">
@@ -15,8 +15,12 @@
           </div>
           <div class="inline field"></div>
         </form>
-        <div class="ui divider"></div>
-        <div class="editor-view">
+        <!-- <div class="ui divider"></div> -->
+        <div
+          ref="editorView"
+          @resize="updateEditorSize($event)"
+          class="editor-view"
+        >
           <template
             v-for="(designTemplate, index) in designTemplates"
             :key="index"
@@ -53,9 +57,6 @@
           @onDataChanged="onDataChanged"
         />
       </div>
-    </div>
-    <div class="ui segment">
-      <div class="ui divider"></div>
     </div>
   </div>
 </template>
@@ -94,7 +95,30 @@ export default {
     };
   },
 
+  mounted() {
+    window.$(".ui.accordion").accordion();
+    window.addEventListener("resize", this.updateEditorSize);
+    this.designTemplates = this.propDesignTemplates;
+
+    let resizeObserver = new ResizeObserver((elem) => {
+      setTimeout(this.updateEditorSize, 300);
+    });
+    resizeObserver.observe(this.$refs.editorView);
+  },
+
   methods: {
+    updateEditorSize() {
+      const editorView = this.$refs.editorView;
+      if (editorView) {
+        const editorViewWidth = editorView.clientWidth;
+        const screenshotContainers =
+          document.querySelectorAll(".screens-container");
+        for (let i = 0; i < screenshotContainers.length; i++) {
+          screenshotContainers[i].style.width = editorViewWidth + "px";
+        }
+      }
+    },
+
     onDataChanged(data) {
       this.selectedCardData = data;
       for (let i = 0; i < this.designTemplates.length; i++) {
@@ -117,6 +141,7 @@ export default {
         Toaster.showToast("Prove export path", Toaster.ERROR, 2000);
         return;
       }
+
       ViewController.instance()
         .getVuexStore()
         .dispatch("setProgressState", true);
@@ -162,11 +187,6 @@ export default {
     },
   },
 
-  mounted() {
-    window.$(".ui.accordion").accordion();
-    this.designTemplates = this.propDesignTemplates;
-  },
-
   computed: {
     darkMode() {
       return this.$store.state.appConfig.darkMode;
@@ -177,16 +197,15 @@ export default {
 
 <style scoped>
 .screenshot-card {
-  padding: 6px;
-  width: 260px;
+  margin-right: 8px;
+  width: 250px;
   height: 480px;
 }
 
 .screens-container {
   display: flex;
-  flex-direction: row;
-  background: #f5f5f5;
-  overflow-x: scroll;
+  padding: 4px;
+  overflow: auto;
 }
 
 #content {
@@ -195,14 +214,11 @@ export default {
 
 .editor-view {
   overflow-y: scroll;
-  height: 75vh;
+  height: calc(100vh - 108px);
+  overflow: auto;
 }
 
 .container {
-  height: 100vh;
-  width: 100%;
-  min-height: 100%;
-  overflow: hidden;
-  padding: 8px 8px 128px 8px;
+  margin: 8px 8px 128px 8px;
 }
 </style>

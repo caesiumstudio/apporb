@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="">
     <form class="ui form">
       <h3 class="ui header">Screenshot Data</h3>
       <div class="field">
@@ -7,7 +7,7 @@
         <input type="text" :value="data.text" @keyup="onDataChanged($event, 'text')" />
       </div>
       <div class="field">
-        <label>Text Color</label>
+        <label>Text Color (CSS Style)</label>
         <input
           type="text"
           :value="data.textStyles"

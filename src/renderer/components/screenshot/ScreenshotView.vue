@@ -1,9 +1,9 @@
 <template>
   <div class="flex-container">
-    <div class="flex-child">
+    <div>
       <ScreenshotSidebar @onScreenshotSelected="onScreenshotSelected" />
     </div>
-    <div id="center" class="flex-child">
+    <div id="center">
       <ScreenshotEditor :propDesignTemplates="designTemplates" />
     </div>
   </div>
@@ -162,6 +162,7 @@ export default {
 
 .flex-container {
   display: flex;
+  flex-direction: row;
 }
 
 #center {
