@@ -10,7 +10,7 @@ const TAG = "AppsLoader";
 export class ImageEditor {
     isValid(args: CommandValue): boolean {
         const commandList: string[] = [
-            "CMD_SAVE_SCREENSHOT"
+            "CMD_EXPORT_SCREENSHOT"
         ];
         return commandList.indexOf(args.command) >= 0;
     }

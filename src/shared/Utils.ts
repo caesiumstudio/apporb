@@ -38,4 +38,8 @@ export class Utils {
         return currentDate.getDate() + "/" + (currentDate.getMonth() + 1) + "/" + currentDate.getFullYear()
             + " @ " + currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
     }
+
+    static isEmpty(obj: object): boolean {
+        return Object.keys(obj).length <= 0;
+    }
 }

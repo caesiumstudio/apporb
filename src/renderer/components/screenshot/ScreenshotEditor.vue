@@ -3,23 +3,21 @@
     <div class="ui grid">
       <div class="twelve wide column">
         <!-- <div class="ui header">Screenshot Editor</div> -->
-        <form class="ui form">
+        <div class="ui form">
           <div class="inline field">
-            <button class="ui button blue" @click="exportSelected">
+            <button class="ui button blue" @click="onExportSelectedScreenshot">
               Export Selected
             </button>
             <input type="text" v-model="exportPath" placeholder="Export path" />
-            <button class="ui button green right floated" @click="onSave">
-              Save Config
-            </button>
+            <ScreenshotSaveConfig :card="selectedCardData" :designTemplates="designTemplates"/>
           </div>
           <div class="inline field"></div>
-        </form>
+        </div>
         <!-- <div class="ui divider"></div> -->
         <div
           ref="editorView"
           @resize="updateEditorSize($event)"
-          class="editor-view"
+          class="ui editor-view"
         >
           <template
             v-for="(designTemplate, index) in designTemplates"
@@ -35,7 +33,7 @@
                     <div class="ui checkbox center aligned">
                       <input
                         type="checkbox"
-                        :checked="selectedCardData.id == card.id"
+                        :checked="selectedCardData.name == card.name"
                         name="example"
                       />
                       <label></label>
@@ -69,11 +67,13 @@ import IPCClient from "@/renderer/ipc/IPCClient";
 import ScreenshotPreview from "@/renderer/components/screenshot/ScreenshotData.vue";
 import ScreenshotCard from "@/renderer/components/screenshot/ScreenshotCard.vue";
 import domtoimage from "dom-to-image";
+import ScreenshotSaveConfig from "@/renderer/components/screenshot/ScreenshotSaveConfig.vue";
 
 export default {
   components: {
     ScreenshotPreview,
     ScreenshotCard,
+    ScreenshotSaveConfig,
   },
 
   props: {
@@ -90,7 +90,7 @@ export default {
     return {
       exportPath: "/home/ravi/Downloads/harmoniumscreenshots",
       previewImage: { img: null },
-      selectedCardData: { id: "sunset-1" },
+      selectedCardData: {},
       designTemplates: [],
     };
   },
@@ -124,7 +124,7 @@ export default {
       for (let i = 0; i < this.designTemplates.length; i++) {
         const designTemplate = this.designTemplates[i];
         for (let j = 0; j < designTemplate.cards.length; j++) {
-          if (designTemplate.cards[j].id == data.id) {
+          if (designTemplate.cards[j].name == data.name) {
             designTemplate.cards[j] = data;
           }
         }
@@ -136,7 +136,7 @@ export default {
       this.selectedCardData = cardData;
     },
 
-    exportSelected() {
+    onExportSelectedScreenshot() {
       if (this.exportPath.length < 5) {
         Toaster.showToast("Prove export path", Toaster.ERROR, 2000);
         return;
@@ -146,7 +146,7 @@ export default {
         .getVuexStore()
         .dispatch("setProgressState", true);
 
-      const cardNode = document.querySelector("#" + this.selectedCardData.id);
+      const cardNode = document.querySelector("#" + this.selectedCardData.name);
       const dup = cardNode.cloneNode(true);
       document.body.appendChild(dup);
       dup.style.transform = "scale(1)";
@@ -161,7 +161,7 @@ export default {
         .then((dataUrl) => {
           IPCClient.instance().request(
             {
-              command: Commands.CMD_SAVE_SCREENSHOT,
+              command: Commands.CMD_EXPORT_SCREENSHOT,
               value: {
                 imageData: dataUrl,
                 fullPath: this.exportPath + "/screenshot-1.png",
@@ -197,6 +197,9 @@ export default {
 
 <style scoped>
 .screenshot-card {
+  /* box-shadow: 0 0 red; */
+  /* border: 1px solid black; */
+  padding: 4px;
   margin-right: 8px;
   width: 250px;
   height: 480px;
@@ -206,6 +209,12 @@ export default {
   display: flex;
   padding: 4px;
   overflow: auto;
+}
+
+.screens-container::-webkit-scrollbar {
+  width: 2px;
+  height: 4px;
+  background-color: #ffffff;
 }
 
 #content {
@@ -219,6 +228,6 @@ export default {
 }
 
 .container {
-  margin: 8px 8px 128px 8px;
+  margin: 8px;
 }
 </style>

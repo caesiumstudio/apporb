@@ -1,12 +1,30 @@
 <template>
   <div id="sidebar" class="ui large vertical menu">
     <div class="item">
-      <div class="menu app-header" @click="onLoadScreenshots">
+      <div class="menu app-header">
         <a class="item active"><i class="sync icon"></i>Screenshots</a>
       </div>
 
       <div class="menu">
-        <div v-for="screenshot in screenshotArray" :key="screenshot.id">
+        <div v-for="designTemplate in designTemplates" :key="designTemplate.id">
+          <div class="ui divider"></div>
+          <a
+            :class="[
+              'item',
+              selectedId == designTemplate.name ? 'active app-selected' : '',
+            ]"
+            @click="onScreenshotSelected(designTemplate)"
+          >
+            {{ designTemplate.name}}
+          </a>
+        </div>
+        <div class="ui divider"></div>
+      </div>
+      <div class="menu app-header" @click="onLoadSavedScreenshotConfigs">
+        <a class="item active"><i class="save icon"></i>Saved Configs</a>
+      </div>
+      <div class="menu">
+        <div v-for="screenshot in savedScreenshotConfig" :key="screenshot.id">
           <div class="ui divider"></div>
           <a
             :class="[
@@ -15,7 +33,7 @@
             ]"
             @click="onScreenshotSelected(screenshot)"
           >
-            {{ screenshot.title }}
+            {{ screenshot.name }}
           </a>
         </div>
         <div class="ui divider"></div>
@@ -32,26 +50,27 @@ const TAG = "ScreenshotSidebar";
 
 export default {
   components: {},
+  props: {
+    designTemplates: Array
+  },
+
   data() {
     return {
-      screenshotArray: [
-        { title: "Gradient", id: "gradient" },
-        { title: "Artistic", id: "artistic" },
-      ],
+      savedScreenshotConfig: [],
       selectedId: "",
     };
   },
 
   methods: {
-    onLoadScreenshots() {
+    onLoadSavedScreenshotConfigs() {
       IPCClient.instance().request(
         {
-          command: Commands.CMD_GET_ALL_NOTIFICATIONS,
+          command: Commands.CMD_GET_ALL_SCREENSHOT_CONFIG,
           value: {},
         },
         (response) => {
           console.log(JSON.stringify(response));
-          this.notifArray = response;
+          this.savedScreenshotConfig = response;
         }
       );
 
@@ -59,10 +78,10 @@ export default {
       this.$emit("onScreenshotSelected", {});
     },
 
-    onScreenshotSelected(screenshot) {
-      this.screenshot = screenshot;
-      this.selectedId = screenshot.id;
-      this.$emit("onScreenshotSelected", screenshot);
+    onScreenshotSelected(screenshotConfig) {
+      // this.screenshot = screenshot;
+      this.selectedId = screenshotConfig.name;
+      this.$emit("onDesignTemplateSelected", screenshotConfig.designTemplates);
     },
   },
 };

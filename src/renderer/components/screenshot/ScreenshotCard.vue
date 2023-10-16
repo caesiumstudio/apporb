@@ -2,7 +2,7 @@
   <div
     class="screenshot"
     @click="onCardClicked"
-    :id="config.id"
+    :id="config.name"
     :style="config.style"
   >
     <div class="headerTextContainer">
