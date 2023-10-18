@@ -35,7 +35,7 @@ export class ScreenshotDB {
         Log.debug(TAG, 'config saved: ' + JSON.stringify(config));
 
         this.dataStore.update({
-            id: config.id
+            id: config.getId()
         }, config, { upsert: true },
             (err: any, numReplaced: number, upsert: any) => {
                 Log.debug(TAG, 'error: ' + err + ' Upserted config: ' + numReplaced + " upsert: " + upsert);

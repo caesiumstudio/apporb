@@ -79,9 +79,8 @@ export default {
     },
 
     onScreenshotSelected(screenshotConfig) {
-      // this.screenshot = screenshot;
       this.selectedId = screenshotConfig.name;
-      this.$emit("onDesignTemplateSelected", screenshotConfig.designTemplates);
+      this.$emit("onDesignTemplateSelected", screenshotConfig.cards);
     },
   },
 };

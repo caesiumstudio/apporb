@@ -2,18 +2,33 @@
   <div class="container">
     <div class="ui grid">
       <div class="twelve wide column">
-        <!-- <div class="ui header">Screenshot Editor</div> -->
-        <div class="ui form">
-          <div class="inline field">
-            <button class="ui button blue" @click="onExportSelectedScreenshot">
-              Export Selected
-            </button>
-            <input type="text" v-model="exportPath" placeholder="Export path" />
-            <ScreenshotSaveConfig :card="selectedCardData" :designTemplates="designTemplates"/>
+        <div class="ui">
+          <div class="ui form">
+            <div class="fields">
+              <div class="field">
+                <button
+                  class="ui button blue"
+                  @click="onExportSelectedScreenshot"
+                >
+                  Export Selected
+                </button>
+              </div>
+              <div class="field">
+                <input
+                  type="text"
+                  v-model="exportPath"
+                  placeholder="Export path"
+                />
+              </div>
+              <ScreenshotSaveConfig
+                :card="selectedCardData"
+                :designTemplates="designTemplates"
+              />
+            </div>
           </div>
-          <div class="inline field"></div>
+          <!-- <div class="inline field"></div> -->
         </div>
-        <!-- <div class="ui divider"></div> -->
+        <div class="ui divider"></div>
         <div
           ref="editorView"
           @resize="updateEditorSize($event)"
@@ -88,7 +103,7 @@ export default {
   },
   data() {
     return {
-      exportPath: "/home/ravi/Downloads/harmoniumscreenshots",
+      exportPath: "",
       previewImage: { img: null },
       selectedCardData: {},
       designTemplates: [],
@@ -138,7 +153,11 @@ export default {
 
     onExportSelectedScreenshot() {
       if (this.exportPath.length < 5) {
-        Toaster.showToast("Prove export path", Toaster.ERROR, 2000);
+        Toaster.showToast(
+          "Something is wrong with the Export Path",
+          Toaster.ERROR,
+          5000
+        );
         return;
       }
 

@@ -1,16 +1,26 @@
 <template>
-  <span class="ui right floated">
-    <button class="ui button green right floated" @click="onSaveConfig">
+  <div class="field">
+    <button class="ui button green" @click="onSaveConfig">
       Save Config {{ card.name ? card.name : "" }}
     </button>
-  </span>
+  </div>
+  <div class="field">
+    <input
+      class="ui right floated"
+      v-model="configName"
+      type="text"
+      placeholder="Config name"
+    />
+  </div>
 </template>
+
 <script>
 import { Commands } from "@/shared/constants/Commands";
 import { Toaster } from "@/renderer/services/Toaster";
 import { ViewController } from "@/renderer/ViewController";
 import { Utils } from "@/shared/Utils";
 import IPCClient from "@/renderer/ipc/IPCClient";
+import { ScreenshotConfig } from "@/shared/ScreenshotConfig";
 
 export default {
   props: {
@@ -18,9 +28,17 @@ export default {
     designTemplates: Array,
   },
 
+  data() {
+    return {
+      configName: "",
+    };
+  },
   methods: {
     onSaveConfig() {
-      if (Utils.isEmpty(this.card)) return;
+      if (Utils.isEmpty(this.card) || this.configName.length < 3) {
+        Toaster.showToast("Config name is empty", Toaster.ERROR, 2000);
+        return;
+      }
       console.log(JSON.stringify(this.card));
 
       const cardClone = Utils.cloneObject(this.card);
@@ -29,11 +47,11 @@ export default {
       IPCClient.instance().request(
         {
           command: Commands.CMD_SAVE_SCREENSHOT,
-          value: {
-            name: "Harmonium",
-            id: Utils.getUID(),
-            designTemplates: Utils.cloneObject(cardRow),
-          },
+          value: new ScreenshotConfig(
+            Utils.getUID(),
+            this.configName,
+            Utils.cloneObject(cardRow)
+          ),
         },
         (response) => {
           ViewController.instance()

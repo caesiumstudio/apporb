@@ -23,7 +23,7 @@ export class ScreenshotDBHandler {
 
     run(args: CommandValue): void {
         if (args.command == Commands.CMD_SAVE_SCREENSHOT) {
-            this.screenshotDB.configUpsert(args.value);
+            this.screenshotDB.configUpsert(ScreenshotConfig.fromJSON(args.value));
             Log.debug(TAG, "Saved screenshot config");
 
             const status: StatusResponse = { code: 0, message: "Config saved" };
