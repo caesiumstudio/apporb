@@ -47,7 +47,7 @@
 
     <div class="actions">
       <div class="ui gray deny button">Cancel</div>
-      <div class="ui black approve button" @click="saveSettings">Save</div>
+      <div class="ui primary approve button" @click="saveSettings">Save</div>
     </div>
     <div v-show="isSettingsVisible"></div>
   </div>
@@ -101,7 +101,7 @@ export default {
           value: {},
         },
         (response) => {
-          if (response) {
+          if (response.code >= 0) {
             response = response.data;
             this.authTokenFilePath = response.authTokenFilePath;
             this.keyID = response.keyID;

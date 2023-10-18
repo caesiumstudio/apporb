@@ -4,6 +4,7 @@ import { Log } from "../../shared/Logger"
 import { AppStoreHandler as AppStoreHandler } from "../appstore/AppStoreHandler"
 import { ClientCredentials } from "../appstore/ClientCredentials"
 import { NotificationHandler as NotificationHandler } from "../notification/NotificationHandler"
+import { ScreenshotHandler } from "../screenshots/ScreenshotHandler"
 
 const TAG = "IPCNative";
 export class IPCNative {
@@ -22,7 +23,7 @@ export class IPCNative {
 
     constructor() {
         // register modules
-        this.ipcListeners = [new AppStoreHandler(), new ClientCredentials(), new NotificationHandler()];
+        this.ipcListeners = [new AppStoreHandler(), new ClientCredentials(), new NotificationHandler(), new ScreenshotHandler()];
         this.init();
     }
 
@@ -45,7 +46,7 @@ export class IPCNative {
         ipcMain.on(
             "RENDERER_TO_NATIVE",
             (event, args: { command: string; value: any }) => {
-                Log.debug(TAG + " RENDERER_TO_NATIVE", JSON.stringify(args));
+                Log.debug(TAG + " RENDERER_TO_NATIVE", args.command);
                 this.ipcListeners.forEach((ipcListener: IPCListener) => {
                     ipcListener.notify(args);
                 });

@@ -1,4 +1,4 @@
-import { Utils } from "@/native/utils/Utils";
+import { Utils } from "./Utils";
 
 export interface NotifHistory {
     id: string,

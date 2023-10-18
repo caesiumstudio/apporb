@@ -32,4 +32,19 @@ body {
   color: white !important;
   border: 0 !important;
 }
+.pt-1 {
+  margin-top: 4px;
+}
+.pt-2 {
+  margin-top: 8px;
+}
+.pt-3 {
+  margin-top: 12px;
+}
+.pt-4 {
+  margin-top: 16px;
+}
+.pt-5 {
+  margin-top: 20px;
+}
 </style>
