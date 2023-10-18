@@ -1,5 +1,5 @@
 <div align="center" style="width: 100%;">
-<img align="center" style="width:200px" src="https://raw.githubusercontent.com/caesiumstudio/apporb/main/public/icon.png"/>
+<img align="center" style="width:200px" src="/public/icon.png"/>
 </div>
 
 <div align="center" style="width:100%">
