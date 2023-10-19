@@ -242,7 +242,7 @@ export default {
 
 .editor-view {
   overflow-y: scroll;
-  height: calc(100vh - 108px);
+  height: calc(100vh - 120px);
   overflow: auto;
 }
 

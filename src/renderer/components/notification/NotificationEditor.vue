@@ -2,8 +2,6 @@
   <div class="container">
     <div v-show="notif" class="ui grid">
       <div class="ten wide column">
-        <!-- <div class="ui header">Notification Editor</div>
-        <div class="ui divider"></div> -->
 
         <form class="ui form">
           <div class="field">
@@ -15,7 +13,7 @@
               <div class="field">
                 <button
                   type="button"
-                  class="ui button primary mini"
+                  class="ui button primary"
                   @click="onNotificationSave"
                 >
                   Save
@@ -23,7 +21,7 @@
                 &nbsp;
                 <button
                   type="button"
-                  class="ui button primary mini"
+                  class="ui button primary"
                   @click="onNotifSaveAsNew"
                 >
                   Save As New
@@ -73,7 +71,7 @@
             <div class="field">
               <button
                 type="button"
-                class="ui button primary mini"
+                class="ui button primary"
                 @click="onSendNotification"
               >
                 Send
