@@ -2,7 +2,7 @@
   <div class="">
     <div v-if="Object.keys(app).length">
       <template v-for="review in customerReviews" :key="review.id">
-        <app-review-card :review="review"/>
+        <app-review-card :review="review" />
       </template>
     </div>
   </div>
@@ -45,9 +45,7 @@ export default {
 
   methods: {
     loadCustomerReviews(app) {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
 
       IPCClient.instance().request(
         {
@@ -55,9 +53,7 @@ export default {
           value: this.getPath(app.relationships.customerReviews.links.related),
         },
         (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+          ViewController.setProgress(false);
 
           if (response.code < 0) {
             Toaster.showToast(response.error, Toaster.ERROR, 3000);

@@ -3,6 +3,7 @@ import { IPCNative } from "../ipc/IpcNative";
 import { StatusResponse } from "@/shared/StatusResponse";
 import Jimp from "jimp";
 import { FileSystem } from "@/shared/FSystem";
+import { Log } from "@/shared/Logger";
 const ImageDataURI = require('image-data-uri');
 
 const TAG = "AppsLoader";
@@ -31,6 +32,7 @@ export class ImageEditor {
                     args.value = status;
                     IPCNative.instance().onNativeEvent(args);
                 } else {
+                    Log.debug(TAG, JSON.stringify(size));
                     image.crop(0, 0, size.width, size.height)
                         // image.resize(256, 256) // resize
                         // .quality(60) // set JPEG quality

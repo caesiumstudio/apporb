@@ -39,7 +39,6 @@ export default {
         Toaster.showToast("Config name is empty", Toaster.ERROR, 2000);
         return;
       }
-      console.log(JSON.stringify(this.card));
 
       const cardClone = Utils.cloneObject(this.card);
       const cardRow = this.getCardRow(cardClone);
@@ -54,9 +53,6 @@ export default {
           ),
         },
         (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
           if (response.code < 0) {
             Toaster.showToast(response.message, Toaster.ERROR, 2000);
           } else {

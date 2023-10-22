@@ -24,6 +24,13 @@
                 :card="selectedCardData"
                 :designTemplates="designTemplates"
               />
+              <div class="field">
+                <select class="ui size dropdown">
+                  <option value="1284x2778">Portrait 1284x2778</option>
+                  <option value="1242x2208">Portrait 1242x2208</option>
+                  <option value="1350x2400">Portrait Ratio (9:16)</option>
+                </select>
+              </div>
             </div>
           </div>
           <!-- <div class="inline field"></div> -->
@@ -56,6 +63,8 @@
                   </div>
                   <ScreenshotCard
                     :config="card"
+                    :width="card.size.width"
+                    :height="card.size.height"
                     @onCardClicked="onCardClicked"
                   />
                 </div>
@@ -65,7 +74,7 @@
         </div>
       </div>
       <div class="four wide column">
-        <ScreenshotPreview
+        <ScreenshotData
           :data="selectedCardData"
           @onDataChanged="onDataChanged"
         />
@@ -78,15 +87,17 @@
 import { Commands } from "@/shared/constants/Commands";
 import { Toaster } from "@/renderer/services/Toaster";
 import { ViewController } from "@/renderer/ViewController";
+import { Utils } from "@/shared/Utils";
+
 import IPCClient from "@/renderer/ipc/IPCClient";
-import ScreenshotPreview from "@/renderer/components/screenshot/ScreenshotData.vue";
+import ScreenshotData from "@/renderer/components/screenshot/ScreenshotData.vue";
 import ScreenshotCard from "@/renderer/components/screenshot/ScreenshotCard.vue";
 import domtoimage from "dom-to-image";
 import ScreenshotSaveConfig from "@/renderer/components/screenshot/ScreenshotSaveConfig.vue";
 
 export default {
   components: {
-    ScreenshotPreview,
+    ScreenshotData,
     ScreenshotCard,
     ScreenshotSaveConfig,
   },
@@ -98,6 +109,7 @@ export default {
     propDesignTemplates: {
       handler(newPropDesignTemplates) {
         this.designTemplates = newPropDesignTemplates;
+        this.setTemplateSize();
       },
     },
   },
@@ -107,12 +119,31 @@ export default {
       previewImage: { img: null },
       selectedCardData: {},
       designTemplates: [],
+      cardWidth: "800",
+      cardHeight: "800",
+      screenshotSize: {
+        width: 1284,
+        height: 2778,
+      },
     };
   },
 
   mounted() {
     window.$(".ui.accordion").accordion();
     window.addEventListener("resize", this.updateEditorSize);
+
+    const vueComponent = this;
+    window.$(".ui.dropdown").dropdown({
+      onChange: (value, text, $selectedItem) => {
+        const parts = value.split("x");
+        vueComponent.screenshotSize = {
+          width: parseInt(parts[0]),
+          height: parseInt(parts[1]),
+        };
+        vueComponent.setTemplateSize();
+      },
+    });
+
     this.designTemplates = this.propDesignTemplates;
 
     let resizeObserver = new ResizeObserver((elem) => {
@@ -122,6 +153,18 @@ export default {
   },
 
   methods: {
+    setTemplateSize() {
+      this.designTemplates.forEach((template) => {
+        console.log(template);
+        template.cards.forEach((card) => {
+          card.size = this.screenshotSize;
+          this.cardHeight =
+            parseInt(this.screenshotSize.height) * 0.2 + 40 + "px";
+            this.cardWidth = parseInt(this.screenshotSize.width) * 0.2 + 10 + "px";
+        });
+      });
+    },
+
     updateEditorSize() {
       const editorView = this.$refs.editorView;
       if (editorView) {
@@ -161,11 +204,14 @@ export default {
         return;
       }
 
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
 
       const cardNode = document.querySelector("#" + this.selectedCardData.name);
+      if (!cardNode) {
+        Toaster.showToast("No card is selected", Toaster.ERROR, 2000);
+        return;
+      }
+
       const dup = cardNode.cloneNode(true);
       document.body.appendChild(dup);
       dup.style.transform = "scale(1)";
@@ -184,13 +230,12 @@ export default {
               value: {
                 imageData: dataUrl,
                 fullPath: this.exportPath + "/screenshot-1.png",
-                size: { height: 2208, width: 1242 },
+                size: Utils.cloneObject(this.screenshotSize),
               },
             },
             (response) => {
-              ViewController.instance()
-                .getVuexStore()
-                .dispatch("setProgressState", false);
+              ViewController.setProgress(false);
+
               if (response.code < 0) {
                 Toaster.showToast(response.message, Toaster.ERROR, 2000);
               } else {
@@ -219,9 +264,11 @@ export default {
   /* box-shadow: 0 0 red; */
   /* border: 1px solid black; */
   padding: 4px;
-  margin-right: 8px;
-  width: 250px;
-  height: 480px;
+  margin-right: 16px;
+  /* width: 250px; */
+  /* height: 480px; */
+  width: v-bind("cardWidth");
+  height: v-bind("cardHeight");
 }
 
 .screens-container {

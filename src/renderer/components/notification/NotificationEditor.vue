@@ -15,7 +15,7 @@
               <div class="field">
                 <button
                   type="button"
-                  class="ui button primary mini"
+                  class="ui button primary"
                   @click="onNotificationSave"
                 >
                   Save
@@ -23,7 +23,7 @@
                 &nbsp;
                 <button
                   type="button"
-                  class="ui button primary mini"
+                  class="ui button primary"
                   @click="onNotifSaveAsNew"
                 >
                   Save As New
@@ -177,9 +177,8 @@ export default {
       const postData = this.getPostData();
       if (!postData) return;
 
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
+
       IPCClient.instance().request(
         {
           command: Commands.CMD_HTTP_POST_NOTIFICATION,
@@ -190,9 +189,7 @@ export default {
           },
         },
         (respJson) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+          ViewController.setProgress(false);
 
           console.log(JSON.stringify(respJson));
           if (respJson.code < 0) {

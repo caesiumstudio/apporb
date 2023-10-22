@@ -55,9 +55,7 @@ export default {
 
   methods: {
     loadAppVersions(app) {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
 
       IPCClient.instance().request(
         {
@@ -65,9 +63,8 @@ export default {
           value: this.getPath(app.relationships.appStoreVersions.links.related),
         },
         (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+          ViewController.setProgress(false);
+
           if (response.code < 0) {
             Toaster.showToast(response.message, Toaster.ERROR, 3000);
           } else {
