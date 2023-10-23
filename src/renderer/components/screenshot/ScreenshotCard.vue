@@ -20,25 +20,20 @@
 export default {
   props: {
     config: Object,
-    width: Number,
-    height: Number,
   },
 
   data() {
     return {
-      widthPx: this.width + "px",
-      heightPx: this.height + "px",
+      widthPx: this.config.size.width + "px",
+      heightPx: this.config.size.height + "px",
     };
   },
   watch: {
-    width: {
-      handler(newWidth) {
-        this.widthPx = this.width + "px";
-      },
-    },
-    height: {
-      handler(newHeight) {
-        this.heightPx = this.height + "px";
+    config: {
+      deep: true,
+      handler(newConfig) {
+        this.widthPx = this.config.size.width + "px";
+        this.heightPx = this.config.size.height + "px";
       },
     },
   },

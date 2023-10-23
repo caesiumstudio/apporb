@@ -20,10 +20,7 @@
                   placeholder="Export path"
                 />
               </div>
-              <ScreenshotSaveConfig
-                :card="selectedCardData"
-                :designTemplates="designTemplates"
-              />
+              <ScreenshotSaveConfig :savedConfig="savedConfig" />
               <div class="field">
                 <select class="ui size dropdown">
                   <option value="1284x2778">Portrait 1284x2778</option>
@@ -33,7 +30,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="inline field"></div> -->
         </div>
         <div class="ui divider"></div>
         <div
@@ -50,23 +46,18 @@
                 v-for="(card, cardIndex) in designTemplate.cards"
                 :key="cardIndex"
               >
-                <div class="screenshot-card selected">
-                  <div class="ui selected">
-                    <div class="ui checkbox center aligned">
-                      <input
-                        type="checkbox"
-                        :checked="selectedCardData.name == card.name"
-                        name="example"
-                      />
-                      <label></label>
-                    </div>
+                <div class="screenshot-card">
+                  <div
+                    :class="[
+                      'card-wrapper',
+                      selectedCardData.name == card.name ? 'selected' : '',
+                    ]"
+                  >
+                    <ScreenshotCard
+                      :config="card"
+                      @onCardClicked="onCardClicked"
+                    />
                   </div>
-                  <ScreenshotCard
-                    :config="card"
-                    :width="card.size.width"
-                    :height="card.size.height"
-                    @onCardClicked="onCardClicked"
-                  />
                 </div>
               </template>
             </div>
@@ -94,6 +85,7 @@ import ScreenshotData from "@/renderer/components/screenshot/ScreenshotData.vue"
 import ScreenshotCard from "@/renderer/components/screenshot/ScreenshotCard.vue";
 import domtoimage from "dom-to-image";
 import ScreenshotSaveConfig from "@/renderer/components/screenshot/ScreenshotSaveConfig.vue";
+import { ScreenshotConfig } from "@/shared/ScreenshotConfig";
 
 export default {
   components: {
@@ -103,24 +95,37 @@ export default {
   },
 
   props: {
-    propDesignTemplates: Array,
+    designTemplateConfig: Object,
   },
+
   watch: {
-    propDesignTemplates: {
-      handler(newPropDesignTemplates) {
-        this.designTemplates = newPropDesignTemplates;
+    designTemplateConfig: {
+      deep: true,
+      handler(newTemplateConfig) {
+        this.designTemplates = newTemplateConfig.cards;
         this.setTemplateSize();
+
+        this.savedConfig = newTemplateConfig.id
+          ? newTemplateConfig // already saved config
+          : new ScreenshotConfig( // new config
+              newTemplateConfig.id,
+              newTemplateConfig.name,
+              []
+            );
       },
     },
   },
+
   data() {
     return {
       exportPath: "",
-      previewImage: { img: null },
+      savedConfig: { id: "", name: "", cards: [] },
       selectedCardData: {},
       designTemplates: [],
-      cardWidth: "800",
-      cardHeight: "800",
+      cardSize: {
+        width: "",
+        height: "",
+      },
       screenshotSize: {
         width: 1284,
         height: 2778,
@@ -158,9 +163,12 @@ export default {
         console.log(template);
         template.cards.forEach((card) => {
           card.size = this.screenshotSize;
-          this.cardHeight =
-            parseInt(this.screenshotSize.height) * 0.2 + 40 + "px";
-            this.cardWidth = parseInt(this.screenshotSize.width) * 0.2 + 10 + "px";
+
+          this.cardSize = {
+            width: parseInt(this.screenshotSize.width) * 0.2 + "px",
+            height: parseInt(this.screenshotSize.height) * 0.2 + "px",
+          };
+          console.log(JSON.stringify(this.cardSize));
         });
       });
     },
@@ -192,6 +200,18 @@ export default {
     onCardClicked(cardData) {
       console.log("selected", JSON.stringify(cardData));
       this.selectedCardData = cardData;
+      this.savedConfig.cards = this.getCardRow(cardData);
+    },
+
+    getCardRow(card) {
+      for (let i = 0; i < this.designTemplates.length; i++) {
+        const designTemplate = this.designTemplates[i];
+        for (let j = 0; j < designTemplate.cards.length; j++) {
+          if (designTemplate.cards[j].name == card.name) {
+            return [designTemplate];
+          }
+        }
+      }
     },
 
     onExportSelectedScreenshot() {
@@ -260,20 +280,24 @@ export default {
 </script>
 
 <style scoped>
+.selected {
+  box-shadow: 0px 0px 0px 4px #2185d0 !important;
+}
+
+.card-wrapper {
+  box-shadow: 0 0 9px 0px #bbbbbb;
+  width: v-bind("cardSize.width");
+  height: v-bind("cardSize.height");
+}
 .screenshot-card {
-  /* box-shadow: 0 0 red; */
-  /* border: 1px solid black; */
-  padding: 4px;
-  margin-right: 16px;
-  /* width: 250px; */
-  /* height: 480px; */
-  width: v-bind("cardWidth");
-  height: v-bind("cardHeight");
+  margin: 6px;
+  width: v-bind("cardSize.width");
+  height: v-bind("cardSize.height");
 }
 
 .screens-container {
   display: flex;
-  padding: 4px;
+  padding: 6px 0;
   overflow: auto;
 }
 

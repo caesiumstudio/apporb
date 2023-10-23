@@ -1,8 +1,6 @@
 <template>
   <div class="field">
-    <button class="ui button green" @click="onSaveConfig">
-      Save Config {{ card.name ? card.name : "" }}
-    </button>
+    <button class="ui button green" @click="onSaveConfig">Save Config</button>
   </div>
   <div class="field">
     <input
@@ -24,32 +22,42 @@ import { ScreenshotConfig } from "@/shared/ScreenshotConfig";
 
 export default {
   props: {
-    card: Object,
-    designTemplates: Array,
+    savedConfig: Object,
   },
 
+  watch: {
+    savedConfig: {
+      deep: true,
+      handler(newSavedConfig) {
+        this.configName = newSavedConfig.name;
+      },
+    },
+  },
   data() {
     return {
       configName: "",
     };
   },
+
   methods: {
     onSaveConfig() {
-      if (Utils.isEmpty(this.card) || this.configName.length < 3) {
-        Toaster.showToast("Config name is empty", Toaster.ERROR, 2000);
-        return;
+      if (this.isInvalidData()) return;
+
+      const savedConfig = Utils.cloneObject(this.savedConfig);
+      savedConfig.name = this.configName;
+      if (savedConfig._id) delete savedConfig._id;
+      // inject new id if it is a new config
+      if (!savedConfig.id) {
+        savedConfig.id = Utils.getUID();
       }
 
-      const cardClone = Utils.cloneObject(this.card);
-      const cardRow = this.getCardRow(cardClone);
-
-      IPCClient.instance().request(
+      const config = IPCClient.instance().request(
         {
           command: Commands.CMD_SAVE_SCREENSHOT,
           value: new ScreenshotConfig(
-            Utils.getUID(),
-            this.configName,
-            Utils.cloneObject(cardRow)
+            savedConfig.id,
+            savedConfig.name,
+            Utils.cloneObject(savedConfig.cards)
           ),
         },
         (response) => {
@@ -62,15 +70,21 @@ export default {
       );
     },
 
-    getCardRow(card) {
-      for (let i = 0; i < this.designTemplates.length; i++) {
-        const designTemplate = this.designTemplates[i];
-        for (let j = 0; j < designTemplate.cards.length; j++) {
-          if (designTemplate.cards[j].name == card.name) {
-            return [designTemplate];
-          }
-        }
+    isInvalidData() {
+      let errorMessage = "";
+
+      if (this.configName.length < 3) {
+        errorMessage = "Config name is empty";
       }
+      if (!errorMessage && this.savedConfig.cards.length === 0) {
+        errorMessage = "No cards are selected";
+      }
+
+      if (errorMessage) {
+        Toaster.showToast(errorMessage, Toaster.ERROR, 2000);
+        return true;
+      }
+      return false;
     },
   },
 };
