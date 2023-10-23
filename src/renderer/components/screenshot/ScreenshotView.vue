@@ -18,6 +18,7 @@ import ScreenshotEditor from "@/renderer/components/screenshot/ScreenshotEditor"
 import { GradientTemplates } from "@/renderer/components/screenshot/designTemplates/GradientTemplates";
 import { ArtisticTemplates } from "@/renderer/components/screenshot/designTemplates/ArtisticTemplates";
 import { DesignTemplate } from "@/shared/DesignTemplate";
+import { PatternTemplates } from "@/renderer/components/screenshot/designTemplates/PatternTemplates";
 
 export default {
   components: {
@@ -47,6 +48,11 @@ export default {
       name: ArtisticTemplates.name,
       cards: this.loadTemplates(ArtisticTemplates.cards),
     });
+    this.designTemplates.push({
+      name: PatternTemplates.name,
+      cards: this.loadTemplates(PatternTemplates.cards),
+    });
+
   },
 
   methods: {
