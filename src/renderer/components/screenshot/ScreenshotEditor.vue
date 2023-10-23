@@ -79,13 +79,12 @@ import { Commands } from "@/shared/constants/Commands";
 import { Toaster } from "@/renderer/services/Toaster";
 import { ViewController } from "@/renderer/ViewController";
 import { Utils } from "@/shared/Utils";
-
+import { ScreenshotConfig } from "@/shared/ScreenshotConfig";
 import IPCClient from "@/renderer/ipc/IPCClient";
 import ScreenshotData from "@/renderer/components/screenshot/ScreenshotData.vue";
 import ScreenshotCard from "@/renderer/components/screenshot/ScreenshotCard.vue";
 import domtoimage from "dom-to-image";
 import ScreenshotSaveConfig from "@/renderer/components/screenshot/ScreenshotSaveConfig.vue";
-import { ScreenshotConfig } from "@/shared/ScreenshotConfig";
 
 export default {
   components: {
@@ -313,7 +312,7 @@ export default {
 
 .editor-view {
   overflow-y: scroll;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 108px);
   overflow: auto;
 }
 
