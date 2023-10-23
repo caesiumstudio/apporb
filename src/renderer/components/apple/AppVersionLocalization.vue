@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="ui segment">
+    <div class="ui">
       <AppVersionTopMenuVue
         :appVersionLocalizations="appVersionLocalizations"
       ></AppVersionTopMenuVue>
     </div>
 
-    <div class="ui segmenft">
+    <div class="ui">
       <div
         v-for="(appVersionLocalization, index) in appVersionLocalizations"
         :key="appVersionLocalization.id"
@@ -22,7 +22,7 @@
             }}
           </div>
           <div class="content">
-            <div class="ui blue segment">
+            <div class="ui">
               <div class="ui form">
                 <div class="field">
                   <label>Description</label>
@@ -69,7 +69,7 @@
                   </textarea>
                   <div class="field"></div>
                   <button
-                    class="ui mini primary button"
+                    class="ui mini primary button mb-3"
                     @click="saveTranslation(index)"
                   >
                     Save
@@ -77,7 +77,7 @@
                 </div>
               </div>
             </div>
-            <div class="ui divider"></div>
+            <!-- <div class="ui divider"></div> -->
           </div>
         </div>
       </div>
@@ -114,9 +114,7 @@ export default {
 
   methods: {
     saveTranslation(index) {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
 
       const appVersionLocalization = this.appVersionLocalizations[index];
       let attributes = this.getAttributes(appVersionLocalization);
@@ -143,9 +141,8 @@ export default {
           if (response.code < 0) {
             Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
           } else {
-            ViewController.instance()
-              .getVuexStore()
-              .dispatch("setProgressState", false);
+            ViewController.setProgress(false);
+
             Toaster.showToast("Operation success.", Toaster.INFO, 2000);
           }
         }
@@ -158,9 +155,7 @@ export default {
     },
 
     loadAppVersionLocalizations() {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
 
       IPCClient.instance(this.appVersion).request(
         {
@@ -171,9 +166,7 @@ export default {
           ),
         },
         (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+          ViewController.setProgress(false);
 
           if (response.code < 0) {
             Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);

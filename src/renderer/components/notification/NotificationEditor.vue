@@ -175,9 +175,8 @@ export default {
       const postData = this.getPostData();
       if (!postData) return;
 
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
+
       IPCClient.instance().request(
         {
           command: Commands.CMD_HTTP_POST_NOTIFICATION,
@@ -188,9 +187,7 @@ export default {
           },
         },
         (respJson) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+          ViewController.setProgress(false);
 
           console.log(JSON.stringify(respJson));
           if (respJson.code < 0) {

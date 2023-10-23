@@ -3,7 +3,7 @@
     <form class="ui form">
       <h3 class="ui header">Screenshot Data</h3>
       <div class="field">
-        <label>Text</label>
+        <label>Text or HTML</label>
         <input type="text" :value="data.text" @keyup="onDataChanged($event, 'text')" />
       </div>
       <div class="field">
@@ -14,14 +14,14 @@
           @keyup="onDataChanged($event, 'textStyles')"
         />
       </div>
-      <!-- <div class="field">
+      <div class="field">
         <label>Background</label>
         <input
           type="text"
           :value="data.style"
           @keyup="onDataChanged($event, 'style')"
         />
-      </div> -->
+      </div>
       <div
         class="ui placeholder segment"
         @drop.prevent="onDrop"

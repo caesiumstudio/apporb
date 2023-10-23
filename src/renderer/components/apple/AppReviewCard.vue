@@ -32,7 +32,7 @@
         <div class="field">
           <button
             :disabled="isModified"
-            :class="['ui mini button primary', {disabled: isUnmodified}]"
+            :class="['ui mini button primary', { disabled: isUnmodified }]"
             @click="onSubmitResponse"
           >
             Save Response
@@ -77,9 +77,7 @@ export default {
       this.isUnmodified = false;
     },
     onSubmitResponse() {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", false);
+      ViewController.setProgress(false);
 
       const postData = {
         data: {
@@ -107,9 +105,7 @@ export default {
           },
         },
         (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+          ViewController.setProgress(false);
 
           if (response.code < 0) {
             console.log(JSON.stringify(response));
@@ -122,9 +118,7 @@ export default {
     },
 
     loadResponse(review) {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
 
       IPCClient.instance().request(
         {
@@ -132,9 +126,8 @@ export default {
           value: this.getPath(review.relationships.response.links.related),
         },
         (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+                ViewController.setProgress(false);
+
 
           if (response.code < 0) {
             Toaster.showToast(response.error, Toaster.ERROR, 3000);

@@ -3,11 +3,11 @@
     <div>
       <ScreenshotSidebar
         :designTemplates="designTemplates"
-        @onDesignTemplateSelected="onDesignTemplateSelected"
+        @onConfigSelected="onConfigSelected"
       />
     </div>
     <div id="center">
-      <ScreenshotEditor :propDesignTemplates="selectedDesignTemplate" />
+      <ScreenshotEditor :designTemplateConfig="selectedDesignTemplate" />
     </div>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   data() {
     return {
       designTemplates: [],
-      selectedDesignTemplate: [],
+      selectedDesignTemplate: {},
     };
   },
 
@@ -50,7 +50,7 @@ export default {
   },
 
   methods: {
-    onDesignTemplateSelected(designTemplate) {
+    onConfigSelected(designTemplate) {
       this.selectedDesignTemplate = designTemplate;
     },
 
@@ -61,7 +61,7 @@ export default {
         for (let j = 0; j < 5; j++) {
           cards.push(new DesignTemplate(designTemplates[i], j).getData());
         }
-        templateCards.push({ cards: cards });
+        templateCards.push({ id: "", name: "", cards: cards });
       }
       return templateCards;
     },

@@ -40,12 +40,18 @@ export class ViewController implements IPCListener {
                 this.ipcRenderer.msgToNative({ command: Commands.CMD_DARK_MODE, value: null });
                 break;
             default:
-                // Log.error(
-                //     "ViewController",
-                //     "Unknown event received from IPCNative"
-                // )
+            // Log.error(
+            //     "ViewController",
+            //     "Unknown event received from IPCNative"
+            // )
         }
 
         return false
+    }
+
+    public static setProgress(isInProgress: boolean): void {
+        ViewController.instance()
+            .getVuexStore()
+            .dispatch("setProgressState", isInProgress);
     }
 }

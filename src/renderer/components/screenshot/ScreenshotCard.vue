@@ -1,12 +1,9 @@
 <template>
-  <div
-    class="screenshot"
-    @click="onCardClicked"
-    :id="config.name"
-    :style="config.style"
-  >
+  <div class="screenshot" @click="onCardClicked" :id="config.name" :style="config.style">
     <div class="headerTextContainer">
-      <div class="headerText" :style="config.textStyles">{{ config.text }}</div>
+      <div class="headerText" :style="config.textStyles">
+        <div v-html="config.text"></div>
+      </div>
     </div>
     <div class="imgContainer">
       <img class="bezel" :src="config.bezel" />
@@ -24,6 +21,26 @@ export default {
   props: {
     config: Object,
   },
+
+  data() {
+    return {
+      widthPx: this.config.size.width + "px",
+      heightPx: this.config.size.height + "px",
+    };
+  },
+  watch: {
+    config: {
+      deep: true,
+      handler(newConfig) {
+        this.widthPx = this.config.size.width + "px";
+        this.heightPx = this.config.size.height + "px";
+      },
+    },
+  },
+
+  mounted() {
+    console.log("prop: " + JSON.stringify(this.config.size));
+  },
   methods: {
     onCardClicked() {
       this.$emit("onCardClicked", this.config);
@@ -35,8 +52,8 @@ export default {
 <style scoped>
 .screenshot {
   overflow: hidden;
-  height: 2208px;
-  width: 1242px;
+  width: v-bind("widthPx");
+  height: v-bind("heightPx");
   transform: scale(0.2);
   transform-origin: 0 0;
 }

@@ -13,27 +13,27 @@
               'item',
               selectedId == designTemplate.name ? 'active app-selected' : '',
             ]"
-            @click="onScreenshotSelected(designTemplate)"
+            @click="onTemplateConfigSelected(designTemplate)"
           >
-            {{ designTemplate.name}}
+            {{ designTemplate.name }}
           </a>
         </div>
         <div class="ui divider"></div>
       </div>
-      <div class="menu app-header" @click="onLoadSavedScreenshotConfigs">
-        <a class="item active"><i class="save icon"></i>Saved Configs</a>
+      <div class="menu app-header" @click="onLoadSavedConfigs">
+        <a class="item active"><i class="sync icon"></i>Saved Configs</a>
       </div>
       <div class="menu">
-        <div v-for="screenshot in savedScreenshotConfig" :key="screenshot.id">
+        <div v-for="config in savedConfig" :key="config.id">
           <div class="ui divider"></div>
           <a
             :class="[
               'item',
-              selectedId == screenshot.id ? 'active app-selected' : '',
+              selectedId == config.name ? 'active app-selected' : '',
             ]"
-            @click="onScreenshotSelected(screenshot)"
+            @click="onConfigSelected(config)"
           >
-            {{ screenshot.name }}
+            {{ config.name }}
           </a>
         </div>
         <div class="ui divider"></div>
@@ -45,24 +45,25 @@
 <script>
 import { Commands } from "@/shared/constants/Commands";
 import IPCClient from "@/renderer/ipc/IPCClient";
+import { ScreenshotConfig } from "@/shared/ScreenshotConfig";
 
 const TAG = "ScreenshotSidebar";
 
 export default {
   components: {},
   props: {
-    designTemplates: Array
+    designTemplates: Array,
   },
 
   data() {
     return {
-      savedScreenshotConfig: [],
+      savedConfig: [],
       selectedId: "",
     };
   },
 
   methods: {
-    onLoadSavedScreenshotConfigs() {
+    onLoadSavedConfigs() {
       IPCClient.instance().request(
         {
           command: Commands.CMD_GET_ALL_SCREENSHOT_CONFIG,
@@ -70,7 +71,7 @@ export default {
         },
         (response) => {
           console.log(JSON.stringify(response));
-          this.savedScreenshotConfig = response;
+          this.savedConfig = response;
         }
       );
 
@@ -78,9 +79,18 @@ export default {
       this.$emit("onScreenshotSelected", {});
     },
 
-    onScreenshotSelected(screenshotConfig) {
-      this.selectedId = screenshotConfig.name;
-      this.$emit("onDesignTemplateSelected", screenshotConfig.cards);
+    onConfigSelected(config) {
+      this.selectedId = config.name;
+      this.$emit("onConfigSelected", config);
+    },
+
+    onTemplateConfigSelected(config) {
+      // selecting a design template creates an empty config for saving.
+      this.selectedId = config.name;
+      this.$emit(
+        "onConfigSelected",
+        new ScreenshotConfig("", "", config.cards)
+      );
     },
   },
 };

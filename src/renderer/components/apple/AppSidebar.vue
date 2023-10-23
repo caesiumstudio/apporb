@@ -50,13 +50,12 @@ export default {
     },
 
     onLoadApps() {
-      const viewController = ViewController.instance();
-      viewController.getVuexStore().dispatch("setProgressState", true);
+      ViewController.setProgress(true);
 
       IPCClient.instance().request(
         { command: Commands.CMD_HTTP_GET_LOAD_APPS, value: "/v1/apps" },
         (response) => {
-          viewController.getVuexStore().dispatch("setProgressState", false);
+          ViewController.setProgress(false);
           if (response.code < 0) {
             Toaster.showToast(response.message, Toaster.ERROR, 3000);
           } else {

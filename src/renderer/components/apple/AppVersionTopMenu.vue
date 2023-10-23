@@ -152,9 +152,8 @@ export default {
     },
 
     addAllLanguages() {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
+
 
       const appVersionLocalization = this.appVersionLocalizations;
       const existingLocale = [];
@@ -174,15 +173,12 @@ export default {
           this.addLanguage(locale);
         }
       }
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", false);
+      ViewController.setProgress(false);
+
     },
 
     addLanguage(locale) {
-      ViewController.instance()
-        .getVuexStore()
-        .dispatch("setProgressState", true);
+      ViewController.setProgress(true);
       const postData = {
         data: {
           type: "appStoreVersionLocalizations",
@@ -216,9 +212,8 @@ export default {
           },
         },
         (response) => {
-          ViewController.instance()
-            .getVuexStore()
-            .dispatch("setProgressState", false);
+          ViewController.setProgress(false);
+
           if (response.code < 0) {
             console.log(JSON.stringify(response));
           } else {
