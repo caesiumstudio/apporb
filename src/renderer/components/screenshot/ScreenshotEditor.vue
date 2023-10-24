@@ -2,36 +2,6 @@
   <div class="container">
     <div class="ui grid">
       <div class="twelve wide column">
-        <div class="ui">
-          <div class="ui form">
-            <div class="fields">
-              <div class="field">
-                <button
-                  class="ui button blue"
-                  @click="onExportSelectedScreenshot"
-                >
-                  Export Selected
-                </button>
-              </div>
-              <div class="field">
-                <input
-                  type="text"
-                  v-model="exportPath"
-                  placeholder="Export path"
-                />
-              </div>
-              <ScreenshotSaveConfig :savedConfig="savedConfig" />
-              <div class="field">
-                <select id="size-selector" class="ui size dropdown">
-                  <option value="1284x2778">Portrait 1284x2778</option>
-                  <option value="1242x2208">Portrait 1242x2208</option>
-                  <option value="1350x2400">Portrait Ratio (9:16)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ui divider"></div>
         <div
           ref="editorView"
           @resize="updateEditorSize($event)"
@@ -65,10 +35,48 @@
         </div>
       </div>
       <div class="four wide column">
-        <ScreenshotData
-          :data="selectedCardData"
-          @onDataChanged="onDataChanged"
-        />
+        <div class="ui pointing secondary menu">
+          <a class="active item" data-tab="first">Export Settings</a>
+          <a class="item" data-tab="second">Screenshot Data</a>
+        </div>
+        <div class="ui active tab segment" data-tab="first">
+          <div class="ui mt-3">
+            <div class="ui form">
+              <div class="field">
+                <button
+                  class="ui button blue"
+                  @click="onExportSelectedScreenshot"
+                >
+                  Export Selected
+                </button>
+              </div>
+              <div class="field">
+                <input
+                  type="text"
+                  v-model="exportPath"
+                  placeholder="Export path"
+                />
+              </div>
+              <ScreenshotSaveConfig :savedConfig="savedConfig" />
+              <div class="field">
+                <select id="size-selector" class="ui size dropdown">
+                  <option value="1284x2778">Portrait 1284x2778</option>
+                  <option value="1242x2208">Portrait 1242x2208</option>
+                  <option value="1350x2400">Portrait Ratio (9:16)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ui tab segment" data-tab="second">
+          <div class="mt-3">
+            <ScreenshotData
+              :data="selectedCardData"
+              @onDataChanged="onDataChanged"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -135,6 +143,7 @@ export default {
   mounted() {
     window.$(".ui.accordion").accordion();
     window.addEventListener("resize", this.updateEditorSize);
+    window.$(".menu .item").tab();
 
     const vueComponent = this;
     window.$("#size-selector").dropdown({
@@ -158,6 +167,7 @@ export default {
 
   methods: {
     setTemplateSize() {
+      if (!this.designTemplates) return;
       this.designTemplates.forEach((template) => {
         console.log(template);
         template.cards.forEach((card) => {

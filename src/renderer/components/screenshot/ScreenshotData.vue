@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <form class="ui form">
-      <h3 class="ui header">Screenshot Data</h3>
+      <!-- <h3 class="ui header">Screenshot Data</h3> -->
       <div class="field">
         <label>Text or HTML</label>
         <input type="text" :value="data.text" @keyup="onDataChanged($event, 'text')" />
