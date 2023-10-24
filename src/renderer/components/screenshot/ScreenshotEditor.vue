@@ -22,7 +22,7 @@
               </div>
               <ScreenshotSaveConfig :savedConfig="savedConfig" />
               <div class="field">
-                <select class="ui size dropdown">
+                <select id="size-selector" class="ui size dropdown">
                   <option value="1284x2778">Portrait 1284x2778</option>
                   <option value="1242x2208">Portrait 1242x2208</option>
                   <option value="1350x2400">Portrait Ratio (9:16)</option>
@@ -137,7 +137,7 @@ export default {
     window.addEventListener("resize", this.updateEditorSize);
 
     const vueComponent = this;
-    window.$(".ui.dropdown").dropdown({
+    window.$("#size-selector").dropdown({
       onChange: (value, text, $selectedItem) => {
         const parts = value.split("x");
         vueComponent.screenshotSize = {
