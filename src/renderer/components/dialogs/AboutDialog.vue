@@ -1,13 +1,17 @@
 <template>
   <div class="ui tiny modal about-dialog">
-    <div class="ui icon header">
-      <img src="assets/icons/png/256x256.png" />
-      {{ aboutData.NAME }}
+    <div id="about-header" class="ui center aligned">
+      <div class="ui icon header center aligned">
+        <img src="icon.png" /> {{ aboutData.NAME }}
+      </div>
     </div>
+    <div class="ui divider"></div>
+
     <div class="image content">
       <table>
         <tr>
-          <td colspan="2">
+          <td>Creator</td>
+          <td>
             <div class="ui small header">{{ aboutData.COMPANY_NAME }}</div>
           </td>
         </tr>
@@ -48,21 +52,10 @@
       </table>
     </div>
 
-    <div v-if="isNotWindows()" class="ui vertical segment center aligned">
-      <div class="ui horizontal divider">Support the project</div>
-      <div
-        class="ui center alinged labeled button"
-        @click="openLink(aboutData.PATREON_PAGE)"
-      >
-        <div class="ui orange button"><i class="patreon icon"></i>Become</div>
-        <a class="ui basic orange left pointing label" href="#">a Patreon </a>
-      </div>
-    </div>
     <div class="ui vertical segment center aligned">
-      <div v-if="!isNotWindows()" class="ui divider"></div>
       <div class="ui small header">Please report issues here</div>
       <a href="#" @click="openLink(aboutData.GITHUB_ISSUE)">
-        {{ aboutData.GITHUB_ISSUE }}
+        Github Issues Page
       </a>
     </div>
     <div v-show="aboutApp"></div>
@@ -70,8 +63,9 @@
 </template>
 <script>
 import { AppData } from "@/shared/constants/AppData";
-import { Log } from "@/services/Logger";
+import { Log } from "@/shared/Logger";
 import { Utils } from "@/shared/Utils";
+import { Platform } from "@/shared/Platform";
 
 export default {
   data() {
@@ -82,10 +76,11 @@ export default {
   computed: {
     aboutApp() {
       Log.debug("About", "show about computing");
-      if (this.$store.state.appConfig.isAboutDialogVisible) {
+      if (this.$store.state.appConfig.toggleAboutDialog) {
+        console.log("showing");
         this.showAboutAppDialog();
       }
-      return this.$store.state.appConfig.isAboutDialogVisible;
+      return this.$store.state.appConfig.toggleAboutDialog;
     },
   },
 
@@ -99,12 +94,12 @@ export default {
     },
 
     showAboutAppDialog() {
-      const $ = window.$;
       let about = this;
-      $(".ui.tiny.modal.about-dialog")
+      window
+        .$(".ui.tiny.modal.about-dialog")
         .modal({
           onHide: () => {
-            about.$store.dispatch("showAboutAppDialog", false);
+            about.$store.dispatch("toggleAboutDialog", false);
           },
           centered: false,
         })
@@ -114,11 +109,16 @@ export default {
   },
 
   mounted() {
-    this.showAboutAppDialog();
+    this.aboutData = AppData;
   },
 };
 </script>
 <style scoped>
+#about-header {
+  background: white;
+  display: flex;
+  padding-top: 20px;
+}
 .ui.icon.header {
   text-align: left;
 }

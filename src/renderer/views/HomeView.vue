@@ -1,5 +1,6 @@
 <template>
   <SettingsDialogs />
+  <AboutDialog />
   <TopMenu />
 </template>
 
@@ -9,14 +10,15 @@ import { Commands } from "@/shared/constants/Commands";
 import { defineComponent } from "vue";
 import { ViewController } from "@/renderer/ViewController";
 import TopMenu from "@/renderer/components/TopMenu.vue";
-import SettingsDialogs from "@/renderer/components/dialogs/SettingsDialogs.vue";
+import SettingsDialogs from "@/renderer/components/dialogs/SettingsDialog.vue";
+import AboutDialog from "@/renderer/components/dialogs/AboutDialog.vue";
 
-declare const $: any;
 export default defineComponent({
   name: "HomeView",
   components: {
     TopMenu,
-    SettingsDialogs
+    SettingsDialogs,
+    AboutDialog
   },
   methods: {
     onClick() {
@@ -24,10 +26,6 @@ export default defineComponent({
       ViewController.instance().notify({ command: Commands.CMD_DARK_MODE, value: '' })
     }
   },
-  mounted() {
-    $('.menu .item')
-      .tab();
-  }
 });
 </script>
 <style scoped>

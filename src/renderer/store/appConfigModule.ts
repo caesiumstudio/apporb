@@ -6,6 +6,7 @@ interface State { }
 export interface AppConfig {
     darkMode: boolean,
     toggleSettingsDialog: boolean,
+    toggleAboutDialog: boolean,
     isProgressOn: boolean
 }
 
@@ -15,6 +16,7 @@ export const appConfig: Module<any, any> = {
     state: {
         darkMode: false,
         toggleSettingsDialog: false,
+        toggleAboutDialog: false,
         isProgressOn: false
     } as AppConfig,
 
@@ -25,6 +27,11 @@ export const appConfig: Module<any, any> = {
 
         toggleSettingsDialog: (state: AppConfig) => {
             state.toggleSettingsDialog = !state.toggleSettingsDialog
+        },
+
+
+        toggleAboutDialog: (state: AppConfig) => {
+            state.toggleAboutDialog = !state.toggleAboutDialog
         },
 
         toggleDarkMode: (state: AppConfig) => {
@@ -38,6 +45,10 @@ export const appConfig: Module<any, any> = {
         },
         toggleDarkMode: (context: AppConfigContext) => {
             context.commit("toggleDarkMode");
+        },
+
+        toggleAboutDialog: (context: AppConfigContext) => {
+            context.commit("toggleAboutDialog");
         },
 
         toggleSettingsDialog: (context: AppConfigContext) => {

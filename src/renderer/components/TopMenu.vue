@@ -2,7 +2,7 @@
   <div>
     <div class="ui fixed top menu inverted">
       <div class="header item" id="menu">
-        <i id="sidebar-button" class="globe icon"></i> AppOrb
+        <i id="sidebar-button" class="globe icon"></i> Apporb
       </div>
 
       <div id="apple-bookshelf" title="AppStore Manager" @click="setPlatform('APPLE')"
@@ -30,25 +30,30 @@
         <i class="image outline icon"></i>
       </div>
       <div class="right menu">
-        <div id="sort-button" class="ui icon item" @click="toggleSettingsDialog">
-          <i class="settings icon"></i>
+        <div id="settings-menu" class="ui dropdown icon item">
+          <i class="align justify icon"></i>
+          <div class="menu">
+            <div id="show-settings" class="item" @click="toggleSettingsDialog">
+              Settings
+            </div>
+            <div class="item" @click="toggleAboutDialog">About Apporb</div>
+          </div>
         </div>
       </div>
     </div>
-
-    <ProgressBar />
-    <AppleStoreView v-show="contentView == 'APPLE'" />
-    <NotificationView v-show="contentView == 'NOTIFICATION'" />
-    <ScreenshotView v-show="contentView == 'SCREENSHOT'" />
-    
   </div>
+
+  <ProgressBar />
+  <AppleStoreView v-show="contentView == 'APPLE'" />
+  <NotificationView v-show="contentView == 'NOTIFICATION'" />
+  <ScreenshotView v-show="contentView == 'SCREENSHOT'" />
 </template>
 
 <script>
 import { ViewController } from "@/renderer/ViewController";
 import AppleStoreView from "@/renderer/components/apple/AppleStoreView";
 import NotificationView from "@/renderer/components/notification/NotificationView.vue";
-import ScreenshotView  from "@/renderer/components/screenshot/ScreenshotView.vue";
+import ScreenshotView from "@/renderer/components/screenshot/ScreenshotView.vue";
 
 import ProgressBar from "@/renderer/components/ProgressBar.vue";
 export default {
@@ -61,12 +66,12 @@ export default {
     AppleStoreView,
     NotificationView,
     ProgressBar,
-    ScreenshotView
+    ScreenshotView,
   },
 
   mounted() {
-    window.$("#sort-button").on("mouseup", () => {
-      window.$("#sort-button.ui.dropdown.icon").dropdown({
+    window.$("#settings-menu").on("mouseup", () => {
+      window.$("#settings-menu.ui.dropdown.icon").dropdown({
         transition: "slide",
       });
     });
@@ -76,6 +81,9 @@ export default {
     setPlatform(contentView) {
       console.log(contentView);
       this.contentView = contentView;
+    },
+    toggleAboutDialog() {
+      ViewController.instance().getVuexStore().dispatch("toggleAboutDialog");
     },
     toggleSettingsDialog() {
       ViewController.instance().getVuexStore().dispatch("toggleSettingsDialog");
