@@ -5,25 +5,25 @@
         <i id="sidebar-button" class="globe icon"></i> AppOrb
       </div>
 
-      <div id="apple-bookshelf" title="Apple platform" @click="setPlatform('APPLE')"
+      <div id="apple-bookshelf" title="AppStore Manager" @click="setPlatform('APPLE')"
         :class="['ui icon item dropdown', { active: contentView === 'APPLE' }]">
         <i class="apple icon"></i>
       </div>
 
-      <div id="android-bookshelf" v-if="false" title="Android platform" :class="[
+      <div id="android-bookshelf" v-if="false" title="PlayStore Console Manager" :class="[
         'ui icon item dropdown',
         { active: contentView === 'ANDROID' },
       ]" @click="setPlatform('ANDROID')">
         <i class="android icon"></i>
       </div>
 
-      <div id="notification-bookshelf" title="Android platform" @click="setPlatform('NOTIFICATION')" :class="[
+      <div id="notification-bookshelf" title="Firebase Notification Manager" @click="setPlatform('NOTIFICATION')" :class="[
         'ui icon item dropdown',
         { active: contentView === 'NOTIFICATION' },
       ]">
         <i class="bell outline icon"></i>
       </div>
-      <div id="notification-bookshelf" title="Screenshot editor" @click="setPlatform('SCREENSHOT')" :class="[
+      <div id="notification-bookshelf" title="Screenshot Editor" @click="setPlatform('SCREENSHOT')" :class="[
         'ui icon item dropdown',
         { active: contentView === 'SCREENSHOT' },
       ]">

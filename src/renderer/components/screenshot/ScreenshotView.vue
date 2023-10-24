@@ -1,10 +1,7 @@
 <template>
   <div class="flex-container">
     <div>
-      <ScreenshotSidebar
-        :designTemplates="designTemplates"
-        @onConfigSelected="onConfigSelected"
-      />
+      <ScreenshotSidebar :designTemplates="designTemplates" @onConfigSelected="onConfigSelected" />
     </div>
     <div id="center">
       <ScreenshotEditor :designTemplateConfig="selectedDesignTemplate" />
@@ -19,6 +16,7 @@ import { GradientTemplates } from "@/renderer/components/screenshot/designTempla
 import { ArtisticTemplates } from "@/renderer/components/screenshot/designTemplates/ArtisticTemplates";
 import { DesignTemplate } from "@/shared/DesignTemplate";
 import { PatternTemplates } from "@/renderer/components/screenshot/designTemplates/PatternTemplates";
+import { PastelTemplates } from "@/renderer/components/screenshot/designTemplates/PastelTemplates";
 
 export default {
   components: {
@@ -52,7 +50,10 @@ export default {
       name: PatternTemplates.name,
       cards: this.loadTemplates(PatternTemplates.cards),
     });
-
+    this.designTemplates.push({
+      name: PastelTemplates.name,
+      cards: this.loadTemplates(PastelTemplates.cards),
+    });
   },
 
   methods: {

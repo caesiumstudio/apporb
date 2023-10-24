@@ -9,7 +9,7 @@ export class DesignTemplate {
             appImage: "assets/placeholders/iphone12/screenshot.png",
             bezel: "assets/placeholders/iphone12/iphone12.png",
             style: args.style,
-            textStyles: "color: white;",
+            textStyles: args.textStyles || 'color: white;',
         }
     }
 
