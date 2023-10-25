@@ -21,11 +21,10 @@
       </div>
       <div class="four wide column">
         <div v-show="Object.keys(selectedCardData).length">
-          
+
           <div class="ui pointing secondary menu">
             <a class="item active" data-tab="second">Screenshot Data</a>
             <a class="item" data-tab="first">Export Settings</a>
-
           </div>
           <div class="ui tab segment" data-tab="first">
             <div class="ui mt-3">

@@ -1,14 +1,19 @@
 <template>
   <div class="container">
     <div v-show="Object.keys(app).length">
-      <div class="ui top attached tabular menu">
+      <div class="ui pointing secondary menu">
+            <a class="item active" data-tab="one">App Meta</a>
+            <a class="item" data-tab="two">Reviews</a>
+          </div>
+
+      <!-- <div class="ui top attached tabular menu">
         <a class="item active" data-tab="one">App Meta</a>
         <a class="item" data-tab="two">Reviews</a>
-      </div>
-      <div class="ui bottom attached tab segment active" data-tab="one">
+      </div> -->
+      <div class="ui tab  active" data-tab="one">
         <app-versions :app="app"/>
       </div>
-      <div class="ui bottom attached tab segment" data-tab="two">
+      <div class="ui tab" data-tab="two">
         <app-reviews :app="app"/>
       </div>
     </div>
