@@ -2,19 +2,14 @@
   <div class="container">
     <div v-show="Object.keys(app).length">
       <div class="ui pointing secondary menu">
-            <a class="item active" data-tab="one">App Meta</a>
-            <a class="item" data-tab="two">Reviews</a>
-          </div>
-
-      <!-- <div class="ui top attached tabular menu">
         <a class="item active" data-tab="one">App Meta</a>
         <a class="item" data-tab="two">Reviews</a>
-      </div> -->
-      <div class="ui tab  active" data-tab="one">
-        <app-versions :app="app"/>
+      </div>
+      <div class="ui tab active" data-tab="one">
+        <app-versions :app="app" />
       </div>
       <div class="ui tab" data-tab="two">
-        <app-reviews :app="app"/>
+        <app-reviews :app="app" />
       </div>
     </div>
     <div v-show="Object.keys(app).length == 0">
@@ -25,8 +20,8 @@
 
 <script>
 import LoaderView from "../LoaderView.vue";
-import AppReviews from './AppReviews.vue';
-import AppVersions from './AppVersions.vue';
+import AppReviews from "./AppReviews.vue";
+import AppVersions from "./AppVersions.vue";
 
 export default {
   components: { AppVersions, AppReviews, LoaderView },
@@ -46,8 +41,7 @@ export default {
     app: Object,
   },
 
-  methods: {
-  },
+  methods: {},
 
   mounted() {
     window.$(".ui.accordion").accordion();
