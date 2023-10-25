@@ -42,10 +42,10 @@ export default {
       name: GradientTemplates.name,
       cards: this.loadTemplates(GradientTemplates.cards),
     });
-    this.designTemplates.push({
-      name: ArtisticTemplates.name,
-      cards: this.loadTemplates(ArtisticTemplates.cards),
-    });
+    // this.designTemplates.push({
+    //   name: ArtisticTemplates.name,
+    //   cards: this.loadTemplates(ArtisticTemplates.cards),
+    // });
     this.designTemplates.push({
       name: PatternTemplates.name,
       cards: this.loadTemplates(PatternTemplates.cards),

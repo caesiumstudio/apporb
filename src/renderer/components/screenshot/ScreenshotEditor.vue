@@ -20,37 +20,40 @@
         </div>
       </div>
       <div class="four wide column">
-        <div class="ui pointing secondary menu">
-          <a class="item active" data-tab="second">Screenshot Data</a>
-          <a class="item" data-tab="first">Export Settings</a>
+        <div v-show="Object.keys(selectedCardData).length">
+          
+          <div class="ui pointing secondary menu">
+            <a class="item active" data-tab="second">Screenshot Data</a>
+            <a class="item" data-tab="first">Export Settings</a>
 
-        </div>
-        <div class="ui tab segment" data-tab="first">
-          <div class="ui mt-3">
-            <div class="ui form">
-              <div class="field">
-                <input type="text" v-model="exportPath" placeholder="Export path" />
-              </div>
-              <div class="field">
-                <button class="ui button blue" @click="onExportSelectedScreenshot">
-                  Export Selected
-                </button>
-              </div>
-              <ScreenshotSaveConfig :savedConfig="savedConfig" />
-              <div class="field">
-                <select id="size-selector" class="ui size dropdown">
-                  <option value="1284x2778">Portrait 1284x2778</option>
-                  <option value="1242x2208">Portrait 1242x2208</option>
-                  <option value="1350x2400">Portrait Ratio (9:16)</option>
-                </select>
+          </div>
+          <div class="ui tab segment" data-tab="first">
+            <div class="ui mt-3">
+              <div class="ui form">
+                <div class="field">
+                  <input type="text" v-model="exportPath" placeholder="Export path" />
+                </div>
+                <div class="field">
+                  <button class="ui button blue" @click="onExportSelectedScreenshot">
+                    Export Selected
+                  </button>
+                </div>
+                <ScreenshotSaveConfig :savedConfig="savedConfig" />
+                <div class="field">
+                  <select id="size-selector" class="ui size dropdown">
+                    <option value="1284x2778">Portrait 1284x2778</option>
+                    <option value="1242x2208">Portrait 1242x2208</option>
+                    <option value="1350x2400">Portrait Ratio (9:16)</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="ui tab active segment" data-tab="second">
-          <div class="mt-3">
-            <ScreenshotData :data="selectedCardData" @onDataChanged="onDataChanged" />
+          <div class="ui tab active segment" data-tab="second">
+            <div class="mt-3">
+              <ScreenshotData :data="selectedCardData" @onDataChanged="onDataChanged" />
+            </div>
           </div>
         </div>
       </div>
