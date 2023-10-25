@@ -17,15 +17,14 @@
 
 Here are the currently planned features -
 
-
-
 ##### The following features are planned -
 1. Translation management for description, whatsNew, promotional text and keywords in app store. :white_check_mark:
-2. Screenshot generation for App Store and Play Store in the suitable resolutions.
-3. Simple but elegant screenshot templates.
+2. Screenshot generation for App Store and Play Store in the suitable resolutions. :white_check_mark:
+3. Simple but elegant screenshot templates. :white_check_mark:
 4. Marketing image generation for various social media platforms like Instagram and Twitter.
 5. Firebase push notification testing for android and iOS apps. :white_check_mark:
 6. Read all the reviews and respond to them individually. :white_check_mark:
+7. App Icon Generation in different resolutions for android and export them in the corret directory.
 
 #### Feel free to suggest any feature you would like to have. :D
 
