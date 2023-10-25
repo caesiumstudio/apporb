@@ -1,14 +1,9 @@
 <template>
   <div class="field">
-    <button class="ui button green" @click="onSaveConfig">Save Config</button>
+    <input class="ui right floated" v-model="configName" type="text" placeholder="Config name" />
   </div>
   <div class="field">
-    <input
-      class="ui right floated"
-      v-model="configName"
-      type="text"
-      placeholder="Config name"
-    />
+    <button class="ui button green" @click="onSaveConfig">Save Config</button>
   </div>
 </template>
 
@@ -89,5 +84,4 @@ export default {
   },
 };
 </script>
-<style scoped>
-</style>
+<style scoped></style>

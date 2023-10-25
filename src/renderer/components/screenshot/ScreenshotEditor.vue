@@ -2,31 +2,16 @@
   <div class="container">
     <div class="ui grid">
       <div class="twelve wide column">
-        <div
-          ref="editorView"
-          @resize="updateEditorSize($event)"
-          class="ui editor-view"
-        >
-          <template
-            v-for="(designTemplate, index) in designTemplates"
-            :key="index"
-          >
+        <div ref="editorView" @resize="updateEditorSize($event)" class="ui editor-view">
+          <template v-for="(designTemplate, index) in designTemplates" :key="index">
             <div class="screens-container">
-              <template
-                v-for="(card, cardIndex) in designTemplate.cards"
-                :key="cardIndex"
-              >
+              <template v-for="(card, cardIndex) in designTemplate.cards" :key="cardIndex">
                 <div class="screenshot-card">
-                  <div
-                    :class="[
-                      'card-wrapper',
-                      selectedCardData.name == card.name ? 'selected' : '',
-                    ]"
-                  >
-                    <ScreenshotCard
-                      :config="card"
-                      @onCardClicked="onCardClicked"
-                    />
+                  <div :class="[
+                    'card-wrapper',
+                    selectedCardData.name == card.name ? 'selected' : '',
+                  ]">
+                    <ScreenshotCard :config="card" @onCardClicked="onCardClicked" />
                   </div>
                 </div>
               </template>
@@ -36,26 +21,20 @@
       </div>
       <div class="four wide column">
         <div class="ui pointing secondary menu">
-          <a class="active item" data-tab="first">Export Settings</a>
-          <a class="item" data-tab="second">Screenshot Data</a>
+          <a class="item active" data-tab="second">Screenshot Data</a>
+          <a class="item" data-tab="first">Export Settings</a>
+
         </div>
-        <div class="ui active tab segment" data-tab="first">
+        <div class="ui tab segment" data-tab="first">
           <div class="ui mt-3">
             <div class="ui form">
               <div class="field">
-                <button
-                  class="ui button blue"
-                  @click="onExportSelectedScreenshot"
-                >
-                  Export Selected
-                </button>
+                <input type="text" v-model="exportPath" placeholder="Export path" />
               </div>
               <div class="field">
-                <input
-                  type="text"
-                  v-model="exportPath"
-                  placeholder="Export path"
-                />
+                <button class="ui button blue" @click="onExportSelectedScreenshot">
+                  Export Selected
+                </button>
               </div>
               <ScreenshotSaveConfig :savedConfig="savedConfig" />
               <div class="field">
@@ -69,12 +48,9 @@
           </div>
         </div>
 
-        <div class="ui tab segment" data-tab="second">
+        <div class="ui tab active segment" data-tab="second">
           <div class="mt-3">
-            <ScreenshotData
-              :data="selectedCardData"
-              @onDataChanged="onDataChanged"
-            />
+            <ScreenshotData :data="selectedCardData" @onDataChanged="onDataChanged" />
           </div>
         </div>
       </div>
@@ -115,10 +91,10 @@ export default {
         this.savedConfig = newTemplateConfig.id
           ? newTemplateConfig // already saved config
           : new ScreenshotConfig( // new config
-              newTemplateConfig.id,
-              newTemplateConfig.name,
-              []
-            );
+            newTemplateConfig.id,
+            newTemplateConfig.name,
+            []
+          );
       },
     },
   },
@@ -298,6 +274,7 @@ export default {
   width: v-bind("cardSize.width");
   height: v-bind("cardSize.height");
 }
+
 .screenshot-card {
   margin: 6px;
   width: v-bind("cardSize.width");
@@ -322,11 +299,12 @@ export default {
 
 .editor-view {
   overflow-y: scroll;
-  height: calc(100vh - 108px);
+  height: calc(100vh - 74px);
   overflow: auto;
 }
 
 .container {
   margin: 8px;
+  height: calc(100vh - 0px);
 }
 </style>

@@ -1,32 +1,26 @@
 <template>
   <div class="">
     <form class="ui form">
-      <!-- <h3 class="ui header">Screenshot Data</h3> -->
       <div class="field">
         <label>Text or HTML</label>
-        <input type="text" :value="data.text" @keyup="onDataChanged($event, 'text')" />
+        <input type="text" :value="data.text" @keyup="onTextChanged($event, 'text', 'text')" />
       </div>
       <div class="field">
         <label>Text Color (CSS Style)</label>
-        <input
-          type="text"
-          :value="data.textStyles"
-          @keyup="onDataChanged($event, 'textStyles')"
-        />
+        <div class="two fields">
+          <div class="ten wide field">
+            <input type="text" :value="getTextStyles()" @keyup="onCSSChanged($event, 'textStyles', 'color')" />
+          </div>
+          <div class="six wide field">
+            <input id="color-picker" type="color" :value="getTextStyles()" @input="onColorPicker($event)">
+          </div>
+        </div>
       </div>
       <div class="field">
         <label>Background</label>
-        <input
-          type="text"
-          :value="data.style"
-          @keyup="onDataChanged($event, 'style')"
-        />
+        <input type="text" :value="getBackgroundValue()" @keyup="onCSSChanged($event, 'style', 'background')" />
       </div>
-      <div
-        class="ui placeholder segment"
-        @drop.prevent="onDrop"
-        @dragover.prevent="dragOver"
-      >
+      <div class="ui placeholder segment" @drop.prevent="onDrop" @dragover.prevent="dragOver">
         <div class="ui icon header" @drop.prevent="onDrop">
           <i class="pdf image outline icon"></i>
           Drop app screenshot here.
@@ -48,9 +42,29 @@ export default {
     };
   },
   methods: {
+    onColorPicker(event) {
+      console.log(event.target.value);
+      this.updateCSSCardData('textStyles', 'color', event.target.value);
+    },
+
+    getTextStyles() {
+      if (this.data && this.data.textStyles) {
+        return this.data.textStyles.replace('color: ', '').replace(";", "").trim();
+      }
+      return '';
+    },
+
+    getBackgroundValue() {
+      if (this.data && this.data.style) {
+        return this.data.style.replace('background: ', '').replace(";", "").trim();
+      }
+      return '';
+    },
+
     dragOver() {
       console.log("dropping");
     },
+
     onDrop(event) {
       if (
         event &&
@@ -70,21 +84,22 @@ export default {
         this.$emit("onDataChanged", cloneData);
       }
     },
-    // onTextColorChange(event) {
-    //   let cloneData = Utils.cloneObject(this.data);
-    //   cloneData.textStyles = event.target.value;
-    //   this.$emit("onDataChanged", cloneData);
-    // },
-    // onBGColorChange(event) {
-    //   let cloneData = Utils.cloneObject(this.data);
-    //   cloneData.text = event.target.value;
-    //   this.$emit("onDataChanged", cloneData);
-    // },
-    onDataChanged(event, attr) {
+
+    onTextChanged(event, attr, value) {
       let cloneData = Utils.cloneObject(this.data);
       cloneData[attr] = event.target.value;
       this.$emit("onDataChanged", cloneData);
     },
+
+    onCSSChanged(event, attr, value) {
+      this.updateCSSCardData(attr, value, event.target.value);
+    },
+
+    updateCSSCardData(attr, cssAttr, cssValue) {
+      let cloneData = Utils.cloneObject(this.data);
+      cloneData[attr] = cssAttr + ": " + cssValue;
+      this.$emit("onDataChanged", cloneData);
+    }
   },
   watch: {
     previewImage: {
@@ -96,4 +111,8 @@ export default {
 };
 </script>
 <style scoped>
+#color-picker {
+  height: 36px;
+  /* width: 36px; */
+}
 </style>
