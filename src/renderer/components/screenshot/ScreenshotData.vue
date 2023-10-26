@@ -20,6 +20,14 @@
         <label>Background</label>
         <input type="text" :value="getBackgroundValue()" @keyup="onCSSChanged($event, 'style', 'background')" />
       </div>
+      <div class="field">
+        <label>Size</label>
+        <select id="size-selector" class="ui size dropdown">
+          <option value="1284x2778">Portrait 1284x2778</option>
+          <option value="1242x2208">Portrait 1242x2208</option>
+          <option value="1350x2400">Portrait Ratio (9:16)</option>
+        </select>
+      </div>
       <div class="ui placeholder segment" @drop.prevent="onDrop" @dragover.prevent="dragOver">
         <div class="ui icon header" @drop.prevent="onDrop">
           <i class="pdf image outline icon"></i>
@@ -40,6 +48,24 @@ export default {
     return {
       imgDataSrc: "",
     };
+  },
+  mounted() {
+    window.$("#size-selector").dropdown({
+      onChange: (value, text, $selectedItem) => {
+        const parts = value.split("x");
+        let cloneData = Utils.cloneObject(this.data);
+        cloneData.size = {
+          width: parseInt(parts[0]),
+          height: parseInt(parts[1]),
+        };
+        this.$emit("onDataChanged", cloneData);
+
+        // this.$emit('onSizeSelected', {
+        //   width: parseInt(parts[0]),
+        //   height: parseInt(parts[1]),
+        // });
+      },
+    });
   },
   methods: {
     onColorPicker(event) {

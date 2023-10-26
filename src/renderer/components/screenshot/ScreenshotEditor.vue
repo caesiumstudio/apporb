@@ -23,10 +23,16 @@
         <div v-show="Object.keys(selectedCardData).length">
 
           <div class="ui pointing secondary menu">
-            <a class="item active" data-tab="second">Screenshot Data</a>
-            <a class="item" data-tab="first">Export Settings</a>
+            <a class="item active" data-tab="first">Screenshot Data</a>
+            <a class="item" data-tab="second">Export Settings</a>
           </div>
-          <div class="ui tab segment" data-tab="first">
+
+          <div class="ui tab active segment" data-tab="first">
+            <div class="mt-3">
+              <ScreenshotData :data="selectedCardData" @onDataChanged="onDataChanged" />
+            </div>
+          </div>
+          <div class="ui tab segment" data-tab="second">
             <div class="ui mt-3">
               <div class="ui form">
                 <div class="field">
@@ -38,20 +44,7 @@
                   </button>
                 </div>
                 <ScreenshotSaveConfig :savedConfig="savedConfig" />
-                <div class="field">
-                  <select id="size-selector" class="ui size dropdown">
-                    <option value="1284x2778">Portrait 1284x2778</option>
-                    <option value="1242x2208">Portrait 1242x2208</option>
-                    <option value="1350x2400">Portrait Ratio (9:16)</option>
-                  </select>
-                </div>
               </div>
-            </div>
-          </div>
-
-          <div class="ui tab active segment" data-tab="second">
-            <div class="mt-3">
-              <ScreenshotData :data="selectedCardData" @onDataChanged="onDataChanged" />
             </div>
           </div>
         </div>
@@ -122,21 +115,7 @@ export default {
     window.$(".ui.accordion").accordion();
     window.addEventListener("resize", this.updateEditorSize);
     window.$(".menu .item").tab();
-
-    const vueComponent = this;
-    window.$("#size-selector").dropdown({
-      onChange: (value, text, $selectedItem) => {
-        const parts = value.split("x");
-        vueComponent.screenshotSize = {
-          width: parseInt(parts[0]),
-          height: parseInt(parts[1]),
-        };
-        vueComponent.setTemplateSize();
-      },
-    });
-
     this.designTemplates = this.propDesignTemplates;
-
     let resizeObserver = new ResizeObserver((elem) => {
       setTimeout(this.updateEditorSize, 300);
     });
@@ -144,6 +123,11 @@ export default {
   },
 
   methods: {
+    onSizeSelected(size) {
+      this.screenshotSize = size;
+      this.setTemplateSize();
+    },
+
     setTemplateSize() {
       if (!this.designTemplates) return;
       this.designTemplates.forEach((template) => {
@@ -174,6 +158,8 @@ export default {
 
     onDataChanged(data) {
       this.selectedCardData = data;
+      this.screenshotSize = data.size;
+
       for (let i = 0; i < this.designTemplates.length; i++) {
         const designTemplate = this.designTemplates[i];
         for (let j = 0; j < designTemplate.cards.length; j++) {
@@ -182,12 +168,14 @@ export default {
           }
         }
       }
+      this.setTemplateSize();
     },
 
     onCardClicked(cardData) {
       console.log("selected", JSON.stringify(cardData));
       this.selectedCardData = cardData;
       this.savedConfig.cards = this.getCardRow(cardData);
+
     },
 
     getCardRow(card) {

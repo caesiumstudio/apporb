@@ -8,4 +8,4 @@ for (let i = 1; i < 9; i++) {
     });
 }
 
-export const PatternTemplates = patterns;   
+export const PatternTemplates = patterns;
