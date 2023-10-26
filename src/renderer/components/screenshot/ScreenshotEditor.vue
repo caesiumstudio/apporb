@@ -131,7 +131,6 @@ export default {
     setTemplateSize() {
       if (!this.designTemplates) return;
       this.designTemplates.forEach((template) => {
-        console.log(template);
         template.cards.forEach((card) => {
           card.size = this.screenshotSize;
 
@@ -139,7 +138,6 @@ export default {
             width: parseInt(this.screenshotSize.width) * 0.2 + "px",
             height: parseInt(this.screenshotSize.height) * 0.2 + "px",
           };
-          console.log(JSON.stringify(this.cardSize));
         });
       });
     },
@@ -172,7 +170,6 @@ export default {
     },
 
     onCardClicked(cardData) {
-      console.log("selected", JSON.stringify(cardData));
       this.selectedCardData = cardData;
       this.savedConfig.cards = this.getCardRow(cardData);
 

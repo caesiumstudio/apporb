@@ -3,22 +3,41 @@
     <form class="ui form">
       <div class="field">
         <label>Text or HTML</label>
-        <input type="text" :value="data.text" @keyup="onTextChanged($event, 'text', 'text')" />
+        <textarea
+          :value="data.text"
+          @mouseup="updateSelection($event)"
+          @keyup="onTextUpdated($event, 'text', 'text')"
+          rows="3"
+          spellcheck="true"
+        ></textarea>
       </div>
       <div class="field">
         <label>Text Color (CSS Style)</label>
         <div class="two fields">
           <div class="ten wide field">
-            <input type="text" :value="getTextStyles()" @keyup="onCSSChanged($event, 'textStyles', 'color')" />
+            <input
+              type="text"
+              :value="getTextStyles()"
+              @keyup="onCSSChanged($event, 'textStyles', 'color')"
+            />
           </div>
           <div class="six wide field">
-            <input id="color-picker" type="color" :value="getTextStyles()" @input="onColorPicker($event)">
+            <input
+              id="color-picker"
+              type="color"
+              :value="getTextStyles()"
+              @input="onColorPicker($event)"
+            />
           </div>
         </div>
       </div>
       <div class="field">
         <label>Background</label>
-        <input type="text" :value="getBackgroundValue()" @keyup="onCSSChanged($event, 'style', 'background')" />
+        <input
+          type="text"
+          :value="getBackgroundValue()"
+          @keyup="onCSSChanged($event, 'style', 'background')"
+        />
       </div>
       <div class="field">
         <label>Size</label>
@@ -28,7 +47,11 @@
           <option value="1350x2400">Portrait Ratio (9:16)</option>
         </select>
       </div>
-      <div class="ui placeholder segment" @drop.prevent="onDrop" @dragover.prevent="dragOver">
+      <div
+        class="ui placeholder segment"
+        @drop.prevent="onDrop"
+        @dragover.prevent="dragOver"
+      >
         <div class="ui icon header" @drop.prevent="onDrop">
           <i class="pdf image outline icon"></i>
           Drop app screenshot here.
@@ -59,32 +82,45 @@ export default {
           height: parseInt(parts[1]),
         };
         this.$emit("onDataChanged", cloneData);
-
-        // this.$emit('onSizeSelected', {
-        //   width: parseInt(parts[0]),
-        //   height: parseInt(parts[1]),
-        // });
       },
     });
   },
   methods: {
+    onTextUpdated(event, attr, value) {
+
+
+      this.onTextChanged(event, attr, value);
+    },
+    updateSelection(event) {
+      const textArea = event.target;
+      const start = textArea.selectionStart;
+      const finish = textArea.selectionEnd;
+      const sel = textArea.value.substring(start, finish);
+      console.log(sel);
+    },
     onColorPicker(event) {
       console.log(event.target.value);
-      this.updateCSSCardData('textStyles', 'color', event.target.value);
+      this.updateCSSCardData("textStyles", "color", event.target.value);
     },
 
     getTextStyles() {
       if (this.data && this.data.textStyles) {
-        return this.data.textStyles.replace('color: ', '').replace(";", "").trim();
+        return this.data.textStyles
+          .replace("color: ", "")
+          .replace(";", "")
+          .trim();
       }
-      return '';
+      return "";
     },
 
     getBackgroundValue() {
       if (this.data && this.data.style) {
-        return this.data.style.replace('background: ', '').replace(";", "").trim();
+        return this.data.style
+          .replace("background: ", "")
+          .replace(";", "")
+          .trim();
       }
-      return '';
+      return "";
     },
 
     dragOver() {
@@ -125,7 +161,7 @@ export default {
       let cloneData = Utils.cloneObject(this.data);
       cloneData[attr] = cssAttr + ": " + cssValue;
       this.$emit("onDataChanged", cloneData);
-    }
+    },
   },
   watch: {
     previewImage: {
@@ -137,6 +173,11 @@ export default {
 };
 </script>
 <style scoped>
+#editor {
+  border: 1px solid #e0e0e0;
+  padding: 4px;
+  height: 120px;
+}
 #color-picker {
   height: 36px;
   /* width: 36px; */
