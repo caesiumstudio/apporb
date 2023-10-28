@@ -87,8 +87,6 @@ export default {
   },
   methods: {
     onTextUpdated(event, attr, value) {
-
-
       this.onTextChanged(event, attr, value);
     },
     updateSelection(event) {

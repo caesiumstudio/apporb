@@ -5,6 +5,7 @@ import { AppStoreHandler as AppStoreHandler } from "../appstore/AppStoreHandler"
 import { ClientCredentials } from "../appstore/ClientCredentials"
 import { NotificationHandler as NotificationHandler } from "../notification/NotificationHandler"
 import { ScreenshotHandler } from "../screenshots/ScreenshotHandler"
+import { IconBuilder } from "../icon-builder/IconBuilder"
 
 const TAG = "IPCNative";
 export class IPCNative {
@@ -23,7 +24,7 @@ export class IPCNative {
 
     constructor() {
         // register modules
-        this.ipcListeners = [new AppStoreHandler(), new ClientCredentials(), new NotificationHandler(), new ScreenshotHandler()];
+        this.ipcListeners = [new AppStoreHandler(), new ClientCredentials(), new NotificationHandler(), new ScreenshotHandler(), new IconBuilder()];
         this.init();
     }
 

@@ -38,7 +38,7 @@ async function createWindow() {
   browserWindow.setMenuBarVisibility(false);
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
-    await browserWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
+    await browserWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string, {"extraHeaders" : "pragma: no-cache"});
     if (!process.env.IS_TEST) browserWindow.webContents.openDevTools()
   } else {
     createProtocol('app');

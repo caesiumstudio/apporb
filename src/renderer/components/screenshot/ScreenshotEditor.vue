@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container inverted">
     <div class="ui grid">
       <div class="twelve wide column">
         <div ref="editorView" @resize="updateEditorSize($event)" class="ui editor-view">

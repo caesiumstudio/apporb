@@ -1,5 +1,5 @@
 <template>
-  <div id="sidebar" class="ui large vertical menu">
+  <div id="sidebar" class="ui large vertical menu inverted">
     <div class="item">
       <div class="menu app-header">
         <a class="item active"><i class="sync icon"></i>Screenshots</a>
