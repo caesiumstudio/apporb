@@ -9,9 +9,7 @@
             {{ getAttributes(appVersion).appStoreState }}
           </div>
           <div class="content">
-            <AppVersionLocalization
-              :appVersion="appVersion"
-            ></AppVersionLocalization>
+            <AppVersionLocalization :appVersion="appVersion"></AppVersionLocalization>
           </div>
         </template>
       </div>
@@ -64,7 +62,6 @@ export default {
         },
         (response) => {
           ViewController.setProgress(false);
-
           if (response.code < 0) {
             Toaster.showToast(response.message, Toaster.ERROR, 3000);
           } else {
