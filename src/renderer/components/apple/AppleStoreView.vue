@@ -4,17 +4,17 @@
       <Sidebar @onAppSelected="onAppSelected" />
     </div>
     <div id="center" class="flex-child">
-      <AppInfo :app="app" />
+      <AppDashboard :app="app" />
     </div>
   </div>
 </template>
 <script>
 import Sidebar from "@/renderer/components/apple/AppSidebar";
-import AppInfo from "@/renderer/components/apple/AppInfo";
+import AppDashboard from "@/renderer/components/apple/AppDashboard";
 export default {
   components: {
     Sidebar,
-    AppInfo,
+    AppDashboard,
   },
 
   props: {

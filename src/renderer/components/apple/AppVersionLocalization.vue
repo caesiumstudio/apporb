@@ -142,8 +142,6 @@ export default {
             Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
           } else {
             ViewController.setProgress(false);
-
-            Toaster.showToast("Operation success.", Toaster.INFO, 2000);
           }
         }
       );
@@ -171,8 +169,6 @@ export default {
           if (response.code < 0) {
             Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
           } else {
-            Toaster.showToast("Operation success.", Toaster.INFO, 2000);
-
             this.appVersionLocalizations = response.data.data;
             if (this.appVersionLocalizations.length) {
               console.log(

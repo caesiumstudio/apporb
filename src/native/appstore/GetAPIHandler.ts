@@ -4,7 +4,7 @@ import { IPCNative } from "../ipc/IpcNative";
 import { ClientCredentials } from "./ClientCredentials";
 import { HttpHandler } from "@/native/appstore/HttpHandler";
 import { APPLE_DEV_HOST } from "@/shared/App";
-import { StatusResponse } from "@/shared/StatusResponse";
+import { ResponseParser, StatusResponse } from "@/shared/StatusResponse";
 const jwt = require("jsonwebtoken");
 
 const TAG = "AppsLoader";
@@ -16,7 +16,9 @@ export class GetAPIHandler {
             "CMD_HTTP_GET_APP_STORE_VERSIONS",
             "CMD_HTTP_GET_APP_STORE_VERSION_LOCALIZATIONS",
             "CMD_HTTP_GET_ALL_APP_STORE_REVIEWS",
-            "CMD_HTTP_GET_APP_REVIEW_RESPONSE"
+            "CMD_HTTP_GET_APP_REVIEW_RESPONSE",
+            "CMD_HTTP_GET_APP_INFO",
+            "CMD_HTTP_GET_APP_INFO_LOCALIZATIONS"
         ];
         return commandList.indexOf(args.command) >= 0;
     }
@@ -31,18 +33,16 @@ export class GetAPIHandler {
             const options = await this.getGetOptions(args.value);
 
             httpHandler.makeGetRequest(options).then((jsonResponse: string) => {
-                const status: StatusResponse = { code: 0, message: "Operation successful.", data: JSON.parse(jsonResponse) };
-                args.value = status;
+                args.value = ResponseParser.parse(jsonResponse);
                 IPCNative.instance().onNativeEvent(args);
             }).catch(error => {
-                const status: StatusResponse = { code: -1, message: "Operation failed." };
-                args.value = status;
+                const status: StatusResponse = { code: -1, message: "Operation failed.", data: error };
+                args.value = ResponseParser.parse(error);
                 IPCNative.instance().onNativeEvent(args);
             });
         } catch (e: any) {
             Log.error(TAG, "Missing credentials");
-            const status: StatusResponse = { code: -1, message: "Missing credentials" };
-            args.value = status;
+            args.value = ResponseParser.getErrorResponse("Missing credentials");
             IPCNative.instance().onNativeEvent(args);
         }
     }

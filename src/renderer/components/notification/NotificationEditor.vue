@@ -11,19 +11,11 @@
                 <input v-model="notif.title" type="text" placeholder="name" />
               </div>
               <div class="field">
-                <button
-                  type="button"
-                  class="ui button primary"
-                  @click="onNotificationSave"
-                >
+                <button type="button" class="ui button primary" @click="onNotificationSave">
                   Save
                 </button>
                 &nbsp;
-                <button
-                  type="button"
-                  class="ui button primary"
-                  @click="onNotifSaveAsNew"
-                >
+                <button type="button" class="ui button primary" @click="onNotifSaveAsNew">
                   Save As New
                 </button>
               </div>
@@ -40,11 +32,7 @@
               <label>Topic</label>
               <div class="two fields">
                 <div class="field">
-                  <input
-                    v-model="notif.topic"
-                    type="text"
-                    placeholder="topic"
-                  />
+                  <input v-model="notif.topic" type="text" placeholder="topic" />
                 </div>
                 <div class="field">
                   <input type="text" />
@@ -54,26 +42,16 @@
 
             <div class="ui segment field">
               <label>Notification JSON</label>
-              <CodeMirrorVue
-                :jsonText="notif.notifJson || '{}'"
-                @onChange="onNotifChange"
-              />
+              <CodeMirrorVue :jsonText="notif.notifJson || '{}'" @onChange="onNotifChange" />
             </div>
 
             <div class="ui segment field">
               <label>Notification Data JSON</label>
-              <CodeMirrorVue
-                :jsonText="notif.dataJson || '{}'"
-                @onChange="onNotifDataChange"
-              />
+              <CodeMirrorVue :jsonText="notif.dataJson || '{}'" @onChange="onNotifDataChange" />
             </div>
 
             <div class="field">
-              <button
-                type="button"
-                class="ui button primary"
-                @click="onSendNotification"
-              >
+              <button type="button" class="ui button primary" @click="onSendNotification">
                 Send
               </button>
             </div>

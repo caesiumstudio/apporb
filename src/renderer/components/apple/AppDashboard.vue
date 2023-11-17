@@ -3,14 +3,20 @@
     <div v-show="Object.keys(app).length">
       <div class="ui pointing secondary menu">
         <a class="item active" data-tab="one">App Meta</a>
-        <a class="item" data-tab="two">Reviews</a>
+        <a class="item" data-tab="two">App Info</a>
+        <a class="item" data-tab="three">Reviews</a>
+
       </div>
       <div class="ui tab active" data-tab="one">
         <app-versions :app="app" />
       </div>
       <div class="ui tab" data-tab="two">
+        <AppInfoLocalizations :app="app" />
+      </div>
+      <div class="ui tab" data-tab="three">
         <app-reviews :app="app" />
       </div>
+
     </div>
     <div v-show="Object.keys(app).length == 0">
       <loader-view :config="loaderConfig" />
@@ -22,9 +28,9 @@
 import LoaderView from "../LoaderView.vue";
 import AppReviews from "./AppReviews.vue";
 import AppVersions from "./AppVersions.vue";
-
+import AppInfoLocalizations from "./AppInfoLocalizations.vue";
 export default {
-  components: { AppVersions, AppReviews, LoaderView },
+  components: { AppVersions, AppReviews, LoaderView, AppInfoLocalizations },
 
   data() {
     return {

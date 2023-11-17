@@ -12,12 +12,7 @@
       <div class="ui form">
         <div class="field">
           <label>Select attributes to translate</label>
-          <select
-            ref="attributes"
-            name="Update attributes"
-            multiple=""
-            class="ui fluid multiple selection dropdown"
-          >
+          <select ref="attributes" name="Update attributes" multiple="" class="ui fluid multiple selection dropdown appinfo">
             <option value=""></option>
             <option value="description">Description</option>
             <option value="whatsNew">What's New</option>
@@ -53,14 +48,19 @@ export default {
     appVersionLocalizations: Object,
   },
 
-  mounted() {
-    const vueComponent = this;
-    window.$(".ui.dropdown").dropdown({
-      onChange: (value, text, $selectedItem) => {
-        vueComponent.transAttr = value;
+  watch: {
+    appVersionLocalizations: {
+      handler(newAppVersionLocalizations) {
+        const vueComponent = this;
+        window.$(".ui.dropdown.appinfo").dropdown({
+          onChange: (value, text, $selectedItem) => {
+            vueComponent.transAttr = value;
+          },
+        });
       },
-    });
+    },
   },
+
 
   methods: {
     generateTranslations() {
