@@ -183,7 +183,7 @@ export default {
           value: {
             url: "https://fcm.googleapis.com/fcm/send",
             postData: postData,
-            authKey: this.notif.authKey,
+            authKey: "key=" + this.notif.authKey,
           },
         },
         (respJson) => {

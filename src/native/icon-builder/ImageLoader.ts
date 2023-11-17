@@ -95,7 +95,7 @@ export class ImageLoader {
                 continue;
             }
 
-            if (file.indexOf("mipmap") > 0) {
+            if (file.indexOf("mipmap") || file.indexOf("drawable") > 0) {
                 images.push(file);
             }
         }

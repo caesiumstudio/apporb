@@ -57,6 +57,7 @@ export class NotificationHandler implements IPCListener {
             IPCNative.instance().onNativeEvent(args);
         }
 
+        Log.debug(TAG, "Options: " + JSON.stringify(options));
         httpHandler.makePostRequest(options, JSON.stringify(args.value.postData)).then((jsonResponse: string) => {
             Log.debug(TAG, jsonResponse);
 
