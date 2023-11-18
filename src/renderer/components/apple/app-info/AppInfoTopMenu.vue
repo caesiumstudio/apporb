@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="app-menu">
-      <div class="ui button primary" @click="addAllLanguages()">
-        Add All Languages
-      </div>
+      <!-- <div class="ui button primary" @click="addAllLanguages()">
+          Add All Languages
+        </div> -->
       <div class="ui button primary" @click="generateTranslations">
         Generate Translations
       </div>
@@ -12,12 +12,15 @@
       <div class="ui form">
         <div class="field">
           <label>Select attributes to translate</label>
-          <select ref="attributes" name="Update attributes" multiple="" class="ui fluid multiple selection dropdown appinfo">
+          <select
+            :id="'dd-' + uid"
+            name="Update attributes"
+            multiple=""
+            class="ui fluid multiple selection dropdown"
+          >
             <option value=""></option>
-            <option value="description">Description</option>
-            <option value="whatsNew">What's New</option>
-            <option value="promotionalText">Promotional Text</option>
-            <option value="keywords">Keywords</option>
+            <option value="name">App Name</option>
+            <option value="subtitle">Sub Title</option>
           </select>
         </div>
       </div>
@@ -25,11 +28,6 @@
   </div>
 </template>
 
-<style scoped>
-.app-menu {
-  padding: 4px 0 4px 0;
-}
-</style>
 <script>
 import { Translation } from "@/shared/constants/Translation";
 import { App, APPLE_DEV_HOST } from "@/shared/App";
@@ -37,30 +35,27 @@ import { Commands } from "@/shared/constants/Commands";
 import IPCClient from "@/renderer/ipc/IPCClient";
 import { Toaster } from "@/renderer/services/Toaster";
 import { ViewController } from "@/renderer/ViewController";
+
 export default {
   data() {
     return {
+      uid: Date.now(),
       transAttr: [],
     };
   },
 
   props: {
-    appVersionLocalizations: Object,
+    appInfoLocalizations: Object,
   },
 
-  watch: {
-    appVersionLocalizations: {
-      handler(newAppVersionLocalizations) {
-        const vueComponent = this;
-        window.$(".ui.dropdown.appinfo").dropdown({
-          onChange: (value, text, $selectedItem) => {
-            vueComponent.transAttr = value;
-          },
-        });
+  mounted() {
+    this.transAttr = [];
+    window.$("#dd-" + this.uid).dropdown({
+      onChange: (value) => {
+        this.transAttr = value;
       },
-    },
+    });
   },
-
 
   methods: {
     generateTranslations() {
@@ -79,8 +74,8 @@ export default {
         return;
       }
 
-      for (let i = 0; i < this.appVersionLocalizations.length; i++) {
-        const loc = this.appVersionLocalizations[i];
+      for (let i = 0; i < this.appInfoLocalizations.length; i++) {
+        const loc = this.appInfoLocalizations[i];
         const attr = this.getAttributes(loc);
         if (attr.locale == "en-US") continue;
 
@@ -89,8 +84,8 @@ export default {
             englishAttr[attribName].replaceAll("\n", "{|}"),
             attr.locale,
             (result) => {
-              for (let i = 0; i < this.appVersionLocalizations.length; i++) {
-                const loc = this.appVersionLocalizations[i];
+              for (let i = 0; i < this.appInfoLocalizations.length; i++) {
+                const loc = this.appInfoLocalizations[i];
                 const attr = this.getAttributes(loc);
                 if (attr.locale === result.locale) {
                   let translatedText = result.payload.replaceAll("{|}", "\n");
@@ -133,8 +128,8 @@ export default {
     },
 
     getEnglishVersion() {
-      for (let i = 0; i < this.appVersionLocalizations.length; i++) {
-        const loc = this.appVersionLocalizations[i];
+      for (let i = 0; i < this.appInfoLocalizations.length; i++) {
+        const loc = this.appInfoLocalizations[i];
         const attr = this.getAttributes(loc);
         if (attr.locale === "en-US") {
           return attr;
@@ -154,10 +149,9 @@ export default {
     addAllLanguages() {
       ViewController.setProgress(true);
 
-
-      const appVersionLocalization = this.appVersionLocalizations;
+      const appVersionLocalization = this.appInfoLocalizations;
       const existingLocale = [];
-      for (let i = 0; i < this.appVersionLocalizations.length; i++) {
+      for (let i = 0; i < this.appInfoLocalizations.length; i++) {
         existingLocale.push(
           this.getAttributes(appVersionLocalization[i]).locale
         );
@@ -174,7 +168,6 @@ export default {
         }
       }
       ViewController.setProgress(false);
-
     },
 
     addLanguage(locale) {
@@ -226,3 +219,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.app-menu {
+  padding: 4px 0 4px 0;
+}
+</style>

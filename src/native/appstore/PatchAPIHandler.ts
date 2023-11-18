@@ -5,14 +5,15 @@ import { ClientCredentials } from "./ClientCredentials";
 import { HttpHandler } from "@/native/appstore/HttpHandler";
 import { APPLE_DEV_HOST } from "@/shared/App";
 import { APIHandler } from "./APIHandler";
-import { StatusResponse } from "@/shared/StatusResponse";
+import { ResponseParser, StatusResponse } from "@/shared/StatusResponse";
 const jwt = require("jsonwebtoken");
 
 const TAG = "PatchAPIHandler";
 
 export class PatchAPIHandler implements APIHandler {
     isValid(args: CommandValue): boolean {
-        const commandList: string[] = ["CMD_HTTP_PATCH_APP_STORE_VERSION_UPDATE"];
+        const commandList: string[] = ["CMD_HTTP_PATCH_APP_STORE_VERSION_UPDATE",
+            "CMD_HTTP_PATCH_APP_INFO_UPDATE"];
         return commandList.indexOf(args.command) >= 0;
     }
 
@@ -24,10 +25,10 @@ export class PatchAPIHandler implements APIHandler {
     private async patch(args: CommandValue) {
         const httpHandler = new HttpHandler();
         const options = await this.getPatchOptions(args.value.url);
-
+        Log.debug(TAG, "Options: " + JSON.stringify(options));
         httpHandler.makePostRequest(options, JSON.stringify(args.value.patchData)).then((jsonResponse: string) => {
-            const status: StatusResponse = { code: 0, message: "Operation successful.", data: JSON.parse(jsonResponse) };
-            args.value = status;
+            // const status: StatusResponse = { code: 0, message: "Operation successful.", data: JSON.parse(jsonResponse) };
+            args.value = ResponseParser.parse(jsonResponse);
             IPCNative.instance().onNativeEvent(args);
         }).catch(error => {
             Log.error(TAG, error);

@@ -91,7 +91,7 @@ import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
 import IPCClient from "@/renderer/ipc/IPCClient";
 import { Toaster } from "@/renderer/services/Toaster";
-import AppVersionTopMenuVue from "@/renderer/components/apple/AppVersionTopMenu.vue";
+import AppVersionTopMenuVue from "./AppVersionTopMenu.vue";
 import { ViewController } from "@/renderer/ViewController";
 export default {
   components: {
@@ -110,6 +110,11 @@ export default {
 
   props: {
     appVersion: Object,
+  },
+
+  mounted() {
+    window.$(".ui.accordion").accordion();
+    this.loadAppVersionLocalizations();
   },
 
   methods: {
@@ -187,11 +192,6 @@ export default {
     getAttributes(appVersion) {
       return App.getAttributes(appVersion);
     },
-  },
-  mounted() {
-    window.$(".ui.accordion").accordion();
-    console.log("appversionlocalization");
-    this.loadAppVersionLocalizations();
   },
   computed: {
     darkMode() {

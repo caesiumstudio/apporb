@@ -9,7 +9,9 @@
             {{ getAttributes(appVersion).appStoreState }}
           </div>
           <div class="content">
-            <AppVersionLocalization :appVersion="appVersion"></AppVersionLocalization>
+            <AppVersionLocalization
+              :appVersion="appVersion"
+            ></AppVersionLocalization>
           </div>
         </template>
       </div>
@@ -21,7 +23,7 @@
 import { App, APPLE_DEV_HOST } from "@/shared/App";
 import { Commands } from "@/shared/constants/Commands";
 import IPCClient from "@/renderer/ipc/IPCClient";
-import AppVersionLocalization from "@/renderer/components/apple/AppVersionLocalization";
+import AppVersionLocalization from "./AppVersionLocalization";
 import { ViewController } from "@/renderer/ViewController";
 import { Toaster } from "@/renderer/services/Toaster";
 

@@ -27,8 +27,8 @@
 <script>
 import LoaderView from "../LoaderView.vue";
 import AppReviews from "./AppReviews.vue";
-import AppVersions from "./AppVersions.vue";
-import AppInfoLocalizations from "./AppInfoLocalizations.vue";
+import AppVersions from "./app-version/AppVersions.vue";
+import AppInfoLocalizations from "./app-info/AppInfoLocalizations.vue";
 export default {
   components: { AppVersions, AppReviews, LoaderView, AppInfoLocalizations },
 
