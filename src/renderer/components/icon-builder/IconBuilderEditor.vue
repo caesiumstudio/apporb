@@ -105,24 +105,15 @@ export default {
 
   data() {
     return {
-      exportPath: "/home/ravi/Downloads/aaaa/",
+      exportPath: "",
       iconPath: "icon-ph.png",
       appIconResolutions: ["icon-ph.png"],
     };
   },
 
   props: {
-    // notifProp: Object,
   },
 
-  // watch: {
-  //   notifProp: {
-  //     handler(newNotifProp) {
-  // this.notif = newNotifProp;
-  // console.log(JSON.stringify(newNotifProp));
-  //     },
-  //   },
-  // },
 
   methods: {
     onExportPathChange() {
