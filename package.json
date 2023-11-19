@@ -73,6 +73,7 @@
     "vuex": "^4.0.0",
     "webpack": "^5.88.2"
   },
+
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/jquery": "^3.5.20",
