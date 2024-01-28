@@ -6,6 +6,7 @@ export class Toaster {
     public static ERROR = 'error';
     public static WARNING = 'orange';
     public static INFO = 'blue';
+    public static SUCCESS = 'green';
 
     public static showToast(message: string, type: string, timeInMilliSeconds: number) {
         (window.$('body') as any).toast({

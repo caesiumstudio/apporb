@@ -3,6 +3,7 @@
     <div class="ui">
       <AppVersionTopMenuVue
         :appVersionLocalizations="appVersionLocalizations"
+        :appVersion="appVersion"
       ></AppVersionTopMenuVue>
     </div>
 
@@ -134,6 +135,11 @@ export default {
         },
       };
 
+      // in the first release whatsNew cannot be set so delete it.
+      if (!patchData.data.attributes.whatsNew) {
+        delete patchData.data.attributes.whatsNew;
+      }
+
       IPCClient.instance(this.appVersion).request(
         {
           command: Commands.CMD_HTTP_PATCH_APP_STORE_VERSION_UPDATE,
@@ -146,6 +152,7 @@ export default {
           if (response.code < 0) {
             Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
           } else {
+            Toaster.showToast("Operation Success.", Toaster.SUCCESS, 1000);
             ViewController.setProgress(false);
           }
         }

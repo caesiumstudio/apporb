@@ -52,6 +52,7 @@ export default {
   },
 
   props: {
+    appVersion: Object,
     appVersionLocalizations: Object,
   },
 
@@ -193,9 +194,9 @@ export default {
           attributes: {
             locale: locale,
             description:
-              "Flitm: be curious - A coding app where you can learn any programming languages like HTML, CSS, Javascript, Java, and Python and build your professional software right from your mobile phone",
+              "",
             keywords: "",
-            marketingUrl: "https://caesiumstudio.com/app-details/flitm",
+            marketingUrl: "",
             promotionalText: "",
             supportUrl: "https://caesiumstudio.com/",
             whatsNew: "",
