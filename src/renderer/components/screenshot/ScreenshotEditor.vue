@@ -2,16 +2,31 @@
   <div class="container inverted">
     <div class="ui grid">
       <div class="twelve wide column">
-        <div ref="editorView" @resize="updateEditorSize($event)" class="ui editor-view">
-          <template v-for="(designTemplate, index) in designTemplates" :key="index">
+        <div
+          ref="editorView"
+          @resize="updateEditorSize($event)"
+          class="ui editor-view"
+        >
+          <template
+            v-for="(designTemplate, index) in designTemplates"
+            :key="index"
+          >
             <div class="screens-container">
-              <template v-for="(card, cardIndex) in designTemplate.cards" :key="cardIndex">
+              <template
+                v-for="(card, cardIndex) in designTemplate.cards"
+                :key="cardIndex"
+              >
                 <div class="screenshot-card">
-                  <div :class="[
-                    'card-wrapper',
-                    selectedCardData.name == card.name ? 'selected' : '',
-                  ]">
-                    <ScreenshotCard :config="card" @onCardClicked="onCardClicked" />
+                  <div
+                    :class="[
+                      'card-wrapper',
+                      selectedCardData.name == card.name ? 'selected' : '',
+                    ]"
+                  >
+                    <ScreenshotCard
+                      :config="card"
+                      @onCardClicked="onCardClicked"
+                    />
                   </div>
                 </div>
               </template>
@@ -21,7 +36,6 @@
       </div>
       <div class="four wide column">
         <div v-show="Object.keys(selectedCardData).length">
-
           <div class="ui pointing secondary menu">
             <a class="item active" data-tab="first">Screenshot Data</a>
             <a class="item" data-tab="second">Export Settings</a>
@@ -29,17 +43,27 @@
 
           <div class="ui tab active segment" data-tab="first">
             <div class="mt-3">
-              <ScreenshotData :data="selectedCardData" @onDataChanged="onDataChanged" />
+              <ScreenshotData
+                :data="selectedCardData"
+                @onDataChanged="onDataChanged"
+              />
             </div>
           </div>
           <div class="ui tab segment" data-tab="second">
             <div class="ui mt-3">
               <div class="ui form">
                 <div class="field">
-                  <input type="text" v-model="exportPath" placeholder="Export path" />
+                  <input
+                    type="text"
+                    v-model="exportPath"
+                    placeholder="Export path"
+                  />
                 </div>
                 <div class="field">
-                  <button class="ui button blue" @click="onExportSelectedScreenshot">
+                  <button
+                    class="ui button blue"
+                    @click="onExportSelectedScreenshot"
+                  >
                     Export Selected
                   </button>
                 </div>
@@ -86,10 +110,10 @@ export default {
         this.savedConfig = newTemplateConfig.id
           ? newTemplateConfig // already saved config
           : new ScreenshotConfig( // new config
-            newTemplateConfig.id,
-            newTemplateConfig.name,
-            []
-          );
+              newTemplateConfig.id,
+              newTemplateConfig.name,
+              []
+            );
       },
     },
   },
@@ -172,7 +196,6 @@ export default {
     onCardClicked(cardData) {
       this.selectedCardData = cardData;
       this.savedConfig.cards = this.getCardRow(cardData);
-
     },
 
     getCardRow(card) {
@@ -213,6 +236,13 @@ export default {
     },
 
     onSave(node) {
+      const fileName =
+        "/screenshot-" +
+        this.screenshotSize.width +
+        "x" +
+        this.screenshotSize.height +
+        ".png";
+
       domtoimage
         .toPng(node)
         .then((dataUrl) => {
@@ -221,7 +251,7 @@ export default {
               command: Commands.CMD_EXPORT_SCREENSHOT,
               value: {
                 imageData: dataUrl,
-                fullPath: this.exportPath + "/screenshot-1.png",
+                fullPath: this.exportPath + fileName,
                 size: Utils.cloneObject(this.screenshotSize),
               },
             },
