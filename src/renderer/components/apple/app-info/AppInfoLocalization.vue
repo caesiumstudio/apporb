@@ -139,7 +139,14 @@ export default {
           if (response.code < 0) {
             Toaster.showToast(response.error, Toaster.ERROR, 3000);
           } else {
-            this.appInfoLocalizations = response.data.data;
+            const localizations = response.data.data;
+            for (let i = 0; i < localizations.length; i++) {
+              if (localizations[i].attributes.locale === 'en-US') {
+                this.appInfoLocalizations.unshift(localizations[i]);
+                continue;
+              }
+              this.appInfoLocalizations.push(localizations[i]);
+            }
           }
         }
       );

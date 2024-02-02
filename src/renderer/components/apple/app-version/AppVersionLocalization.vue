@@ -181,11 +181,13 @@ export default {
           if (response.code < 0) {
             Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
           } else {
-            this.appVersionLocalizations = response.data.data;
-            if (this.appVersionLocalizations.length) {
-              console.log(
-                this.getAttributes(this.appVersionLocalizations[0]).locale
-              );
+            const localizations = response.data.data;
+            for (let i = 0; i < localizations.length; i++) {
+              if (localizations[i].attributes.locale === "en-US") {
+                this.appVersionLocalizations.unshift(localizations[i]);
+                continue;
+              }
+              this.appVersionLocalizations.push(localizations[i]);
             }
           }
         }

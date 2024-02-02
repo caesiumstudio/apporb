@@ -67,7 +67,6 @@ export default {
             Toaster.showToast(response.error, Toaster.ERROR, 3000);
           } else {
             this.appInfos = response.data.data;
-            // this.loadAppInfoLocalizations(response.data.data);
           }
         }
       );
