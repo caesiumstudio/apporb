@@ -1,5 +1,5 @@
 <template>
-  <div class="ui small card fluid">
+  <div class="ui small card fluid" v-show="getVisibility()">
     <div class="content">
       <div class="header">
         {{ getAttributes(review).title }}
@@ -8,8 +8,7 @@
         </div>
       </div>
       <div class="meta">
-        <span class="category"
-          >{{ getAttributes(review).reviewerNickname }}
+        <span class="category">{{ getAttributes(review).reviewerNickname }}
           <div class="right floated author">
             {{ getAttributes(review).createdDate }}
             {{ getAttributes(review).territory }}
@@ -22,19 +21,11 @@
       <div class="ui form">
         <div class="field">
           <label>Response</label>
-          <textarea
-            @keyup="onTextModified"
-            v-model="response"
-            rows="2"
-            spellcheck="true"
-          ></textarea>
+          <textarea @keyup="onTextModified" v-model="response" rows="2" spellcheck="true"></textarea>
         </div>
         <div class="field">
-          <button
-            :disabled="isModified"
-            :class="['ui mini button primary', { disabled: isUnmodified }]"
-            @click="onSubmitResponse"
-          >
+          <button :disabled="isModified" :class="['ui mini button primary', { disabled: isUnmodified }]"
+            @click="onSubmitResponse">
             Save Response
           </button>
         </div>
@@ -60,6 +51,8 @@ export default {
 
   props: {
     review: Object,
+    hideReplied: Boolean,
+    hide5Stars: Boolean,
   },
 
   watch: {
@@ -73,6 +66,11 @@ export default {
     this.loadResponse(this.review);
   },
   methods: {
+    getVisibility() {
+      if (this.hideReplied && this.response) return false;
+      if (this.hide5Stars && this.review.attributes.rating >= 5) return false;
+      return true;
+    },
     onTextModified() {
       this.isUnmodified = false;
     },
@@ -126,7 +124,7 @@ export default {
           value: this.getPath(review.relationships.response.links.related),
         },
         (response) => {
-                ViewController.setProgress(false);
+          ViewController.setProgress(false);
 
 
           if (response.code < 0) {
