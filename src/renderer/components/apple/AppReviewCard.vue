@@ -28,6 +28,9 @@
             @click="onSubmitResponse">
             Save Response
           </button>
+          <button :disabled="isModified" :class="['ui mini button primary']" @click="onAiResponse">
+            Ai Response
+          </button>
         </div>
       </div>
     </div>
@@ -39,6 +42,7 @@ import { Commands } from "@/shared/constants/Commands";
 import IPCClient from "@/renderer/ipc/IPCClient";
 import { ViewController } from "@/renderer/ViewController";
 import { Toaster } from "@/renderer/services/Toaster";
+import { OrbAI } from "@/renderer/services/OrbAI";
 export default {
   components: {},
 
@@ -66,14 +70,22 @@ export default {
     this.loadResponse(this.review);
   },
   methods: {
+    async onAiResponse() {
+      const orbAI = OrbAI.getInstance();
+      const generatedResponse = await orbAI.runPrompt("Generate an app review response for this comment \"" + this.getAttributes(this.review).body + "\"");
+      this.response = generatedResponse.content;      
+    },
+
     getVisibility() {
-      if (this.hideReplied && this.response) return false;
+      if (this.hideReplied && this.response && this.isUnmodified) return false;
       if (this.hide5Stars && this.review.attributes.rating >= 5) return false;
       return true;
     },
+
     onTextModified() {
       this.isUnmodified = false;
     },
+
     onSubmitResponse() {
       ViewController.setProgress(false);
 
