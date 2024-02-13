@@ -28,6 +28,7 @@
                 <div class="field">
                   <label>Description</label>
                   <textarea
+                    @keyup="onChange($event, 4000)"
                     v-model="getAttributes(appVersionLocalization).description"
                     spellcheck="true"
                   ></textarea>
@@ -36,6 +37,7 @@
                 <div class="field">
                   <label>Keywords</label>
                   <input
+                    @keyup="onChange($event, 100)"
                     type="text"
                     v-model="getAttributes(appVersionLocalization).keywords"
                   />
@@ -52,6 +54,7 @@
                 <div class="field">
                   <label>Promotional Text</label>
                   <textarea
+                    @keyup="onChange($event, 170)"
                     v-model="
                       getAttributes(appVersionLocalization).promotionalText
                     "
@@ -63,6 +66,7 @@
                 <div class="field">
                   <label>What's New</label>
                   <textarea
+                    @keyup="onChange($event, 170)"
                     v-model="getAttributes(appVersionLocalization).whatsNew"
                     rows="2"
                     spellcheck="true"
@@ -119,6 +123,15 @@ export default {
   },
 
   methods: {
+    onChange(event, validLength) {
+      const remainingLength = validLength - event.target.value.length;
+      console.log("Remaining: " + remainingLength);
+      if (remainingLength < 0) {
+        event.target.style.border = '1px dotted red';
+      } else {
+        event.target.style.border = '';
+      }
+    },
     saveTranslation(index) {
       ViewController.setProgress(true);
 
