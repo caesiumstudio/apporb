@@ -160,7 +160,7 @@ export default {
       delete attributes.locale;
       delete attributes.privacyChoicesUrl;
       delete attributes.privacyPolicyText;
-      delete attributes.privacyPolicyUrl;
+      // delete attributes.privacyPolicyUrl;
 
       const patchData = {
         data: {
@@ -181,8 +181,8 @@ export default {
         (response) => {
           ViewController.setProgress(false);
           console.log(JSON.stringify(response));
-          if (response.code < 0) {
-            Toaster.showToast(response.message, Toaster.ERROR, 2000);
+          if (response.code < 0) {            
+            alert("Error: " + response.message);
           }
           {
             Toaster.showToast(response.message, Toaster.INFO, 2000);

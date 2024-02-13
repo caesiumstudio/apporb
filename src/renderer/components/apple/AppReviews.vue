@@ -1,8 +1,28 @@
 <template>
   <div class="">
+    <div class="ui small inverted  menu ">
+      <!-- <a class="active item">
+        Home
+      </a>
+      <a class="item">
+        Messages
+      </a> -->
+      <div class="right menu">
+        <div class="ui dropdown item borderless">
+          Language <i class="dropdown icon"></i>
+          <div class="menu">
+            <a class="item" id="idShowReplied">{{ hideReplied ? "Show" : "Hide" }} Replied</a>
+            <a class="item" id="idNot5Stars">{{ hide5Stars ? "Show" : "Hide" }} 5 Stars</a>
+          </div>
+        </div>
+        <!-- <div class="item">
+          <div class="ui primary button">Sign Up</div>
+        </div> -->
+      </div>
+    </div>
     <div v-if="Object.keys(app).length">
       <template v-for="review in customerReviews" :key="review.id">
-        <app-review-card :review="review" />
+        <app-review-card :review="review" :hideReplied="hideReplied" :hide5Stars="hide5Stars" />
       </template>
     </div>
   </div>
@@ -23,6 +43,8 @@ export default {
   data() {
     return {
       customerReviews: [],
+      hideReplied: false,
+      hide5Stars: false,
       selectedBookTitle: "",
       loaderConfig: {
         isIconVisible: false,
@@ -76,6 +98,17 @@ export default {
   mounted() {
     window.$(".ui.accordion").accordion();
     window.$(".menu .item").tab();
+    window.$(".dropdown").dropdown({
+      onChange: (value, text, $selectedItem) => {
+        this.transAttr = value;
+        const id = $selectedItem[0].getAttribute("id")
+        if (id === 'idShowReplied') {
+          this.hideReplied = !this.hideReplied;
+        } else if (id === 'idNot5Stars') {
+          this.hide5Stars = !this.hide5Stars;
+        }
+      },
+    });
   },
 
   computed: {
