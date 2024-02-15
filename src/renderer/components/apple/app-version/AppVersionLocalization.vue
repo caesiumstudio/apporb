@@ -22,13 +22,20 @@
               <div class="ui form">
                 <div class="field">
                   <label>Description</label>
-                  <textarea v-model="getAttributes(appVersionLocalization).description" spellcheck="true"></textarea>
-                
+                  <textarea
+                    @keyup="onChange($event, 4000)"
+                    v-model="getAttributes(appVersionLocalization).description"
+                    spellcheck="true"
+                  ></textarea>
                 </div>
 
                 <div class="field">
                   <label>Keywords</label>
-                  <input type="text" v-model="getAttributes(appVersionLocalization).keywords" />
+                  <input
+                    @keyup="onChange($event, 100)"
+                    type="text"
+                    v-model="getAttributes(appVersionLocalization).keywords"
+                  />
                 </div>
 
                 <div class="field">
@@ -38,13 +45,24 @@
 
                 <div class="field">
                   <label>Promotional Text</label>
-                  <textarea v-model="getAttributes(appVersionLocalization).promotionalText
-                    " rows="2" spellcheck="true">
+                  <textarea
+                    @keyup="onChange($event, 170)"
+                    v-model="
+                      getAttributes(appVersionLocalization).promotionalText
+                    "
+                    rows="2"
+                    spellcheck="true"
+                  >
                   </textarea>
                 </div>
                 <div class="field">
                   <label>What's New</label>
-                  <textarea v-model="getAttributes(appVersionLocalization).whatsNew" rows="2" spellcheck="true">
+                  <textarea
+                    @keyup="onChange($event, 170)"
+                    v-model="getAttributes(appVersionLocalization).whatsNew"
+                    rows="2"
+                    spellcheck="true"
+                  >
                   </textarea>
                   <div class="field"></div>
                   <button class="ui mini primary button mb-3" @click="saveTranslation(index)">
@@ -56,6 +74,7 @@
                 </div>
               </div>
             </div>
+            <!-- <div class="ui divider"></div> -->
           </div>
         </div>
       </div>
@@ -71,7 +90,6 @@ import IPCClient from "@/renderer/ipc/IPCClient";
 import { Toaster } from "@/renderer/services/Toaster";
 import AppVersionTopMenuVue from "./AppVersionTopMenu.vue";
 import { ViewController } from "@/renderer/ViewController";
-import {OrbAI} from '@/renderer/services/OrbAI';
 export default {
   components: {
     AppVersionTopMenuVue,
@@ -84,7 +102,6 @@ export default {
         isIconVisible: true,
         text: "Loading apps data",
       },
-      isOrbAIView: true,
     };
   },
 
@@ -98,10 +115,15 @@ export default {
   },
 
   methods: {
-    showChatView() {
-      OrbAI.getInstance().openChatView();
+    onChange(event, validLength) {
+      const remainingLength = validLength - event.target.value.length;
+      console.log("Remaining: " + remainingLength);
+      if (remainingLength < 0) {
+        event.target.style.border = '1px dotted red';
+      } else {
+        event.target.style.border = '';
+      }
     },
-
     saveTranslation(index) {
       ViewController.setProgress(true);
 
@@ -206,3 +228,4 @@ export default {
   border: none;
 }
 </style>
+                  

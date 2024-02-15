@@ -87,7 +87,6 @@ export class ImageLoader {
         const images: string[] = [];
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            console.log(file);
 
             if (!file.endsWith('png') && !file.endsWith('jpg')) {
                 files.splice(i, 1);

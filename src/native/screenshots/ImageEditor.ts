@@ -23,11 +23,8 @@ export class ImageEditor {
         let size = args.value.size;
 
         ImageDataURI.outputFile(imageData, fullPath).then((imagePath: string) => {
-            console.log(imagePath);
-
             Jimp.read(imagePath, (err, image) => {
                 if (err) {
-                    console.log(err);
                     const status: StatusResponse = { code: -1, message: "Error" };
                     args.value = status;
                     IPCNative.instance().onNativeEvent(args);

@@ -28,7 +28,6 @@ export class PostAPIHandler {
         const options = await this.getPostOptions(args.value.url);
 
         httpHandler.makePostRequest(options, JSON.stringify(args.value.postData)).then((jsonResponse: string) => {
-            console.log(jsonResponse);
             const jsonObject = JSON.parse(jsonResponse);
             const status: StatusResponse = { code: 0, message: "Operation successful.", data: JSON.parse(jsonResponse) };
             if (jsonObject.errors) {
