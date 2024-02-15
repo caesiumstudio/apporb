@@ -1,17 +1,12 @@
 <template>
   <div>
     <div class="ui">
-      <AppVersionTopMenuVue
-        :appVersionLocalizations="appVersionLocalizations"
-        :appVersion="appVersion"
-      ></AppVersionTopMenuVue>
+      <AppVersionTopMenuVue :appVersionLocalizations="appVersionLocalizations" :appVersion="appVersion">
+      </AppVersionTopMenuVue>
     </div>
 
     <div class="ui">
-      <div
-        v-for="(appVersionLocalization, index) in appVersionLocalizations"
-        :key="appVersionLocalization.id"
-      >
+      <div v-for="(appVersionLocalization, index) in appVersionLocalizations" :key="appVersionLocalization.id">
         <div class="ui accordion">
           <div class="title">
             <i class="dropdown icon"></i>
@@ -27,58 +22,40 @@
               <div class="ui form">
                 <div class="field">
                   <label>Description</label>
-                  <textarea
-                    v-model="getAttributes(appVersionLocalization).description"
-                    spellcheck="true"
-                  ></textarea>
+                  <textarea v-model="getAttributes(appVersionLocalization).description" spellcheck="true"></textarea>
+                
                 </div>
 
                 <div class="field">
                   <label>Keywords</label>
-                  <input
-                    type="text"
-                    v-model="getAttributes(appVersionLocalization).keywords"
-                  />
+                  <input type="text" v-model="getAttributes(appVersionLocalization).keywords" />
                 </div>
 
                 <div class="field">
                   <label>Marketing URL</label>
-                  <input
-                    type="text"
-                    v-model="getAttributes(appVersionLocalization).marketingUrl"
-                  />
+                  <input type="text" v-model="getAttributes(appVersionLocalization).marketingUrl" />
                 </div>
 
                 <div class="field">
                   <label>Promotional Text</label>
-                  <textarea
-                    v-model="
-                      getAttributes(appVersionLocalization).promotionalText
-                    "
-                    rows="2"
-                    spellcheck="true"
-                  >
+                  <textarea v-model="getAttributes(appVersionLocalization).promotionalText
+                    " rows="2" spellcheck="true">
                   </textarea>
                 </div>
                 <div class="field">
                   <label>What's New</label>
-                  <textarea
-                    v-model="getAttributes(appVersionLocalization).whatsNew"
-                    rows="2"
-                    spellcheck="true"
-                  >
+                  <textarea v-model="getAttributes(appVersionLocalization).whatsNew" rows="2" spellcheck="true">
                   </textarea>
                   <div class="field"></div>
-                  <button
-                    class="ui mini primary button mb-3"
-                    @click="saveTranslation(index)"
-                  >
+                  <button class="ui mini primary button mb-3" @click="saveTranslation(index)">
                     Save
+                  </button>
+                  <button :class="['ui mini button primary']" @click="showChatView">
+                    OrbAI
                   </button>
                 </div>
               </div>
             </div>
-            <!-- <div class="ui divider"></div> -->
           </div>
         </div>
       </div>
@@ -94,6 +71,7 @@ import IPCClient from "@/renderer/ipc/IPCClient";
 import { Toaster } from "@/renderer/services/Toaster";
 import AppVersionTopMenuVue from "./AppVersionTopMenu.vue";
 import { ViewController } from "@/renderer/ViewController";
+import {OrbAI} from '@/renderer/services/OrbAI';
 export default {
   components: {
     AppVersionTopMenuVue,
@@ -106,6 +84,7 @@ export default {
         isIconVisible: true,
         text: "Loading apps data",
       },
+      isOrbAIView: true,
     };
   },
 
@@ -119,6 +98,10 @@ export default {
   },
 
   methods: {
+    showChatView() {
+      OrbAI.getInstance().openChatView();
+    },
+
     saveTranslation(index) {
       ViewController.setProgress(true);
 
