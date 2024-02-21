@@ -1,17 +1,13 @@
 <template>
   <div>
     <div class="ui">
-      <AppVersionTopMenuVue
-        :appVersionLocalizations="appVersionLocalizations"
-        :appVersion="appVersion"
-      ></AppVersionTopMenuVue>
+      <AppVersionTopMenuVue :appVersionLocalizations="appVersionLocalizations" :appVersion="appVersion"
+        @saveAll="saveAll">
+      </AppVersionTopMenuVue>
     </div>
 
     <div class="ui">
-      <div
-        v-for="(appVersionLocalization, index) in appVersionLocalizations"
-        :key="appVersionLocalization.id"
-      >
+      <div v-for="(appVersionLocalization, index) in appVersionLocalizations" :key="appVersionLocalization.id">
         <div class="ui accordion">
           <div class="title">
             <i class="dropdown icon"></i>
@@ -27,57 +23,38 @@
               <div class="ui form">
                 <div class="field">
                   <label>Description</label>
-                  <textarea
-                    @keyup="onChange($event, 4000)"
-                    v-model="getAttributes(appVersionLocalization).description"
-                    spellcheck="true"
-                  ></textarea>
+                  <textarea @keyup="onChange($event, 4000)" v-model="getAttributes(appVersionLocalization).description"
+                    spellcheck="true"></textarea>
                 </div>
 
                 <div class="field">
                   <label>Keywords</label>
-                  <input
-                    @keyup="onChange($event, 100)"
-                    type="text"
-                    v-model="getAttributes(appVersionLocalization).keywords"
-                  />
+                  <input @keyup="onChange($event, 100)" type="text"
+                    v-model="getAttributes(appVersionLocalization).keywords" />
                 </div>
 
                 <div class="field">
                   <label>Marketing URL</label>
-                  <input
-                    type="text"
-                    v-model="getAttributes(appVersionLocalization).marketingUrl"
-                  />
+                  <input type="text" v-model="getAttributes(appVersionLocalization).marketingUrl" />
                 </div>
 
                 <div class="field">
                   <label>Promotional Text</label>
-                  <textarea
-                    @keyup="onChange($event, 170)"
-                    v-model="
-                      getAttributes(appVersionLocalization).promotionalText
-                    "
-                    rows="2"
-                    spellcheck="true"
-                  >
+                  <textarea @keyup="onChange($event, 170)" v-model="getAttributes(appVersionLocalization).promotionalText
+                    " rows="2" spellcheck="true">
                   </textarea>
                 </div>
                 <div class="field">
                   <label>What's New</label>
-                  <textarea
-                    @keyup="onChange($event, 170)"
-                    v-model="getAttributes(appVersionLocalization).whatsNew"
-                    rows="2"
-                    spellcheck="true"
-                  >
+                  <textarea @keyup="onChange($event, 170)" v-model="getAttributes(appVersionLocalization).whatsNew"
+                    rows="2" spellcheck="true">
                   </textarea>
                   <div class="field"></div>
-                  <button
-                    class="ui mini primary button mb-3"
-                    @click="saveTranslation(index)"
-                  >
+                  <button class="ui mini primary button mb-3" @click="saveTranslation(index)">
                     Save
+                  </button>
+                  <button :class="['ui mini button primary']" @click="showChatView">
+                    Ai
                   </button>
                 </div>
               </div>
@@ -98,6 +75,7 @@ import IPCClient from "@/renderer/ipc/IPCClient";
 import { Toaster } from "@/renderer/services/Toaster";
 import AppVersionTopMenuVue from "./AppVersionTopMenu.vue";
 import { ViewController } from "@/renderer/ViewController";
+import { OrbAI } from "@/renderer/services/OrbAI";
 export default {
   components: {
     AppVersionTopMenuVue,
@@ -123,6 +101,10 @@ export default {
   },
 
   methods: {
+    showChatView() {
+      new OrbAI().openChatView();
+    },
+
     onChange(event, validLength) {
       const remainingLength = validLength - event.target.value.length;
       console.log("Remaining: " + remainingLength);
@@ -132,7 +114,29 @@ export default {
         event.target.style.border = '';
       }
     },
+
+    saveAll() {
+      console.log('saving all');
+      let versionIndex = 0;
+
+
+      const callback = (msg) => {
+        console.log('Status: ' + msg);
+        versionIndex++;
+        if (versionIndex < this.appVersionLocalizations.length) {
+          this.saveTranslationWithCallback(versionIndex, callback);
+        }
+      }
+      this.saveTranslationWithCallback(versionIndex, callback);
+    },
+
     saveTranslation(index) {
+      this.saveTranslationWithCallback(index, (msg) => {
+        console.log('Status: ' + msg);
+      });
+    },
+
+    saveTranslationWithCallback(index, callback) {
       ViewController.setProgress(true);
 
       const appVersionLocalization = this.appVersionLocalizations[index];
@@ -163,10 +167,12 @@ export default {
         },
         (response) => {
           if (response.code < 0) {
+            callback(response.code);
             Toaster.showToast("Operation failed.", Toaster.ERROR, 2000);
           } else {
             Toaster.showToast("Operation Success.", Toaster.SUCCESS, 1000);
             ViewController.setProgress(false);
+            callback(response.code);
           }
         }
       );
@@ -236,3 +242,4 @@ export default {
   border: none;
 }
 </style>
+                  

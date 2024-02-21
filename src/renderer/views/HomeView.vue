@@ -1,6 +1,8 @@
 <template>
   <SettingsDialogs />
   <AboutDialog />
+  <AboutDialog />
+
   <TopMenu />
 </template>
 
@@ -18,7 +20,7 @@ export default defineComponent({
   components: {
     TopMenu,
     SettingsDialogs,
-    AboutDialog
+    AboutDialog,
   },
   methods: {
     onClick() {
@@ -28,5 +30,4 @@ export default defineComponent({
   },
 });
 </script>
-<style scoped>
-</style>
+<style scoped></style>

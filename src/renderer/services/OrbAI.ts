@@ -16,7 +16,6 @@ export class OrbAI {
         return OrbAI.instance;
     }
 
-
     public runPrompt = async (prompt: string) => {
         const response = await this.openai.chat.completions.create({
             model: "gpt-3.5-turbo",
@@ -28,4 +27,8 @@ export class OrbAI {
         const parsedResponse = response.choices[0].message;        
         return parsedResponse;
     };
+
+    public openChatView() {
+        window.open('https://gemini.google.com/app', '_blank');
+    }
 }

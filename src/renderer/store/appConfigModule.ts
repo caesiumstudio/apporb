@@ -7,7 +7,8 @@ export interface AppConfig {
     darkMode: boolean,
     toggleSettingsDialog: boolean,
     toggleAboutDialog: boolean,
-    isProgressOn: boolean
+    isProgressOn: boolean,
+    toggleOrbAiChatView: boolean
 }
 
 type AppConfigContext = ActionContext<AppConfig, State>
@@ -17,7 +18,8 @@ export const appConfig: Module<any, any> = {
         darkMode: false,
         toggleSettingsDialog: false,
         toggleAboutDialog: false,
-        isProgressOn: false
+        isProgressOn: false,
+        toggleOrbAiChatView: false
     } as AppConfig,
 
     mutations: {
@@ -29,6 +31,9 @@ export const appConfig: Module<any, any> = {
             state.toggleSettingsDialog = !state.toggleSettingsDialog
         },
 
+        toggleOrbAiChatViewDialog: (state: AppConfig) => {
+            state.toggleOrbAiChatView = !state.toggleOrbAiChatView
+        },
 
         toggleAboutDialog: (state: AppConfig) => {
             state.toggleAboutDialog = !state.toggleAboutDialog
@@ -53,6 +58,10 @@ export const appConfig: Module<any, any> = {
 
         toggleSettingsDialog: (context: AppConfigContext) => {
             context.commit("toggleSettingsDialog");
+        },
+
+        toggleOrbAiChatViewDialog: (context: AppConfigContext) => {
+            context.commit("toggleOrbAiChatViewDialog");
         }
     },
 }
