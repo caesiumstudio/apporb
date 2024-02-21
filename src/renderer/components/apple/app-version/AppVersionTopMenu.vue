@@ -7,17 +7,16 @@
       <div class="ui button primary" @click="generateTranslations">
         Generate Translations
       </div>
+      <div class="ui button primary" @click="saveAll">
+        Save All
+      </div>
 
       <div class="ui divider hidden"></div>
       <div class="ui form">
         <div class="field">
           <label>Select attributes to translate</label>
-          <select
-            :id="'dd-' + uid"
-            name="Update attributes"
-            multiple=""
-            class="ui fluid multiple selection dropdown appversion"
-          >
+          <select :id="'dd-' + uid" name="Update attributes" multiple=""
+            class="ui fluid multiple selection dropdown appversion">
             <option value=""></option>
             <option value="description">Description</option>
             <option value="whatsNew">What's New</option>
@@ -73,6 +72,10 @@ export default {
   },
 
   methods: {
+    saveAll() {
+      this.$emit("saveAll", '');
+    },
+
     generateTranslations() {
       const englishAttr = this.getEnglishVersion();
       if (!englishAttr) {

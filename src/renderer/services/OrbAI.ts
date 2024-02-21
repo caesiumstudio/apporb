@@ -28,7 +28,7 @@ export class OrbAI {
         return parsedResponse;
     };
 
-    openChatView() {
-        window.open('https://gemini.google.com/app', '_blank');        
+    public openChatView() {
+        window.open('https://gemini.google.com/app', '_blank');
     }
 }
