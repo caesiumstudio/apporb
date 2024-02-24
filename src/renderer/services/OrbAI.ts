@@ -24,7 +24,7 @@ export class OrbAI {
             ]
         });
 
-        const parsedResponse = response.choices[0].message;        
+        const parsedResponse = response.choices[0].message;
         return parsedResponse;
     };
 

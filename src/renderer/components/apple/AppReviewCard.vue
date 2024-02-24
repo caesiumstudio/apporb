@@ -8,7 +8,8 @@
         </div>
       </div>
       <div class="meta">
-        <span class="category">{{ getAttributes(review).reviewerNickname }}
+        <span class="category"
+          >{{ getAttributes(review).reviewerNickname }}
           <div class="right floated author">
             {{ getAttributes(review).createdDate }}
             {{ getAttributes(review).territory }}
@@ -21,15 +22,27 @@
       <div class="ui form">
         <div class="field">
           <label>Response</label>
-          <textarea @keyup="onTextModified" v-model="response" rows="2" spellcheck="true"></textarea>
+          <textarea
+            @keyup="onTextModified"
+            v-model="response"
+            rows="2"
+            spellcheck="true"
+          ></textarea>
         </div>
         <div class="field">
-          <button :disabled="isModified" :class="['ui mini button primary', { disabled: isUnmodified }]"
-            @click="onSubmitResponse">
+          <button
+            :disabled="isModified"
+            :class="['ui mini button primary', { disabled: isUnmodified }]"
+            @click="onSubmitResponse"
+          >
             Save Response
           </button>
-          <button :disabled="isModified" :class="['ui mini button primary']" @click="onAiResponse">
-            Ai Response
+          <button
+            :disabled="isModified"
+            :class="['ui mini button primary']"
+            @click="onAiResponse"
+          >
+            Ai
           </button>
         </div>
       </div>
@@ -71,9 +84,10 @@ export default {
   },
   methods: {
     async onAiResponse() {
-      const orbAI = OrbAI.getInstance();
-      const generatedResponse = await orbAI.runPrompt("Generate an app review response for this comment \"" + this.getAttributes(this.review).body + "\"");
-      this.response = generatedResponse.content;      
+      const orbAI = new OrbAI();
+      orbAI.openChatView();
+      // const generatedResponse = await orbAI.runPrompt("Generate an app review response for this comment \"" + this.getAttributes(this.review).body + "\"");
+      // this.response = generatedResponse.content;
     },
 
     getVisibility() {
@@ -137,7 +151,6 @@ export default {
         },
         (response) => {
           ViewController.setProgress(false);
-
 
           if (response.code < 0) {
             Toaster.showToast(response.error, Toaster.ERROR, 3000);
