@@ -55,6 +55,7 @@
     "core-js": "^3.8.3",
     "dom-to-image": "^2.6.0",
     "electron-icon-builder": "^2.0.1",
+    "firebase-admin": "^10.3.0",
     "fs": "^0.0.1-security",
     "image-data-uri": "^2.0.1",
     "jimp": "^0.22.10",

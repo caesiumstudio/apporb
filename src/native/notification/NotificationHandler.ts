@@ -5,6 +5,7 @@ import { Notification, emptyNotification } from "@/shared/Notification";
 import { NotificationDB } from "./NotificationDB";
 import { IPCNative } from "../ipc/IpcNative";
 import { StatusResponse } from "@/shared/StatusResponse";
+import { FCMNotif } from "./FcmNotif";
 
 const TAG = "NotificationHandler";
 
@@ -45,31 +46,37 @@ export class NotificationHandler implements IPCListener {
     }
 
     private post(args: CommandValue) {
-        const httpHandler = new HttpHandler();
-        const options = this.getPostOptions(args.value);
-        if (options.headers.Authorization.length < 30) {
-            const status: StatusResponse = { code: 0, message: "Invalid auth key" };
-            args.value = status;
-            IPCNative.instance().onNativeEvent(args);
-        } else if (args.value.postData.to.length < 3) {
-            const status: StatusResponse = { code: 0, message: "Invalid topic" };
-            args.value = status;
-            IPCNative.instance().onNativeEvent(args);
-        }
+        // const httpHandler = new HttpHandler();
+        // const options = this.getPostOptions(args.value);
+        // if (options.headers.Authorization.length < 30) {
+        //     const status: StatusResponse = { code: 0, message: "Invalid auth key" };
+        //     args.value = status;
+        //     IPCNative.instance().onNativeEvent(args);
+        // } else if (args.value.postData.to.length < 3) {
+        //     const status: StatusResponse = { code: 0, message: "Invalid topic" };
+        //     args.value = status;
+        //     IPCNative.instance().onNativeEvent(args);
+        // }
 
-        Log.debug(TAG, "Options: " + JSON.stringify(options));
-        httpHandler.makePostRequest(options, JSON.stringify(args.value.postData)).then((jsonResponse: string) => {
-            Log.debug(TAG, jsonResponse);
+        // Log.debug(TAG, "Options: " + JSON.stringify(options));
+        Log.debug(TAG, "NotifData: " + JSON.stringify(args.value.postData));
+        const fcmNotif = new FCMNotif();
+        Log.debug(TAG, "Sending notification");
+        const postData = args.value.postData;
+        fcmNotif.sendToTopic(postData.topic, postData.notification, postData.data);
+        fcmNotif.sendToToken(postData.token, postData.notification, postData.data);
+        // httpHandler.makePostRequest(options, JSON.stringify(args.value.postData)).then((jsonResponse: string) => {
+        //     Log.debug(TAG, jsonResponse);
 
-            const status: StatusResponse = { code: 0, message: "Sent successfully", data: JSON.parse(jsonResponse) };
-            args.value = status;
-            IPCNative.instance().onNativeEvent(args);
-        }).catch(error => {
-            Log.error(TAG, error);
-            const status: StatusResponse = { code: -1, message: "Error sending notification", data: error };
-            args.value = status;
-            IPCNative.instance().onNativeEvent(args);
-        });
+        //     const status: StatusResponse = { code: 0, message: "Sent successfully", data: JSON.parse(jsonResponse) };
+        //     args.value = status;
+        //     IPCNative.instance().onNativeEvent(args);
+        // }).catch(error => {
+        //     Log.error(TAG, error);
+        //     const status: StatusResponse = { code: -1, message: "Error sending notification", data: error };
+        //     args.value = status;
+        //     IPCNative.instance().onNativeEvent(args);
+        // });
     }
 
 
@@ -85,5 +92,6 @@ export class NotificationHandler implements IPCListener {
         };
     }
 }
+
 
 

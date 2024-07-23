@@ -12,7 +12,6 @@
 <script>
 import NotificationSidebar from "@/renderer/components/notification/NotificationSidebar";
 import NotificationEditor from "@/renderer/components/notification/NotificationEditor";
-import { Log } from "@/shared/Logger";
 export default {
   components: {
     NotificationSidebar,

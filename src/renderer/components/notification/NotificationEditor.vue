@@ -159,9 +159,9 @@ export default {
         {
           command: Commands.CMD_HTTP_POST_NOTIFICATION,
           value: {
-            url: "https://fcm.googleapis.com/fcm/send",
+            // url: "https://fcm.googleapis.com/fcm/send",
             postData: postData,
-            authKey: "key=" + this.notif.authKey,
+            // authKey: "key=" + this.notif.authKey,
           },
         },
         (respJson) => {
@@ -186,7 +186,7 @@ export default {
     getPostData() {
       try {
         const postData = {
-          to: "/topics/" + this.notif.topic,
+          to: this.notif.topic,
           notification: Utils.cloneObject(JSON.parse(this.notif.notifJson)),
           data: Utils.cloneObject(JSON.parse(this.notif.dataJson)),
         };

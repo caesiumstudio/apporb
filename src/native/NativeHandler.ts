@@ -1,16 +1,15 @@
 import { app, BrowserWindow } from "electron"
 import { IPCNative } from "./ipc/IpcNative"
-import { Commands } from "@/shared/constants/Commands";
-import { ClientCredentials } from "./appstore/ClientCredentials";
+import { Commands } from "../shared/constants/Commands";
 
 export class NativeHandler {
-  private win: BrowserWindow
+  private wind: BrowserWindow
   private ipcNative: IPCNative;
 
-  constructor(win: BrowserWindow) {
-    this.win = win;
+  constructor(wind: BrowserWindow) {
+    this.wind = wind;
     this.ipcNative = IPCNative.instance();
-    this.ipcNative.setWindow(win);
+    this.ipcNative.setWindow(wind);
 
 
     app.commandLine.appendSwitch("disable-http-cache");
