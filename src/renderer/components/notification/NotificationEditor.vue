@@ -1,11 +1,10 @@
 <template>
   <div class="container">
-    <div v-show="notif" class="ui grid">
-      <div class="ten wide column">
-
-        <form class="ui form">
+    <div v-show="notif" class="ui grid content" >
+      <div class="ten wide column notif-editor">
+        <form class="ui form ">
           <div class="field">
-            <label>Name</label>
+            <!-- <label>Name</label> -->
             <div class="two fields">
               <div class="field">
                 <input v-model="notif.title" type="text" placeholder="name" />
@@ -22,20 +21,22 @@
             </div>
           </div>
           <div class="field">
-            <label>Authorization Key</label>
+            <label>Service account file path (*.json)</label>
             <div class="fields">
               <div class="sixteen wide field">
-                <input v-model="notif.authKey" type="text" />
+                <input v-model="notif.serviceAccountJsonPath" type="text" />
               </div>
             </div>
             <div class="field">
-              <label>Topic</label>
+
               <div class="two fields">
                 <div class="field">
+                  <label>Topic</label>
                   <input v-model="notif.topic" type="text" placeholder="topic" />
                 </div>
                 <div class="field">
-                  <input type="text" />
+                  <label>Token</label>
+                  <input v-model="notif.token" type="text" placeholder="token" />
                 </div>
               </div>
             </div>
@@ -51,8 +52,11 @@
             </div>
 
             <div class="field">
-              <button type="button" class="ui button primary" @click="onSendNotification">
-                Send
+              <button type="button" class="ui button primary" @click="onSendNotification('topic')">
+                Send to Topic
+              </button>
+              <button type="button" class="ui button primary" @click="onSendNotification('token')">
+                Send to Token
               </button>
             </div>
           </div>
@@ -149,19 +153,25 @@ export default {
       console.log(value);
     },
 
-    onSendNotification() {
-      const postData = this.getPostData();
+    onSendNotification(sendType) {
+      let postData = this.getPostData();
       if (!postData) return;
+
+      if (sendType === 'token') {
+        postData = JSON.parse(JSON.stringify(postData));
+        delete postData.topic;
+      } else if (sendType === 'topic') {
+        postData = JSON.parse(JSON.stringify(postData));
+        delete postData.token;
+      }
 
       ViewController.setProgress(true);
 
       IPCClient.instance().request(
         {
           command: Commands.CMD_HTTP_POST_NOTIFICATION,
-          value: {
-            // url: "https://fcm.googleapis.com/fcm/send",
-            postData: postData,
-            // authKey: "key=" + this.notif.authKey,
+          value: {            
+            postData: postData,            
           },
         },
         (respJson) => {
@@ -169,8 +179,10 @@ export default {
 
           console.log(JSON.stringify(respJson));
           if (respJson.code < 0) {
-            Toaster.showToast(respJson.error, Toaster.ERROR, 1000);
+            Toaster.showToast(respJson.message, Toaster.ERROR, 1000);
           } else {
+            Toaster.showToast(respJson.message, Toaster.SUCCESS, 1000);
+
             this.notif.history.push({
               id: Utils.getUID(),
               title: postData.notification.title,
@@ -185,8 +197,10 @@ export default {
 
     getPostData() {
       try {
-        const postData = {
-          to: this.notif.topic,
+        const postData = {          
+          topic: this.notif.topic,
+          token: this.notif.token,
+          serviceAccountJsonPath: this.notif.serviceAccountJsonPath,
           notification: Utils.cloneObject(JSON.parse(this.notif.notifJson)),
           data: Utils.cloneObject(JSON.parse(this.notif.dataJson)),
         };
@@ -216,14 +230,19 @@ export default {
 
 <style scoped>
 .container {
-  height: 100vh;
+  height: 100%;
   width: 100%;
-  min-height: 100%;
-  overflow: hidden;
+  /* min-height: 100%; */
+  overflow: scroll;
   padding: 8px 8px 128px 8px;
 }
 
-#content {
+.notif-editor {  
+  height: calc(100vh - 32px);
+  overflow: scroll;
+}
+.container {
   border: none;
+  background-color: rgb(255, 255, 255);
 }
 </style>

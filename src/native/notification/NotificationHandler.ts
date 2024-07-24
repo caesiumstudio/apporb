@@ -10,7 +10,7 @@ import { FCMNotif } from "./FcmNotif";
 const TAG = "NotificationHandler";
 
 export class NotificationHandler implements IPCListener {
-
+    private fcmNotif = new FCMNotif();
     notify(args: CommandValue): boolean {
         if (args.command === "CMD_HTTP_POST_NOTIFICATION") {
             this.post(args);
@@ -46,50 +46,49 @@ export class NotificationHandler implements IPCListener {
     }
 
     private post(args: CommandValue) {
-        // const httpHandler = new HttpHandler();
-        // const options = this.getPostOptions(args.value);
-        // if (options.headers.Authorization.length < 30) {
-        //     const status: StatusResponse = { code: 0, message: "Invalid auth key" };
-        //     args.value = status;
-        //     IPCNative.instance().onNativeEvent(args);
-        // } else if (args.value.postData.to.length < 3) {
-        //     const status: StatusResponse = { code: 0, message: "Invalid topic" };
+        const postData = args.value.postData;
+
+        // if (!postData.token && postData.topic) {
+        //     const status: StatusResponse = { code: 0, message: "Missing token or topic" };
         //     args.value = status;
         //     IPCNative.instance().onNativeEvent(args);
         // }
 
-        // Log.debug(TAG, "Options: " + JSON.stringify(options));
-        Log.debug(TAG, "NotifData: " + JSON.stringify(args.value.postData));
-        const fcmNotif = new FCMNotif();
-        Log.debug(TAG, "Sending notification");
-        const postData = args.value.postData;
-        fcmNotif.sendToTopic(postData.topic, postData.notification, postData.data);
-        fcmNotif.sendToToken(postData.token, postData.notification, postData.data);
-        // httpHandler.makePostRequest(options, JSON.stringify(args.value.postData)).then((jsonResponse: string) => {
-        //     Log.debug(TAG, jsonResponse);
+        if (!postData.serviceAccountJsonPath) {
+            const status: StatusResponse = { code: 0, message: "Missing service account json path" };
+            args.value = status;
+            IPCNative.instance().onNativeEvent(args);
+        }
 
-        //     const status: StatusResponse = { code: 0, message: "Sent successfully", data: JSON.parse(jsonResponse) };
-        //     args.value = status;
-        //     IPCNative.instance().onNativeEvent(args);
-        // }).catch(error => {
-        //     Log.error(TAG, error);
-        //     const status: StatusResponse = { code: -1, message: "Error sending notification", data: error };
-        //     args.value = status;
-        //     IPCNative.instance().onNativeEvent(args);
-        // });
-    }
+        Log.debug(TAG, "NotifData: " + JSON.stringify(args.value));
 
+        this.fcmNotif.initApp(postData.serviceAccountJsonPath);
 
-    public getPostOptions(value: any) {
-        return {
-            host: "fcm.googleapis.com",
-            path: "/fcm/send",
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; UTF-8",
-                Authorization: value.authKey
-            },
-        };
+        if (postData.topic) {
+            this.fcmNotif.sendToTopic(postData.topic, postData.notification, postData.data).then((res: any) => {
+                Log.debug(TAG, res);
+                args.value = { code: 0, message: "Notification sent", data: res };
+                IPCNative.instance().onNativeEvent(args);
+            }).catch((error: any) => {
+                Log.error(TAG, error);
+                const status: StatusResponse = { code: -1, message: "Error sending notification", data: error };
+                args.value = status;
+                IPCNative.instance().onNativeEvent(args);
+            });
+        }
+
+        if (postData.token) {
+            this.fcmNotif.sendToToken(postData.token, postData.notification, postData.data).then((res: any) => {
+                Log.debug(TAG, res);
+                args.value = { code: 0, message: "Notification sent", data: res };
+                IPCNative.instance().onNativeEvent(args);
+            }).catch((error: any) => {
+                Log.error(TAG, error);
+                const status: StatusResponse = { code: -1, message: "Error sending notification", data: error };
+                args.value = status;
+                IPCNative.instance().onNativeEvent(args);
+            });
+        }
     }
 }
 
