@@ -100,14 +100,14 @@ export default {
         this.transAttr.forEach((attribName) => {
           if (!englishAttr[attribName]) return;
           this.updateTranslatedText(
-            englishAttr[attribName].replaceAll("\n", "{|}"),
+            englishAttr[attribName].replaceAll("\n", ";"),
             attr.locale,
             (result) => {
               for (let i = 0; i < this.appVersionLocalizations.length; i++) {
                 const loc = this.appVersionLocalizations[i];
                 const attr = this.getAttributes(loc);
                 if (attr.locale === result.locale) {
-                  let translatedText = result.payload.replaceAll("{|}", "\n");
+                  let translatedText = result.payload.replaceAll(";", "\n");
                   const charLimit = {
                     keywords: 170,
                     promotionalText: 170,
