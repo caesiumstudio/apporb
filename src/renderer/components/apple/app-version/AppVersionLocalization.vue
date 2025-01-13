@@ -96,7 +96,7 @@ export default {
         "-------",
         "Developer contact: caesiumstudio@gmail.com",
         "Privacy Policy: https://www.caesiumstudio.com/privacy-policy",
-        "End User License Agreement: https://www.caesiumstudio.com/eula/license"],
+        "End User License Agreement: https://www.apple.com/legal/internet-services/itunes/dev/stdeula"],
       appVersionLocalizations: [],
       loaderConfig: {
         isIconVisible: true,
