@@ -107,7 +107,7 @@ export default {
   watch: {
     appInfos: {
       handler(newAppInfo) {
-        console.log(JSON.stringify(newAppInfo));
+        //console.log(JSON.stringify(newAppInfo));
         this.loadAppInfoLocalizations();
       },
     },
@@ -180,7 +180,7 @@ export default {
         },
         (response) => {
           ViewController.setProgress(false);
-          console.log(JSON.stringify(response));
+          //console.log(JSON.stringify(response));
           if (response.code < 0) {            
             alert("Error: " + response.message);
           }

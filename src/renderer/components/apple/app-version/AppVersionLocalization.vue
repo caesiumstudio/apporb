@@ -7,6 +7,15 @@
     </div>
 
     <div class="ui">
+      <div class="ui form">
+        <div class="field">
+          <label>Description Footer</label>
+          <textarea :value="descriptionFooter.join('\n')" spellcheck="true">
+      </textarea>
+        </div>
+      </div>
+    </div>
+    <div class="ui">
       <div v-for="(appVersionLocalization, index) in appVersionLocalizations" :key="appVersionLocalization.id">
         <div class="ui accordion">
           <div class="title">
@@ -83,6 +92,11 @@ export default {
 
   data() {
     return {
+      descriptionFooter: [
+        "-------",
+        "Developer contact: caesiumstudio@gmail.com",
+        "Privacy Policy: https://www.caesiumstudio.com/privacy-policy",
+        "End User License Agreement: https://www.caesiumstudio.com/eula/license"],
       appVersionLocalizations: [],
       loaderConfig: {
         isIconVisible: true,
@@ -136,11 +150,21 @@ export default {
       });
     },
 
+    removeFooter(description) {
+      const index = description.indexOf('-------');
+      if (index > 0) {
+        return description.substring(0, description.indexOf('-------'));
+      }
+      return description.trim() + '\n\n';
+    },
+
     saveTranslationWithCallback(index, callback) {
       ViewController.setProgress(true);
 
       const appVersionLocalization = this.appVersionLocalizations[index];
       let attributes = this.getAttributes(appVersionLocalization);
+      attributes.description = this.removeFooter(attributes.description.toString());
+      attributes.description += this.descriptionFooter.join('\n');
       attributes = JSON.parse(JSON.stringify(attributes));
       delete attributes.locale;
 
@@ -242,4 +266,3 @@ export default {
   border: none;
 }
 </style>
-                  

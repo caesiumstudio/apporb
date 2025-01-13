@@ -20,7 +20,7 @@ module.exports = defineConfig({
           ]
         },
         "win": {
-          "target": "appx",
+          // "target": "appx",
           "target": "nsis"
         }
       }
