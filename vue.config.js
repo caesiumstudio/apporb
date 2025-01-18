@@ -19,6 +19,9 @@ module.exports = defineConfig({
             "rpm" // for building rpm package execute first "sudo apt-get install rpm"
           ]
         },
+        "mac": {
+          "target": ["dmg"]
+        },
         "win": {
           // "target": "appx",
           "target": "nsis"
